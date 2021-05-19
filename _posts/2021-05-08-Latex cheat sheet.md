@@ -21,13 +21,14 @@ math: true
 
 - 分段函数
 
-  `f(x)= \begin{cases}`
+  ```latex
+  f(x)= \begin{cases} 
+  		0 & condition1 \\   
+  		1 & condition2 
+  	   \end{cases} 
+  ```
 
-  ​				 ` 0 & condition1 \\ ` 
-
-  ​				 `1 & condition2`
-
-  ​            ` \end{cases} `
+  
   $$
   f(x)= \begin{cases} 0 & condition1 \\ 1 & condition2 \end{cases}
   $$
@@ -193,5 +194,3 @@ math: true
   ```
 
   
-
-docker run --gpus=1 --rm --shm-size=1g --ulimit memlock=-1 --ulimit stack=67108864 -p8000:8000 -p8001:8001 -p8002:8002 -v/home/lab301/wdir/zg/mc/tensorRT/models/:/models nvcr.io/nvidia/tritonserver:20.09-py3 tritonserver --model-repository=/models

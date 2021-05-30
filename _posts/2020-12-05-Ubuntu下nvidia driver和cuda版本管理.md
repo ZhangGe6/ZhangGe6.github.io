@@ -30,7 +30,7 @@ sudo apt-get purge "nvidia*"
  ```bash
  lspci | grep -i nvidia
  ```
- > 部分老版本Ubuntu(如14.04)输出为一十六进制数，可以在[The PCI ID Repository](http://pci-ids.ucw.cz/mods/PC/10de?action=help?help=pci)`See also`一栏下输入框查询该代码对应的显卡型号。
+ > 部分老版本Ubuntu(如16.04)输出为一十六进制数，可以在[The PCI ID Repository](http://pci-ids.ucw.cz/mods/PC/10de?action=help?help=pci)`See also`一栏下输入框查询该代码对应的显卡型号。
 
 
 
@@ -108,9 +108,14 @@ gcc version 4.8.4 (Ubuntu 4.8.4-2ubuntu1~14.04.4)
 does not match the compiler used here:
 cc (Ubuntu 4.9.4-2ubuntu1~14.04.1) 4.9.4
 ```
-将本机的`gcc`默认版本切换为当前编译所需版本即可(此处为将`4.9.4`切换为`4.8.4`)。具体方法见[ubuntu下多个gcc版本切换](https://blog.csdn.net/astrotycoon/article/details/8069621)。
+将本机的`gcc`默认版本切换为当前编译所需版本即可(此处为将`4.9.4`切换为`4.8.4`)。
+
+[参考1-ubuntu下多个gcc版本切换](https://blog.csdn.net/astrotycoon/article/details/8069621) 
+
+[参考2-Ubuntu 16.04 GCC 7 & G++ 7 安装](https://blog.csdn.net/calvinpaean/article/details/90691315)。
+
 > - 查看当前使用的`gcc`版本：`gcc -v`
-> - 查看本机已安装哪些`gcc`版本：`ls /usr/bin/gcc*`
+>   - 查看本机已安装哪些`gcc`版本：`ls /usr/bin/gcc*`
 > - 切换`gcc`版本：`sudo update-alternatives --config gcc`
 > 	- 根据输出，输入希望切换至的`gcc`版本对应的编号，即可完成切换。
 
@@ -133,7 +138,9 @@ sudo add-apt-repository ppa:graphics-drivers/ppa && sudo apt update
 sudo ./cuda_<your_version>_linux.run  
 ```
 希望一切顺利！
-> - 当然现实可能不是那么顺利...，如果报错`no cc`，那么试试先`sudo apt install build-essential`
+> - 当然现实可能不是那么顺利...，如果报错`no cc`，那么试试
+>   - `sudo apt update`
+>   - `sudo apt install build-essential`
 > - 安装过程中可能会询问是否用覆盖现有`cuda`版本，建议选否，便于后续软链接操作。
 
 

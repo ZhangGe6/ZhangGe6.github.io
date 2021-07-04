@@ -1,0 +1,175 @@
+<p>本文记录一个使用NCNN成功量化的demo。</p>
+<h1 id="pytorch-to-onnx">Pytorch to onnx</h1>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+</pre></td><td class="rouge-code"><pre><span class="c1"># This blog helps a lot: https://blog.csdn.net/Enchanted_ZhouH/article/details/105861646
+</span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torchvision</span>
+<span class="kn">import</span> <span class="nn">torch.onnx</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">torchvision.transforms</span> <span class="k">as</span> <span class="n">transforms</span>
+<span class="kn">import</span> <span class="nn">onnxruntime</span> <span class="k">as</span> <span class="n">rt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"../pytorch_train/cifar10"</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">models</span>
+
+<span class="c1"># ========= Convert ========= #
+</span><span class="n">model_name</span> <span class="o">=</span> <span class="s">"vgg"</span>
+<span class="n">onnx_save_path</span>  <span class="o">=</span> <span class="s">"./onnx_model/"</span>
+
+<span class="c1"># An instance of your model
+</span><span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s">"vgg"</span><span class="p">:</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="p">.</span><span class="n">vgg</span><span class="p">()</span>
+    <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">''</span><span class="p">)</span>
+    
+<span class="n">model</span><span class="p">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">)</span>
+
+<span class="c1"># define input shape
+</span><span class="n">height</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span>
+<span class="n">input_names</span> <span class="o">=</span> <span class="p">[</span><span class="s">"input"</span><span class="p">]</span>
+<span class="n">output_names</span> <span class="o">=</span> <span class="p">[</span><span class="s">"output"</span><span class="p">]</span>
+
+<span class="c1"># convert pytorch to onnx
+</span><span class="n">torch_out</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">onnx</span><span class="p">.</span><span class="n">export</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">onnx_save_path</span> <span class="o">+</span> <span class="n">model_name</span> <span class="o">+</span> <span class="s">".onnx"</span><span class="p">,</span> <span class="n">input_names</span><span class="o">=</span><span class="n">input_names</span><span class="p">,</span> <span class="n">output_names</span><span class="o">=</span><span class="n">output_names</span><span class="p">)</span>
+
+<span class="c1"># ========= Test ========= #
+</span><span class="n">img_path</span> <span class="o">=</span> <span class="s">"/home/lab301/wdir/zg/mc/ncnn/quant_gym/dataset/fall_dataset/background/0.jpg"</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">imread</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">img</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="n">transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="p">.</span><span class="n">Compose</span><span class="p">([</span><span class="n">transforms</span><span class="p">.</span><span class="n">ToTensor</span><span class="p">()])</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">img</span><span class="p">).</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># pytorch test
+</span><span class="n">model</span><span class="p">.</span><span class="nb">eval</span><span class="p">()</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="n">val</span><span class="p">,</span> <span class="n">cls</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"[pytorch]---&gt;predicted class:"</span><span class="p">,</span> <span class="n">cls</span><span class="p">.</span><span class="n">item</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"[pytorch]---&gt;predicted value:"</span><span class="p">,</span> <span class="n">val</span><span class="p">.</span><span class="n">item</span><span class="p">())</span>
+
+<span class="c1"># onnx test
+</span><span class="n">sess</span> <span class="o">=</span> <span class="n">rt</span><span class="p">.</span><span class="n">InferenceSession</span><span class="p">(</span><span class="n">onnx_save_path</span> <span class="o">+</span> <span class="n">model_name</span> <span class="o">+</span> <span class="s">".onnx"</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="s">"x"</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="s">"y"</span><span class="p">]</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">sess</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">{</span><span class="n">x</span> <span class="p">:</span> <span class="n">img</span><span class="p">.</span><span class="n">numpy</span><span class="p">()})</span>
+<span class="n">cls</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">val</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">cls</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"[onnx]---&gt;predicted class:"</span><span class="p">,</span> <span class="n">cls</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"[onnx]---&gt;predicted value:"</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="onnx-to-ncnn">onnx to ncnn</h1>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="rouge-code"><pre><span class="nv">modelName</span><span class="o">=</span><span class="s2">"SGVB"</span>
+<span class="nv">image_dir</span><span class="o">=</span><span class="s2">"/home/lab301/wdir/zg/mc/ncnn/quant_gym/dataset/fall_dataset/fall"</span>
+<span class="nv">image_size</span><span class="o">=</span><span class="s2">"200,200"</span>
+<span class="c"># echo $modelName</span>
+
+<span class="nb">rm</span> <span class="nt">-rf</span> trans_file/<span class="nv">$modelName</span><span class="k">*</span>
+<span class="c"># simplify onnx model</span>
+python3 <span class="nt">-m</span> onnxsim onnx_model/<span class="nv">$modelName</span>.onnx trans_file/<span class="nv">$modelName</span><span class="nt">-sim</span>.onnx
+
+<span class="c"># onnx to ncnn</span>
+./tools/onnx2ncnn trans_file/<span class="nv">$modelName</span><span class="nt">-sim</span>.onnx trans_file/<span class="nv">$modelName</span>.param trans_file/<span class="nv">$modelName</span>.bin
+
+<span class="c"># # Optimization graphic</span>
+./tools/ncnnoptimize trans_file/<span class="nv">$modelName</span>.param trans_file/<span class="nv">$modelName</span>.bin trans_file/<span class="nv">$modelName</span><span class="nt">-nobn</span>.param trans_file/<span class="nv">$modelName</span><span class="nt">-nobn</span>.bin 0
+
+<span class="c"># Create the calibration table file</span>
+./tools/ncnn2table <span class="nt">--param</span><span class="o">=</span>trans_file/<span class="nv">$modelName</span><span class="nt">-nobn</span>.param <span class="nt">--bin</span><span class="o">=</span>trans_file/<span class="nv">$modelName</span><span class="nt">-nobn</span>.bin <span class="nt">--images</span><span class="o">=</span><span class="nv">$image_dir</span> <span class="nt">--output</span><span class="o">=</span>trans_file/<span class="nv">$modelName</span><span class="nt">-nobn</span>.table <span class="nt">--mean</span><span class="o">=</span>104,117,123 <span class="nt">--norm</span><span class="o">=</span>0.017,0.017,0.017 <span class="nt">--size</span><span class="o">=</span><span class="nv">$image_size</span> <span class="nt">--thread</span><span class="o">=</span>2
+
+<span class="c"># Quantization</span>
+./tools/ncnn2int8 trans_file/<span class="nv">$modelName</span><span class="nt">-nobn</span>.param trans_file/<span class="nv">$modelName</span><span class="nt">-nobn</span>.bin trans_file/<span class="nv">$modelName</span><span class="nt">-int8</span>.param trans_file/<span class="nv">$modelName</span><span class="nt">-int8</span>.bin trans_file/<span class="nv">$modelName</span><span class="nt">-nobn</span>.table
+
+<span class="nb">echo</span> <span class="s2">"ALL DONE"</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="参考">参考</h1>
+<p><a href="https://github.com/Tencent/ncnn/blob/master/docs/how-to-use-and-FAQ/use-ncnn-with-pytorch-or-onnx.md">use-ncnn-with-pytorch-or-onnx.md</a></p>
+
+<p><a href="https://github.com/Tencent/ncnn/tree/master/tools/quantize#2-create-the-calibration-table-file">Post Training Quantization Tools</a></p>
+

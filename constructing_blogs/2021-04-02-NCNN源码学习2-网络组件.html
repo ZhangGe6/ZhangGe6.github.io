@@ -1,0 +1,1283 @@
+<h1 id="网络构建类组件">网络构建类组件</h1>
+
+<h2 id="blob">Blob</h2>
+
+<p>先上头文件</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td>
+<td class="rouge-code"><pre><span class="c1">// ncnn/src/blob.h</span>
+
+<span class="k">class</span> <span class="nc">NCNN_EXPORT</span> <span class="n">Blob</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">Blob</span><span class="p">();</span>  <span class="c1">// empty</span>
+
+<span class="nl">public:</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>  <span class="c1">// blob name</span>
+    
+    <span class="kt">int</span> <span class="n">producer</span><span class="p">;</span>  <span class="c1">// layer index which produce this blob as output</span>
+    <span class="kt">int</span> <span class="n">consumer</span><span class="p">;</span>  <span class="c1">// layer index which need this blob as input</span>
+    
+    <span class="n">Mat</span> <span class="n">shape</span><span class="p">;</span>     <span class="c1">// shape hint</span>
+<span class="p">};</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>默认的Blob构造函数</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td>
+<td class="rouge-code"><pre><span class="c1">// ncnn/src/blob.cpp</span>
+
+<span class="n">Blob</span><span class="o">::</span><span class="n">Blob</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">producer</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">consumer</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>ncnn也使用了类似caffe中的blob作为最基本的数据结构来存储计算过程中的各种数据。由blob类结构可以看出blob类本身不存放具体的计算数据，只负责关联blob和相应层（即该blob是哪个层的输出，哪个层的输入）。</p>
+
+<p><img src="/assets/img/20210404/blob.png" alt=""></p>
+
+<center>图1   NCNN中的blob相关示意。blob类主要本身负责与layer的关联，保存在blobs数组中。真正的blob feature存放在blob_mats里(后文讲到ExtractorPrivate时会具体介绍到)，索引与blob一致</center>
+
+<blockquote>
+  <p><img class="emoji" title=":question:" alt=":question:" src="https://github.githubassets.com/images/icons/emoji/unicode/2753.png" height="20" width="20"> 这个shape hint是什么？</p>
+</blockquote>
+
+<h2 id="layer">layer</h2>
+
+<p>先上头文件</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+</pre></td>
+<td class="rouge-code"><pre><span class="c1">// ncnn/src/layer.h</span>
+
+<span class="k">class</span> <span class="nc">NCNN_EXPORT</span> <span class="n">Layer</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="c1">// empty</span>
+    <span class="n">Layer</span><span class="p">();</span>
+    <span class="c1">// virtual destructor</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">Layer</span><span class="p">();</span>
+
+    <span class="c1">// 读取层配置参数(return 0 if success)</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">load_param</span><span class="p">(</span><span class="k">const</span> <span class="n">ParamDict</span><span class="o">&amp;</span> <span class="n">pd</span><span class="p">);</span>   
+
+    <span class="c1">// 读取层权重(return 0 if success)</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">load_model</span><span class="p">(</span><span class="k">const</span> <span class="n">ModelBin</span><span class="o">&amp;</span> <span class="n">mb</span><span class="p">);</span>
+
+    <span class="c1">// layer implementation specific setup</span>
+    <span class="c1">// return 0 if success</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">create_pipeline</span><span class="p">(</span><span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">);</span>
+
+    <span class="c1">// layer implementation specific clean</span>
+    <span class="c1">// return 0 if success</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">destroy_pipeline</span><span class="p">(</span><span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">);</span>
+
+<span class="nl">public:</span>
+    <span class="kt">bool</span> <span class="n">one_blob_only</span><span class="p">;</span> <span class="c1">// one input and one output blob</span>
+    <span class="kt">bool</span> <span class="n">support_inplace</span><span class="p">;</span>  <span class="c1">// support inplace inference</span>
+
+    <span class="kt">bool</span> <span class="n">support_vulkan</span><span class="p">;</span> <span class="c1">// support vulkan compute</span>
+    <span class="kt">bool</span> <span class="n">support_packing</span><span class="p">;</span>  <span class="c1">// accept input blob with packed storage</span>
+    
+    <span class="kt">bool</span> <span class="n">support_bf16_storage</span><span class="p">;</span>  <span class="c1">// accept bf16</span>
+    <span class="kt">bool</span> <span class="n">support_fp16_storage</span><span class="p">;</span>  <span class="c1">// accept fp16</span>
+    <span class="kt">bool</span> <span class="n">support_int8_storage</span><span class="p">;</span>  <span class="c1">// accept int8</span>
+
+    <span class="kt">bool</span> <span class="n">support_image_storage</span><span class="p">;</span> <span class="c1">// shader image storage</span>
+    <span class="kt">bool</span> <span class="n">support_tensor_storage</span><span class="p">;</span> <span class="c1">// shader tensor storage</span>
+
+    <span class="c1">// TODO drop these fields</span>
+    <span class="kt">bool</span> <span class="n">support_weight_fp16_storage</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">support_reserved_0</span><span class="p">;</span>
+	<span class="p">...</span>
+    <span class="kt">bool</span> <span class="n">support_reserved_13</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="c1">// implement inference, return 0 if success</span>
+    <span class="c1">// 多输入多输出的layer forward实现</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">forward</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Mat</span><span class="o">&gt;&amp;</span> <span class="n">bottom_blobs</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Mat</span><span class="o">&gt;&amp;</span> <span class="n">top_blobs</span><span class="p">,</span> <span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="c1">// 单输入单输出的layer forward实现</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">forward</span><span class="p">(</span><span class="k">const</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">bottom_blob</span><span class="p">,</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">top_blob</span><span class="p">,</span> <span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="c1">// 多输入多输出的layer forward实现(in_place)</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">forward_inplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Mat</span><span class="o">&gt;&amp;</span> <span class="n">bottom_top_blobs</span><span class="p">,</span> <span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="c1">// 单输入单输出的layer forward实现(in_place)</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">forward_inplace</span><span class="p">(</span><span class="n">Mat</span><span class="o">&amp;</span> <span class="n">bottom_top_blob</span><span class="p">,</span> <span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span><span class="p">;</span>   <span class="c1">// custom user data</span>
+    <span class="kt">int</span> <span class="n">typeindex</span><span class="p">;</span>    <span class="c1">// layer type index</span>
+    
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">type</span><span class="p">;</span>   <span class="c1">// layer type name</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">name</span><span class="p">;</span>    <span class="c1">// layer name</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">bottoms</span><span class="p">;</span>  <span class="c1">// blob index which this layer needs as input</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">tops</span><span class="p">;</span>     <span class="c1">// blob index which this layer produces as output</span>
+    
+    <span class="c1">// shape hint</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Mat</span><span class="o">&gt;</span> <span class="n">bottom_shapes</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Mat</span><span class="o">&gt;</span> <span class="n">top_shapes</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// layer factory function</span>
+<span class="k">typedef</span> <span class="n">Layer</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">layer_creator_func</span><span class="p">)(</span><span class="kt">void</span><span class="o">*</span><span class="p">);</span>
+<span class="k">typedef</span> <span class="nf">void</span> <span class="p">(</span><span class="o">*</span><span class="n">layer_destroyer_func</span><span class="p">)(</span><span class="n">Layer</span><span class="o">*</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span><span class="p">);</span>
+
+<span class="k">struct</span> <span class="nc">layer_registry_entry</span>
+<span class="p">{</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">;</span>             <span class="c1">// layer type name</span>
+    <span class="n">layer_creator_func</span> <span class="n">creator</span><span class="p">;</span>   <span class="c1">// layer factory entry</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="nc">custom_layer_registry_entry</span>
+<span class="p">{</span>
+    <span class="c1">// layer type name</span>
+    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">;</span>              
+
+    <span class="c1">// layer factory entry</span>
+    <span class="n">layer_creator_func</span> <span class="n">creator</span><span class="p">;</span>
+    <span class="n">layer_destroyer_func</span> <span class="n">destroyer</span><span class="p">;</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">NCNN_EXPORT</span> <span class="kt">int</span> <span class="nf">layer_to_index</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">type</span><span class="p">);</span>   <span class="c1">// get layer type(index) from type name</span>
+<span class="n">NCNN_EXPORT</span> <span class="n">Layer</span><span class="o">*</span> <span class="nf">create_layer</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">type</span><span class="p">);</span>  <span class="c1">// create layer from type name</span>
+<span class="n">NCNN_EXPORT</span> <span class="n">Layer</span><span class="o">*</span> <span class="nf">create_layer</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">);</span>         <span class="c1">// create layer from layer type</span>
+
+<span class="cp">#define DEFINE_LAYER_CREATOR(name)                          \
+    ::ncnn::Layer* name##_layer_creator(void* </span><span class="cm">/*userdata*/</span><span class="cp">) \
+    {                                                       \
+        return new name;                                    \
+    }
+</span>
+<span class="cp">#define DEFINE_LAYER_DESTROYER(name)                                      \
+    void name##_layer_destroyer(::ncnn::Layer* layer, void* </span><span class="cm">/*userdata*/</span><span class="cp">) \
+    {                                                                     \
+        delete layer;                                                     \
+    }
+</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>layer的默认构造函数比较简单，对一众成员变量进行<code class="language-plaintext highlighter-rouge">false</code>初始化。</p>
+
+<p>layer类定义了layer的通用属性，需要注意的有几点：</p>
+
+<h3 id="具体某个layer的构造过程">具体某个layer的构造过程</h3>
+
+<p>简而言之，一个layer的诞生经历了以下几个过程：</p>
+
+<ol>
+  <li>在一切之前，已根据”layer_registry_xx.h”文件实例化了一个元素为layer_registry_entry类型的列表。</li>
+  <li>根据layer name索引到layer注册表中对应的index；</li>
+  <li>根据该index从layer注册表中获取<code class="language-plaintext highlighter-rouge">name</code>属性及<code class="language-plaintext highlighter-rouge">creator</code>属性，根据该creator创建出该layer并返回。</li>
+</ol>
+
+<p><strong>以Convolution layer为例：</strong></p>
+
+<ol>
+  <li>
+    <p>根据”layer_registry_xx.h”文件创建元素为layer_registry_entry类型的列表:</p>
+
+    <div class="language-cpp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td>
+<td class="rouge-code"><pre><span class="c1">// ncnn/src/layer.cpp</span>
+       
+<span class="k">static</span> <span class="k">const</span> <span class="n">layer_registry_entry</span> <span class="n">layer_registry</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+<span class="cp">#include "layer_registry.h"
+</span><span class="p">};</span>
+</pre></td>
+</tr></tbody></table></code></pre></div>    </div>
+
+    <p>“layer_registry.h”是在build项目的时候自动产生的，部分内容如下：</p>
+
+    <div class="language-cpp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td>
+<td class="rouge-code"><pre><span class="c1">// ncnn/build/src/layer_registry.h</span>
+   
+<span class="c1">// Layer Registry header</span>
+<span class="c1">// This file is auto-generated by cmake, don't edit it.</span>
+   
+<span class="cp">#if NCNN_STRING
+</span><span class="p">{</span><span class="s">"AbsVal"</span><span class="p">,</span> <span class="n">AbsVal_final_layer_creator</span><span class="p">},</span>
+<span class="cp">#else
+</span><span class="p">{</span><span class="n">AbsVal_final_layer_creator</span><span class="p">},</span>
+<span class="cp">#endif
+#if NCNN_STRING
+</span><span class="p">{</span><span class="s">"ArgMax"</span><span class="p">,</span> <span class="mi">0</span><span class="p">},</span>
+<span class="cp">#else
+</span><span class="p">{</span><span class="mi">0</span><span class="p">},</span>
+<span class="cp">#endif
+#if NCNN_STRING
+</span><span class="p">{</span><span class="s">"BatchNorm"</span><span class="p">,</span> <span class="n">BatchNorm_final_layer_creator</span><span class="p">},</span>
+<span class="cp">#else
+</span><span class="p">{</span><span class="n">BatchNorm_final_layer_creator</span><span class="p">},</span>
+<span class="p">...</span>
+</pre></td>
+</tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <p>根据layer name索引到layer注册表中对应的index：</p>
+
+    <div class="language-cpp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td>
+<td class="rouge-code"><pre><span class="kt">int</span> <span class="nf">layer_to_index</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">type</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">layer_registry_entry_count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">,</span> <span class="n">layer_registry</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+   
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+   
+<span class="n">Layer</span><span class="o">*</span> <span class="nf">create_layer</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">type</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">layer_to_index</span><span class="p">(</span><span class="n">type</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+   
+    <span class="k">return</span> <span class="n">create_layer</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <p>根据该index从layer注册表中获取<code class="language-plaintext highlighter-rouge">name</code>属性及<code class="language-plaintext highlighter-rouge">creator</code>属性，根据该creator创建出该layer并返回：</p>
+
+    <div class="language-cpp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td>
+<td class="rouge-code"><pre><span class="n">Layer</span><span class="o">*</span> <span class="nf">create_layer</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="p">...</span>
+    <span class="n">layer_creator_func</span> <span class="n">layer_creator</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="p">...</span>
+    <span class="p">{</span>
+        <span class="n">layer_creator</span> <span class="o">=</span> <span class="n">layer_registry</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">creator</span><span class="p">;</span>
+    <span class="p">}</span>
+   
+    <span class="n">Layer</span><span class="o">*</span> <span class="n">layer</span> <span class="o">=</span> <span class="n">layer_creator</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">layer</span><span class="o">-&gt;</span><span class="n">typeindex</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">layer</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div>    </div>
+
+    <p>这一步有比较大的GAP，需要再展开分析一下：</p>
+
+    <blockquote>
+      <p>在具体分析之前，需要一些预备知识：</p>
+
+      <ol>
+        <li><code class="language-plaintext highlighter-rouge">typedef</code></li>
+      </ol>
+
+      <p><code class="language-plaintext highlighter-rouge">layer.h</code>文件中，<code class="language-plaintext highlighter-rouge">typedef Layer* (*layer_creator_func)(void*);</code>的含义是：定义了一种叫layer_creator_func的类型，并定义这种类型为指向某种函数的指针，这种函数以一个以void*为参数并返回Layer*类型。（更详细的用法可参考<a href="https://blog.csdn.net/qll125596718/article/details/6891881">这里</a>）</p>
+
+      <ol>
+        <li>C++ define 宏定义</li>
+      </ol>
+
+      <p><code class="language-plaintext highlighter-rouge">layer.h</code>文件中，</p>
+
+      <p><code class="language-plaintext highlighter-rouge">#define DEFINE_LAYER_CREATOR(name)	::ncnn::Layer* name##_layer_creator(void* /*userdata*/){ return new name; }</code></p>
+
+      <p>宏定义只是在预处理阶段做了简单的替换。另外，这里<code class="language-plaintext highlighter-rouge">##</code>的作用是把两个语言符号组合成单个语言符号。（更详细的用法可参考<a href="https://blog.csdn.net/u012611878/article/details/52534622">这里</a>）</p>
+    </blockquote>
+
+    <p>比如我们想要创建的层是Convolution，那么它在layer_registry中对应的index是6（<code class="language-plaintext highlighter-rouge">layer_registry[6] = {"Convolution", Convolution_final_layer_creator}</code>），layer_creator=layer_registry[6].creator，也就是Convolution_final_layer_creator。这个Convolution_final_layer_creator直接搜索是搜不到的，它是何方神圣呢？</p>
+
+    <p>来到<code class="language-plaintext highlighter-rouge">ncnn/build/src/layer_declaration.h</code>。这个文件同样是build过程生成的：</p>
+
+    <div class="language-cpp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td>
+<td class="rouge-code"><pre><span class="c1">// ncnn/build/src/layer_declaration.h</span>
+       
+<span class="k">namespace</span> <span class="n">ncnn</span> <span class="p">{</span>
+<span class="k">class</span> <span class="nc">Convolution_final</span> <span class="o">:</span> <span class="k">virtual</span> <span class="k">public</span> <span class="n">Convolution</span><span class="p">,</span> <span class="k">virtual</span> <span class="k">public</span> <span class="n">Convolution_x86</span><span class="p">,</span> <span class="k">virtual</span> <span class="k">public</span> <span class="n">Convolution_vulkan</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">create_pipeline</span><span class="p">(</span><span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">{</span> <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">Convolution</span><span class="o">::</span><span class="n">create_pipeline</span><span class="p">(</span><span class="n">opt</span><span class="p">);</span> <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="k">return</span> <span class="n">ret</span><span class="p">;</span> <span class="p">}</span>
+        <span class="p">{</span> <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">Convolution_x86</span><span class="o">::</span><span class="n">create_pipeline</span><span class="p">(</span><span class="n">opt</span><span class="p">);</span> <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="k">return</span> <span class="n">ret</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">vkdev</span><span class="p">)</span> <span class="p">{</span> <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">Convolution_vulkan</span><span class="o">::</span><span class="n">create_pipeline</span><span class="p">(</span><span class="n">opt</span><span class="p">);</span> <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="k">return</span> <span class="n">ret</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">destroy_pipeline</span><span class="p">(</span><span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">vkdev</span><span class="p">)</span> <span class="p">{</span> <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">Convolution_vulkan</span><span class="o">::</span><span class="n">destroy_pipeline</span><span class="p">(</span><span class="n">opt</span><span class="p">);</span> <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="k">return</span> <span class="n">ret</span><span class="p">;</span> <span class="p">}</span>
+        <span class="p">{</span> <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">Convolution_x86</span><span class="o">::</span><span class="n">destroy_pipeline</span><span class="p">(</span><span class="n">opt</span><span class="p">);</span> <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="k">return</span> <span class="n">ret</span><span class="p">;</span> <span class="p">}</span>
+        <span class="p">{</span> <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">Convolution</span><span class="o">::</span><span class="n">destroy_pipeline</span><span class="p">(</span><span class="n">opt</span><span class="p">);</span> <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span> <span class="k">return</span> <span class="n">ret</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="n">DEFINE_LAYER_CREATOR</span><span class="p">(</span><span class="n">Convolution_final</span><span class="p">)</span>
+<span class="p">}</span> 
+</pre></td>
+</tr></tbody></table></code></pre></div>    </div>
+
+    <p>Convolution_final类继承了<code class="language-plaintext highlighter-rouge">Convolution</code>类（而<code class="language-plaintext highlighter-rouge">Convolution</code>类继承了<code class="language-plaintext highlighter-rouge">layer</code>类）。可以看到定义的末尾，有<code class="language-plaintext highlighter-rouge">DEFINE_LAYER_CREATOR(Convolution_final)</code>，翻译一下（替换一下）也就是</p>
+
+    <div class="language-cpp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="n">ncnn</span><span class="o">::</span><span class="n">Layer</span><span class="o">*</span> <span class="nf">Convolution_final_layer_creator</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="cm">/*userdata*/</span><span class="p">){</span> <span class="k">return</span> <span class="k">new</span> <span class="n">Convolution_final</span><span class="p">;</span> <span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div>    </div>
+
+    <p>破案了！<code class="language-plaintext highlighter-rouge">Convolution_final_layer_creator</code>函数return一个<code class="language-plaintext highlighter-rouge">Convolution_final</code>对象。终于可以回来，layer_creator这样一个返回layer*的函数指针，它指向了Convolution_final_final_layer_creator，而在执行<code class="language-plaintext highlighter-rouge">Layer* layer = layer_creator(0)</code>发生了什么呢？也就是<code class="language-plaintext highlighter-rouge">Convolution_final_layer_creator(/*userdata=*/0)</code>，这一步返回了一个<code class="language-plaintext highlighter-rouge">Convolution_final</code>类并赋给layer。</p>
+
+    <p>好像转了一大圈，做的其实是一件很简单的事情欸…，一个问题是，为什么要有<code class="language-plaintext highlighter-rouge">Convolution_final</code>这个类呢，它和<code class="language-plaintext highlighter-rouge">Convolution</code>类有什么区别呢？</p>
+
+    <p><strong>好问题！我现在也不知道。</strong></p>
+
+    <p>初步推测是，如果构建过程不出现异常，则使用Convolution_final::create_pipeline可以<strong>依次</strong>调用Convolution::create_pipeline、Convolution_x86::create_pipeline(opt)、Convolution_vulkan::create_pipeline(opt)实现累积性的优化。</p>
+
+    <blockquote>
+      <p>因为按照Convolution_final::create_pipeline写的，当前一个create_pipeline异常，也就是ret值不为0时，会执行返回操作，否则程序继续进行下去。</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h2 id="net">Net</h2>
+
+<p>仍然是先上头文件</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+</pre></td>
+<td class="rouge-code"><pre><span class="k">class</span> <span class="nc">DataReader</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">Extractor</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">NetPrivate</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">NCNN_EXPORT</span> <span class="n">Net</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">Net</span><span class="p">();</span>    <span class="c1">// empty init</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">Net</span><span class="p">();</span>   <span class="c1">// clear and destroy</span>
+
+<span class="nl">public:</span>
+    <span class="n">Option</span> <span class="n">opt</span><span class="p">;</span>  <span class="c1">// option can be changed before loading</span>
+
+    <span class="c1">// register custom layer by layer type name, return 0 if success</span>
+    <span class="kt">int</span> <span class="n">register_custom_layer</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">type</span><span class="p">,</span> <span class="n">layer_creator_func</span> <span class="n">creator</span><span class="p">,</span> <span class="n">layer_destroyer_func</span> <span class="n">destroyer</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="c1">// register custom layer by layer type, return 0 if success</span>
+    <span class="kt">int</span> <span class="n">register_custom_layer</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">,</span> <span class="n">layer_creator_func</span> <span class="n">creator</span><span class="p">,</span> <span class="n">layer_destroyer_func</span> <span class="n">destroyer</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="kt">int</span> <span class="n">load_param</span><span class="p">(</span><span class="k">const</span> <span class="n">DataReader</span><span class="o">&amp;</span> <span class="n">dr</span><span class="p">);</span>      <span class="c1">// 读取网络配置文件（往上追溯是plain param file）</span>
+    <span class="kt">int</span> <span class="n">load_param_bin</span><span class="p">(</span><span class="k">const</span> <span class="n">DataReader</span><span class="o">&amp;</span> <span class="n">dr</span><span class="p">);</span>  <span class="c1">// 读取网络配置文件（往上追溯是二进制文件）</span>
+
+    <span class="kt">int</span> <span class="n">load_model</span><span class="p">(</span><span class="k">const</span> <span class="n">DataReader</span><span class="o">&amp;</span> <span class="n">dr</span><span class="p">);</span>      <span class="c1">// 读取权值文件</span>
+
+    <span class="c1">// load network structure from plain param file，return 0 if success</span>
+    <span class="kt">int</span> <span class="n">load_param</span><span class="p">(</span><span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">load_param</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">protopath</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">load_param_mem</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">mem</span><span class="p">);</span>
+    <span class="c1">// load network structure from binary param file，return 0 if success</span>
+    <span class="kt">int</span> <span class="n">load_param_bin</span><span class="p">(</span><span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">load_param_bin</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">protopath</span><span class="p">);</span>
+
+    <span class="c1">// load network weight data from model file return 0 if success</span>
+    <span class="kt">int</span> <span class="n">load_model</span><span class="p">(</span><span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">load_model</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">modelpath</span><span class="p">);</span>
+
+    <span class="c1">// load network structure from external memory</span>
+    <span class="c1">// memory pointer must be 32-bit aligned</span>
+    <span class="c1">// return bytes consumed</span>
+    <span class="kt">int</span> <span class="n">load_param</span><span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">mem</span><span class="p">);</span>
+
+    <span class="c1">// reference network weight data from external memory</span>
+    <span class="c1">// weight data is not copied but referenced</span>
+    <span class="c1">// so external memory should be retained when used</span>
+    <span class="c1">// memory pointer must be 32-bit aligned</span>
+    <span class="c1">// return bytes consumed</span>
+    <span class="kt">int</span> <span class="n">load_model</span><span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">mem</span><span class="p">);</span>
+
+    <span class="c1">// unload network structure and weight data</span>
+    <span class="kt">void</span> <span class="n">clear</span><span class="p">();</span>
+
+    <span class="c1">// construct an Extractor from network</span>
+    <span class="n">Extractor</span> <span class="n">create_extractor</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Blob</span><span class="o">&gt;&amp;</span> <span class="n">blobs</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Layer</span><span class="o">*&gt;&amp;</span> <span class="n">layers</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Blob</span><span class="o">&gt;&amp;</span> <span class="n">mutable_blobs</span><span class="p">();</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Layer</span><span class="o">*&gt;&amp;</span> <span class="n">mutable_layers</span><span class="p">();</span>
+
+<span class="nl">protected:</span>
+    <span class="k">friend</span> <span class="k">class</span> <span class="nc">Extractor</span><span class="p">;</span>
+    
+    <span class="kt">int</span> <span class="n">find_blob_index_by_name</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">find_layer_index_by_name</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">name</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">custom_layer_to_index</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">type</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="n">Layer</span><span class="o">*</span> <span class="n">create_custom_layer</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">type</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="n">Layer</span><span class="o">*</span> <span class="n">create_custom_layer</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">);</span>
+
+<span class="nl">private:</span>
+    <span class="n">Net</span><span class="p">(</span><span class="k">const</span> <span class="n">Net</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">Net</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Net</span><span class="o">&amp;</span><span class="p">);</span>
+
+<span class="nl">private:</span>
+    <span class="n">NetPrivate</span><span class="o">*</span> <span class="k">const</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>Net同样具有一个私有成员变量<code class="language-plaintext highlighter-rouge">NetPrivate* const d</code>，Net的默认构造函数根据opt初始化NetPrivate(opt)。<code class="language-plaintext highlighter-rouge">NetPrivate</code>类定义如下</p>
+
+<h3 id="netprivate">NetPrivate</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td>
+<td class="rouge-code"><pre><span class="k">class</span> <span class="nc">NetPrivate</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">NetPrivate</span><span class="p">(</span><span class="n">Option</span><span class="o">&amp;</span> <span class="n">_opt</span><span class="p">);</span>
+    <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">;</span>
+
+    <span class="k">friend</span> <span class="k">class</span> <span class="nc">Extractor</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">forward_layer</span><span class="p">(</span><span class="kt">int</span> <span class="n">layer_index</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Mat</span><span class="o">&gt;&amp;</span> <span class="n">blob_mats</span><span class="p">,</span> <span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">convert_layout</span><span class="p">(</span><span class="n">Mat</span><span class="o">&amp;</span> <span class="n">bottom_blob</span><span class="p">,</span> <span class="k">const</span> <span class="n">Layer</span><span class="o">*</span> <span class="n">layer</span><span class="p">,</span> <span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">do_forward_layer</span><span class="p">(</span><span class="k">const</span> <span class="n">Layer</span><span class="o">*</span> <span class="n">layer</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Mat</span><span class="o">&gt;&amp;</span> <span class="n">blob_mats</span><span class="p">,</span> <span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Blob</span><span class="o">&gt;</span> <span class="n">blobs</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Layer</span><span class="o">*&gt;</span> <span class="n">layers</span><span class="p">;</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">custom_layer_registry_entry</span><span class="o">&gt;</span> <span class="n">custom_layer_registry</span><span class="p">;</span>
+
+    <span class="n">PoolAllocator</span><span class="o">*</span> <span class="n">local_blob_allocator</span><span class="p">;</span>
+    <span class="n">PoolAllocator</span><span class="o">*</span> <span class="n">local_workspace_allocator</span><span class="p">;</span>
+
+<span class="p">};</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>分析来看，Net本身的blobs，layers是没有用到的，真正的layer和blobs的索引是在NetPrivate的blobs，layers上进行的（<strong>不知道有没有分析错</strong>）。<code class="language-plaintext highlighter-rouge">forward_layer()</code>和<code class="language-plaintext highlighter-rouge">do_forward_layer()</code>是执行前向推断的关键函数，下文会展开叙述。</p>
+
+<h3 id="整个net的构造过程">整个Net的构造过程</h3>
+
+<p>简而言之，一个Net的诞生经历了以下几个过程：</p>
+
+<ol>
+  <li>
+    <p>在一切之前，已有Net构造所需的配置文件（如官方示例使用的<code class="language-plaintext highlighter-rouge">squeezenet_v1.1.param</code>），该配置文件中，除第一行是神秘数字（雾，第二行是网络的layer和blob的数量，剩下每行对应一个layer及其配置信息。读取配置文件；</p>
+  </li>
+  <li>
+    <p>判断神秘数字是否匹配，获取layer和blob的数量，据此设定d-&gt;layers与d-&gt;blobs长度；</p>
+  </li>
+  <li>
+    <p>按配置文件每一行配置每一层layer：</p>
+
+    <ol>
+      <li>
+        <p>读取layer类型layer_type，layer名称layer_name，layer的输入blob数量bottom_count，输出blob数量top_count；</p>
+      </li>
+      <li>
+        <p>根据layer_type构造出一个layer（见上：<a href="#%E5%85%B7%E4%BD%93%E6%9F%90%E4%B8%AAlayer%E7%9A%84%E6%9E%84%E9%80%A0%E8%BF%87%E7%A8%8B">具体某个layer的构造过程</a>）,并为该layer的type、name属性赋值，resize该layer的bottoms与tops（<strong>bottoms与tops记录该layer输入和输出的blob index</strong>），使之和bottom_count与top_count匹配;</p>
+      </li>
+      <li>
+        <p>关联该layer与对应的blob，上代码：</p>
+
+        <div class="language-cpp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td>
+<td class="rouge-code"><pre><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">top_count</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// 创建一个新的blob，并"指向" d-&gt;blobs[blob_index]</span>
+    <span class="n">Blob</span><span class="o">&amp;</span> <span class="n">blob</span> <span class="o">=</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">blobs</span><span class="p">[</span><span class="n">blob_index</span><span class="p">];</span>    
+      	
+    <span class="c1">// 配置文件读取，读取blob_name</span>
+    <span class="kt">char</span> <span class="n">blob_name</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+    <span class="n">SCAN_VALUE</span><span class="p">(</span><span class="s">"%255s"</span><span class="p">,</span> <span class="n">blob_name</span><span class="p">)</span>
+      	
+    <span class="n">blob</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">blob_name</span><span class="p">);</span>
+    <span class="c1">// NCNN_LOGE("new blob %s", blob_name);</span>
+      
+    <span class="c1">// (正)关联：标记当前layer是该blob的producer</span>
+    <span class="n">blob</span><span class="p">.</span><span class="n">producer</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+      	
+    <span class="c1">// (反)关联：标记该blob_index对应当前layer的第j个输出</span>
+    <span class="n">layer</span><span class="o">-&gt;</span><span class="n">tops</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">blob_index</span><span class="p">;</span>
+      	
+    <span class="c1">// 准备处理下一个blob</span>
+    <span class="n">blob_index</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div>        </div>
+
+        <blockquote>
+          <p>该部分代码取自ncnn/src/net.cpp，为一个layer与它的tops关联的过程，和bottoms关联的过程与之同理。这部分代码尽管是把与bottoms关联放在前面，但是建议从与tops关联开始读和理解。因为一开始d-&gt;blobs的属性均未设定，从input layer（它的为bottom_count为0，top_count为1）出发，最先调用了与tops关联部分的代码，并为第一个blob设定了属性。以此为起点，与bottoms关联代码中的find_blob_index_by_name()也就好理解了。</p>
+        </blockquote>
+      </li>
+      <li>
+        <p>继续读取该层的配置项参数(<code class="language-plaintext highlighter-rouge">int pdlr = pd.load_param(dr);</code>)；配置这一层输入输出的blob的shape；将读取的配置项参数载入(<code class="language-plaintext highlighter-rouge">int lr = layer-&gt;load_param(pd);</code>);</p>
+      </li>
+      <li>
+        <p>该层配置完毕，赋给Net(<code class="language-plaintext highlighter-rouge">d-&gt;layers[i] = layer</code>)。</p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>网络配置完毕。</p>
+  </li>
+</ol>
+
+<p><img src="/assets/img/20210404/layer.png" alt=""></p>
+
+<center>图2   NCNN中的layer相关示意。右图表示layer和blob相关联的操作</center>
+
+<p><img src="/assets/img/20210404/Net.png" alt=""></p>
+
+<center>图3   NCNN中的Net相关示意。</center>
+
+<h2 id="extractor">Extractor</h2>
+
+<p>头文件</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+</pre></td>
+<td class="rouge-code"><pre><span class="k">class</span> <span class="nc">ExtractorPrivate</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">NCNN_EXPORT</span> <span class="n">Extractor</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">Extractor</span><span class="p">();</span>
+    <span class="n">Extractor</span><span class="p">(</span><span class="k">const</span> <span class="n">Extractor</span><span class="o">&amp;</span><span class="p">);</span>    <span class="c1">// copy</span>
+    <span class="n">Extractor</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Extractor</span><span class="o">&amp;</span><span class="p">);</span>    <span class="c1">// assign</span>
+
+    <span class="kt">void</span> <span class="n">clear</span><span class="p">();</span>  <span class="c1">// clear blob mats and alloctors</span>
+
+    <span class="kt">void</span> <span class="n">set_light_mode</span><span class="p">(</span><span class="kt">bool</span> <span class="n">enable</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="n">set_num_threads</span><span class="p">(</span><span class="kt">int</span> <span class="n">num_threads</span><span class="p">);</span>
+
+    <span class="c1">// set blob memory allocator</span>
+    <span class="kt">void</span> <span class="n">set_blob_allocator</span><span class="p">(</span><span class="n">Allocator</span><span class="o">*</span> <span class="n">allocator</span><span class="p">);</span>
+    <span class="c1">// set workspace memory allocator</span>
+    <span class="kt">void</span> <span class="n">set_workspace_allocator</span><span class="p">(</span><span class="n">Allocator</span><span class="o">*</span> <span class="n">allocator</span><span class="p">);</span>
+
+    <span class="c1">// set input by blob name, return 0 if success</span>
+    <span class="kt">int</span> <span class="n">input</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">blob_name</span><span class="p">,</span> <span class="k">const</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">in</span><span class="p">);</span>
+
+    <span class="c1">// get result by blob name</span>
+    <span class="c1">// return 0 if success</span>
+    <span class="c1">// type = 0, default</span>
+    <span class="c1">// type = 1, do not convert fp16/bf16 or / and packing</span>
+    <span class="kt">int</span> <span class="n">extract</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">blob_name</span><span class="p">,</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">feat</span><span class="p">,</span> <span class="kt">int</span> <span class="n">type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="c1">// set input by blob index, return 0 if success</span>
+    <span class="kt">int</span> <span class="n">input</span><span class="p">(</span><span class="kt">int</span> <span class="n">blob_index</span><span class="p">,</span> <span class="k">const</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">in</span><span class="p">);</span>
+
+    <span class="c1">// get result by blob index</span>
+    <span class="c1">// return 0 if success</span>
+    <span class="c1">// type = 0, default</span>
+    <span class="c1">// type = 1, do not convert fp16/bf16 or / and packing</span>
+    <span class="kt">int</span> <span class="n">extract</span><span class="p">(</span><span class="kt">int</span> <span class="n">blob_index</span><span class="p">,</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">feat</span><span class="p">,</span> <span class="kt">int</span> <span class="n">type</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+
+<span class="nl">protected:</span>
+    <span class="k">friend</span> <span class="n">Extractor</span> <span class="n">Net</span><span class="o">::</span><span class="n">create_extractor</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">Extractor</span><span class="p">(</span><span class="k">const</span> <span class="n">Net</span><span class="o">*</span> <span class="n">net</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">blob_count</span><span class="p">);</span>
+
+<span class="nl">private:</span>
+    <span class="n">ExtractorPrivate</span><span class="o">*</span> <span class="k">const</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>Net类对象通过调用</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td>
+<td class="rouge-code"><pre><span class="n">Extractor</span> <span class="n">Net</span><span class="o">::</span><span class="n">create_extractor</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">Extractor</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">blobs</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>调用Extractor的构造函数，实例化并返回一个Extractor，这个Extractor检测当前Net的特征。来看看这个Extractor的构造函数定义：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td>
+<td class="rouge-code"><pre><span class="n">Extractor</span><span class="o">::</span><span class="n">Extractor</span><span class="p">(</span><span class="k">const</span> <span class="n">Net</span><span class="o">*</span> <span class="n">_net</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">blob_count</span><span class="p">)</span>
+    <span class="o">:</span> <span class="n">d</span><span class="p">(</span><span class="k">new</span> <span class="nf">ExtractorPrivate</span><span class="p">(</span><span class="n">_net</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="n">d</span><span class="o">-&gt;</span><span class="n">blob_mats</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">blob_count</span><span class="p">);</span>
+    <span class="n">d</span><span class="o">-&gt;</span><span class="n">opt</span> <span class="o">=</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">net</span><span class="o">-&gt;</span><span class="n">opt</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<h3 id="extractorprivate">ExtractorPrivate</h3>
+
+<p>Extractor同样具有一个私有成员变量<code class="language-plaintext highlighter-rouge">ExtractorPrivate* const d</code>，可以看到，Extractor的构造函数根据当前的Net对象初始化<code class="language-plaintext highlighter-rouge">d</code>。<code class="language-plaintext highlighter-rouge">ExtractorPrivate</code>定义如下</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td>
+<td class="rouge-code"><pre><span class="k">class</span> <span class="nc">ExtractorPrivate</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">ExtractorPrivate</span><span class="p">(</span><span class="k">const</span> <span class="n">Net</span><span class="o">*</span> <span class="n">_net</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">net</span><span class="p">(</span><span class="n">_net</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+    <span class="k">const</span> <span class="n">Net</span><span class="o">*</span> <span class="n">net</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Mat</span><span class="o">&gt;</span> <span class="n">blob_mats</span><span class="p">;</span>
+    <span class="n">Option</span> <span class="n">opt</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>Extractor有两个重要的函数：input和extract，分别来看看：</p>
+
+<h3 id="input">input</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+<td class="rouge-code"><pre><span class="kt">int</span> <span class="n">Extractor</span><span class="o">::</span><span class="n">input</span><span class="p">(</span><span class="kt">int</span> <span class="n">blob_index</span><span class="p">,</span> <span class="k">const</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">in</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">blob_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">blob_index</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">d</span><span class="o">-&gt;</span><span class="n">blob_mats</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">d</span><span class="o">-&gt;</span><span class="n">blob_mats</span><span class="p">[</span><span class="n">blob_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">in</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>input函数很简单，就是把输入in塞到ExtractorPrivate-&gt;blob_mats的对应blob_index处（<strong>看来ExtractorPrivate的blob_mats是feature真正保存的地方</strong>）。</p>
+
+<h3 id="extract">extract</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td>
+<td class="rouge-code"><pre><span class="kt">int</span> <span class="n">Extractor</span><span class="o">::</span><span class="n">extract</span><span class="p">(</span><span class="kt">int</span> <span class="n">blob_index</span><span class="p">,</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">feat</span><span class="p">,</span> <span class="kt">int</span> <span class="n">type</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">blob_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">blob_index</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">d</span><span class="o">-&gt;</span><span class="n">blob_mats</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+	<span class="p">...</span>
+
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">d</span><span class="o">-&gt;</span><span class="n">blob_mats</span><span class="p">[</span><span class="n">blob_index</span><span class="p">].</span><span class="n">dims</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>                       <span class="c1">// 如果输出blob为空</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">layer_index</span> <span class="o">=</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">net</span><span class="o">-&gt;</span><span class="n">blobs</span><span class="p">()[</span><span class="n">blob_index</span><span class="p">].</span><span class="n">producer</span><span class="p">;</span>   <span class="c1">// 查找输出blob对应的生产者</span>
+
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">net</span><span class="o">-&gt;</span><span class="n">d</span><span class="o">-&gt;</span><span class="n">forward_layer</span><span class="p">(</span><span class="n">layer_index</span><span class="p">,</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">blob_mats</span><span class="p">,</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">opt</span><span class="p">);</span>   <span class="c1">// 前向推理</span>
+        <span class="c1">// ExtractorPrivate-&gt;Net-&gt;NetPrivate-&gt;forward_layer(layer_index, d-&gt;blob_mats, d-&gt;opt)</span>
+    <span class="p">}</span>
+
+    <span class="n">feat</span> <span class="o">=</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">blob_mats</span><span class="p">[</span><span class="n">blob_index</span><span class="p">];</span>                             <span class="c1">// 输出特征</span>
+	<span class="p">...</span>
+        
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>extract函数调用了<code class="language-plaintext highlighter-rouge">NetPrivate-&gt;forward_layer()</code>，我们来看看这个函数</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td>
+<td class="rouge-code"><pre><span class="kt">int</span> <span class="n">NetPrivate</span><span class="o">::</span><span class="n">forward_layer</span><span class="p">(</span><span class="kt">int</span> <span class="n">layer_index</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Mat</span><span class="o">&gt;&amp;</span> <span class="n">blob_mats</span><span class="p">,</span> <span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">)</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">const</span> <span class="n">Layer</span><span class="o">*</span> <span class="n">layer</span> <span class="o">=</span> <span class="n">layers</span><span class="p">[</span><span class="n">layer_index</span><span class="p">];</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">one_blob_only</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// load bottom blob</span>
+        <span class="kt">int</span> <span class="n">bottom_blob_index</span> <span class="o">=</span> <span class="n">layer</span><span class="o">-&gt;</span><span class="n">bottoms</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">blob_mats</span><span class="p">[</span><span class="n">bottom_blob_index</span><span class="p">].</span><span class="n">dims</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">forward_layer</span><span class="p">(</span><span class="n">blobs</span><span class="p">[</span><span class="n">bottom_blob_index</span><span class="p">].</span><span class="n">producer</span><span class="p">,</span> <span class="n">blob_mats</span><span class="p">,</span> <span class="n">opt</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="c1">// 为简化分析，本文仅保留layer-&gt;one_blob_only的情形</span>
+    <span class="p">{</span>
+        <span class="p">...</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">do_forward_layer</span><span class="p">(</span><span class="n">layer</span><span class="p">,</span> <span class="n">blob_mats</span><span class="p">,</span> <span class="n">opt</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>可以看到，NetPrivate-&gt;forward_layer()递归调用自身。如果当前layer的输入为空（<code class="language-plaintext highlighter-rouge">blob_mats[bottom_blob_index].dims == 0</code>）,便往前查找前一层layer，如果前一层layer的输入仍未空，则继续查找前一层layer…递归终止后从最终输入非空的layer开始，执行<code class="language-plaintext highlighter-rouge">do_forward_layer(layer, blob_mats, opt)</code>逐层前向推断并将计算得到的feature保存在blob_mats中。看一下<code class="language-plaintext highlighter-rouge">NetPrivate::forward_layer()</code>的定义：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+</pre></td>
+<td class="rouge-code"><pre><span class="kt">int</span> <span class="n">NetPrivate</span><span class="o">::</span><span class="n">do_forward_layer</span><span class="p">(</span><span class="k">const</span> <span class="n">Layer</span><span class="o">*</span> <span class="n">layer</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Mat</span><span class="o">&gt;&amp;</span> <span class="n">blob_mats</span><span class="p">,</span> <span class="k">const</span> <span class="n">Option</span><span class="o">&amp;</span> <span class="n">opt</span><span class="p">)</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">layer</span><span class="o">-&gt;</span><span class="n">one_blob_only</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">bottom_blob_index</span> <span class="o">=</span> <span class="n">layer</span><span class="o">-&gt;</span><span class="n">bottoms</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="kt">int</span> <span class="n">top_blob_index</span> <span class="o">=</span> <span class="n">layer</span><span class="o">-&gt;</span><span class="n">tops</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+        <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">bottom_blob_ref</span> <span class="o">=</span> <span class="n">blob_mats</span><span class="p">[</span><span class="n">bottom_blob_index</span><span class="p">];</span>
+        <span class="n">Mat</span> <span class="n">bottom_blob</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">opt</span><span class="p">.</span><span class="n">lightmode</span><span class="p">)</span>
+        <span class="p">{</span>
+			<span class="p">...</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">bottom_blob</span><span class="p">.</span><span class="n">dims</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">bottom_blob</span> <span class="o">=</span> <span class="n">bottom_blob_ref</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">convert_layout</span><span class="p">(</span><span class="n">bottom_blob</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">opt</span><span class="p">);</span>
+
+        <span class="c1">// forward</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">opt</span><span class="p">.</span><span class="n">lightmode</span> <span class="o">&amp;&amp;</span> <span class="n">layer</span><span class="o">-&gt;</span><span class="n">support_inplace</span><span class="p">)</span>
+        <span class="p">{</span>
+			<span class="p">...</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">Mat</span> <span class="n">top_blob</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">layer</span><span class="o">-&gt;</span><span class="n">forward</span><span class="p">(</span><span class="n">bottom_blob</span><span class="p">,</span> <span class="n">top_blob</span><span class="p">,</span> <span class="n">opt</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ret</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+
+            <span class="c1">// store top blob</span>
+            <span class="n">blob_mats</span><span class="p">[</span><span class="n">top_blob_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">top_blob</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">opt</span><span class="p">.</span><span class="n">lightmode</span><span class="p">)</span>
+        <span class="p">{</span>
+			<span class="p">...</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+		<span class="p">...</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></pre></div></div>
+
+<p>如图所示（<a href="https://polariszhao.github.io/2020/09/21/ncnn%E5%89%8D%E5%90%91%E8%AE%A1%E7%AE%97%E6%B5%81%E7%A8%8B%E6%B5%85%E6%9E%90/">图源</a>）</p>
+
+<p><img src="/assets/img/20210404/recusive_forward.png" alt=""></p>
+
+<center>图4   前向逐层递归与后向逐层推理示意</center>
+
+<p><img src="/assets/img/20210404/blob_index.png" alt=""></p>
+
+<center>图5   备忘：blobs, blob_mats, blob_index之间的关系</center>

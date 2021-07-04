@@ -1,0 +1,775 @@
+<p>本文对NCNN中的基本组件进行介绍：工具类如。网络构建类如Blob, layer, net等</p>
+
+<blockquote>
+  <p>注：以下分析中所使用的代码为2021年4月3日的版本，另外为了便于分析，代码中删去了大量不影响理解的#ifndef #endif等宏函数，删去了vulkan相关函数代码，删去了Android相关代码。</p>
+</blockquote>
+
+<h1 id="工具类组件">工具类组件</h1>
+
+<h2 id="datareader">DataReader</h2>
+
+<h3 id="datareader-1">DataReader</h3>
+
+<p>上头文件</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre><span class="k">class</span> <span class="nc">NCNN_EXPORT</span> <span class="n">DataReader</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">DataReader</span><span class="p">();</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">DataReader</span><span class="p">();</span>
+    
+    <span class="c1">// parse plain param text</span>
+    <span class="c1">// return 1 if scan success</span>
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">scan</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="c1">// read binary param and model data</span>
+    <span class="c1">// return bytes read</span>
+    <span class="k">virtual</span> <span class="kt">size_t</span> <span class="n">read</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>这是一个基类，用来继承。</p>
+
+<h3 id="datareaderfromstdio">DataReaderFromStdio</h3>
+
+<p>从文件流中读取数据。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre><span class="k">class</span> <span class="nc">DataReaderFromStdioPrivate</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">NCNN_EXPORT</span> <span class="n">DataReaderFromStdio</span> <span class="o">:</span> <span class="k">public</span> <span class="n">DataReader</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="k">explicit</span> <span class="n">DataReaderFromStdio</span><span class="p">(</span><span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">DataReaderFromStdio</span><span class="p">();</span>
+
+    <span class="k">virtual</span> <span class="kt">int</span> <span class="n">scan</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="kt">size_t</span> <span class="n">read</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+<span class="nl">private:</span>
+    <span class="n">DataReaderFromStdio</span><span class="p">(</span><span class="k">const</span> <span class="n">DataReaderFromStdio</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">DataReaderFromStdio</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">DataReaderFromStdio</span><span class="o">&amp;</span><span class="p">);</span>
+
+<span class="nl">private:</span>
+    <span class="n">DataReaderFromStdioPrivate</span><span class="o">*</span> <span class="k">const</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>函数scan是按照format格式读取信息的，所以它非常适合读取模型的proto信息；函数read是安装buffer长度读取信息的，所以它非常适合读取读取模型的权重信息。<a href="https://zhuanlan.zhihu.com/p/340256986">参考</a></p>
+
+<p>构建了一个成员变量<code class="language-plaintext highlighter-rouge">DataReaderFromStdioPrivate* const d</code>，这里主要作用是维护一个FILE指针(<code class="language-plaintext highlighter-rouge">d-&gt;fp</code>)，记录当前<strong>文件读取状态（位置）</strong>。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre><span class="kt">int</span> <span class="n">DataReaderFromStdio</span><span class="o">::</span><span class="n">scan</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">format</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">fscanf</span><span class="p">(</span><span class="n">d</span><span class="o">-&gt;</span><span class="n">fp</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">size_t</span> <span class="n">DataReaderFromStdio</span><span class="o">::</span><span class="n">read</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">buf</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">)</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">fread</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">d</span><span class="o">-&gt;</span><span class="n">fp</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<blockquote>
+  <p>fscanf函数可参考<a href="http://www.cplusplus.com/reference/cstdio/fscanf/">这里</a></p>
+</blockquote>
+
+<h2 id="paramdict">ParamDict</h2>
+
+<p>NCNN使用的参数字典</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+</pre></td><td class="rouge-code"><pre><span class="c1">// ncnn/src/paramdict.h</span>
+
+<span class="k">class</span> <span class="nc">DataReader</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">Net</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">ParamDictPrivate</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">NCNN_EXPORT</span> <span class="n">ParamDict</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">ParamDict</span><span class="p">();</span>     
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">ParamDict</span><span class="p">();</span>
+
+    <span class="n">ParamDict</span><span class="p">(</span><span class="k">const</span> <span class="n">ParamDict</span><span class="o">&amp;</span><span class="p">);</span> <span class="c1">// copy</span>
+    <span class="n">ParamDict</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">ParamDict</span><span class="o">&amp;</span><span class="p">);</span> <span class="c1">// assign</span>
+	
+    <span class="c1">// 获取index为id处元素的type</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>  
+	
+    <span class="c1">// 获取index为id处元素的值，如果该处值为null，则返回def</span>
+    <span class="kt">int</span> <span class="n">get</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="kt">int</span> <span class="n">def</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>       <span class="c1">// get int</span>
+    <span class="kt">float</span> <span class="n">get</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="kt">float</span> <span class="n">def</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>   <span class="c1">// get float</span>
+    <span class="n">Mat</span> <span class="n">get</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">def</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>  <span class="c1">// get array</span>
+	
+    <span class="c1">// 将index为id处元素的值设为i/f/v</span>
+    <span class="kt">void</span> <span class="n">set</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">);</span>         <span class="c1">// set int</span>
+    <span class="kt">void</span> <span class="n">set</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="kt">float</span> <span class="n">f</span><span class="p">);</span>       <span class="c1">// set float</span>
+    <span class="kt">void</span> <span class="n">set</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="k">const</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">v</span><span class="p">);</span>  <span class="c1">// set array</span>
+
+<span class="nl">protected:</span>
+    <span class="k">friend</span> <span class="k">class</span> <span class="nc">Net</span><span class="p">;</span>
+
+    <span class="kt">void</span> <span class="n">clear</span><span class="p">();</span>
+
+    <span class="kt">int</span> <span class="n">load_param</span><span class="p">(</span><span class="k">const</span> <span class="n">DataReader</span><span class="o">&amp;</span> <span class="n">dr</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">load_param_bin</span><span class="p">(</span><span class="k">const</span> <span class="n">DataReader</span><span class="o">&amp;</span> <span class="n">dr</span><span class="p">);</span>
+
+<span class="nl">private:</span>
+    <span class="n">ParamDictPrivate</span><span class="o">*</span> <span class="k">const</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>构建了一个成员变量<code class="language-plaintext highlighter-rouge">ParamDictPrivate* const d</code>，这里主要作用是维护一个长度为<code class="language-plaintext highlighter-rouge">NCNN_MAX_PARAM_COUNT</code>的参数列表，列表中每个元素为一个结构体，记录元素的数据类型与值：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre><span class="k">struct</span>
+<span class="p">{</span>
+    <span class="c1">// 0 = null, 1 = int/float, 2 = int, 3 = float</span>
+    <span class="c1">// 4 = array of int/float, 5 = array of int, 6 = array of float</span>
+    <span class="kt">int</span> <span class="n">type</span><span class="p">;</span>
+    <span class="k">union</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">f</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">Mat</span> <span class="n">v</span><span class="p">;</span>
+<span class="p">}</span> 
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>这里需要注意一下成员函数<code class="language-plaintext highlighter-rouge">load_param(const DataReader&amp; dr)</code>：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+</pre></td><td class="rouge-code"><pre><span class="kt">int</span> <span class="n">ParamDict</span><span class="o">::</span><span class="n">load_param</span><span class="p">(</span><span class="k">const</span> <span class="n">DataReader</span><span class="o">&amp;</span> <span class="n">dr</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">clear</span><span class="p">();</span>
+    <span class="c1">//   0=100 1=1.250000 -23303=5,0.1,0.2,0.4,0.8,1.0</span>
+
+    <span class="c1">// parse each key=value pair (id是key, vstr是value)</span>
+    <span class="kt">int</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">dr</span><span class="p">.</span><span class="n">scan</span><span class="p">(</span><span class="s">"%d="</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">id</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>   
+        <span class="c1">//fprintf(stderr, "pd load_param: %d \n", id);   // here, read the key </span>
+        <span class="kt">bool</span> <span class="n">is_array</span> <span class="o">=</span> <span class="n">id</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="mi">23300</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_array</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">id</span> <span class="o">=</span> <span class="o">-</span><span class="n">id</span> <span class="o">-</span> <span class="mi">23300</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="p">...</span>	
+        <span class="c1">// 先以char格式读取，然后判断是否为float类型，保存在d的列表的对应id处</span>
+        <span class="c1">// 对 array</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_array</span><span class="p">)</span>
+        <span class="p">{</span>	
+            <span class="p">...</span>
+            <span class="n">d</span><span class="o">-&gt;</span><span class="n">params</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">type</span> <span class="o">=</span> <span class="n">is_float</span> <span class="o">?</span> <span class="mi">6</span> <span class="o">:</span> <span class="mi">5</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// 对 float or int </span>
+        <span class="k">else</span>   
+        <span class="p">{</span>
+			<span class="p">...</span>
+            <span class="n">d</span><span class="o">-&gt;</span><span class="n">params</span><span class="p">[</span><span class="n">id</span><span class="p">].</span><span class="n">type</span> <span class="o">=</span> <span class="n">is_float</span> <span class="o">?</span> <span class="mi">3</span> <span class="o">:</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>更详细的介绍可参考ncnn的<a href="https://github.com/Tencent/ncnn/wiki/param-and-model-file-structure#layer-param">wiki</a></p>
+
+<h2 id="options">Options</h2>
+
+<p>先上头文件</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+</pre></td><td class="rouge-code"><pre><span class="c1">// ncnn/src/option.h</span>
+
+<span class="k">class</span> <span class="nc">Allocator</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">NCNN_EXPORT</span> <span class="n">Option</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="n">Option</span><span class="p">();</span>  <span class="c1">// default option</span>
+
+<span class="nl">public:</span>
+    <span class="c1">// light mode, intermediate blob will be recycled when enabled, enabled by default</span>
+    <span class="kt">bool</span> <span class="n">lightmode</span><span class="p">;</span>
+
+    <span class="c1">// thread count, default value is the one returned by get_cpu_count()</span>
+    <span class="kt">int</span> <span class="n">num_threads</span><span class="p">;</span>
+
+    <span class="c1">// blob memory allocator</span>
+    <span class="n">Allocator</span><span class="o">*</span> <span class="n">blob_allocator</span><span class="p">;</span>
+
+    <span class="c1">// workspace memory allocator</span>
+    <span class="n">Allocator</span><span class="o">*</span> <span class="n">workspace_allocator</span><span class="p">;</span>
+
+    <span class="c1">// the time openmp threads busy-wait for more work before going to sleep</span>
+    <span class="c1">// default value is 20ms to keep the cores enabled</span>
+    <span class="c1">// without too much extra power consumption afterwards</span>
+    <span class="kt">int</span> <span class="n">openmp_blocktime</span><span class="p">;</span>
+
+    <span class="c1">// enable winograd convolution optimization</span>
+    <span class="c1">// improve convolution 3x3 stride1 performance, may consume more memory</span>
+    <span class="c1">// changes should be applied before loading network structure and weight</span>
+    <span class="c1">// enabled by default</span>
+    <span class="kt">bool</span> <span class="n">use_winograd_convolution</span><span class="p">;</span>
+
+    <span class="c1">// enable sgemm convolution optimization</span>
+    <span class="c1">// improve convolution 1x1 stride1 performance, may consume more memory</span>
+    <span class="c1">// changes should be applied before loading network structure and weight</span>
+    <span class="c1">// enabled by default</span>
+    <span class="kt">bool</span> <span class="n">use_sgemm_convolution</span><span class="p">;</span>
+
+    <span class="c1">// enable quantized int8 inference</span>
+    <span class="c1">// use low-precision int8 path for quantized model</span>
+    <span class="c1">// changes should be applied before loading network structure and weight</span>
+    <span class="c1">// enabled by default</span>
+    <span class="kt">bool</span> <span class="n">use_int8_inference</span><span class="p">;</span>
+
+    <span class="c1">// enable vulkan compute</span>
+    <span class="kt">bool</span> <span class="n">use_vulkan_compute</span><span class="p">;</span>
+
+    <span class="c1">// enable bf16 data type for storage</span>
+    <span class="c1">// improve most operator performance on all arm devices, may consume more memory</span>
+    <span class="kt">bool</span> <span class="n">use_bf16_storage</span><span class="p">;</span>
+
+    <span class="c1">// enable options for gpu inference</span>
+    <span class="kt">bool</span> <span class="n">use_fp16_packed</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">use_fp16_storage</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">use_fp16_arithmetic</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">use_int8_packed</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">use_int8_storage</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">use_int8_arithmetic</span><span class="p">;</span>
+
+    <span class="c1">// enable simd-friendly packed memory layout</span>
+    <span class="c1">// improve all operator performance on all arm devices, will consume more memory</span>
+    <span class="c1">// changes should be applied before loading network structure and weight</span>
+    <span class="c1">// enabled by default</span>
+    <span class="kt">bool</span> <span class="n">use_packing_layout</span><span class="p">;</span>
+
+    <span class="kt">bool</span> <span class="n">use_shader_pack8</span><span class="p">;</span>
+
+    <span class="c1">// subgroup option</span>
+    <span class="kt">bool</span> <span class="n">use_subgroup_basic</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">use_subgroup_vote</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">use_subgroup_ballot</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">use_subgroup_shuffle</span><span class="p">;</span>
+
+    <span class="c1">// turn on for adreno</span>
+    <span class="kt">bool</span> <span class="n">use_image_storage</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">use_tensor_storage</span><span class="p">;</span>
+
+    <span class="c1">// used for fp16 weight storage in AVX</span>
+    <span class="c1">// TODO drop this option</span>
+    <span class="kt">bool</span> <span class="n">use_weight_fp16_storage</span><span class="p">;</span>
+
+    <span class="c1">// enable DAZ(Denormals-Are-Zero) and FTZ(Flush-To-Zero)</span>
+    <span class="c1">// default value is 3</span>
+    <span class="c1">// 0 = DAZ OFF, FTZ OFF</span>
+    <span class="c1">// 1 = DAZ ON , FTZ OFF</span>
+    <span class="c1">// 2 = DAZ OFF, FTZ ON</span>
+    <span class="c1">// 3 = DAZ ON,  FTZ ON</span>
+    <span class="kt">int</span> <span class="n">flush_denormals</span><span class="p">;</span>
+
+    <span class="kt">bool</span> <span class="n">use_local_pool_allocator</span><span class="p">;</span>
+
+    <span class="kt">bool</span> <span class="n">use_reserved_1</span><span class="p">;</span>
+	<span class="p">...</span>
+    <span class="kt">bool</span> <span class="n">use_reserved_11</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Options类包含了使用的各种配置选项。Options的默认构造函数为这些配置设定初始值。</p>
+
+<h2 id="mat">Mat</h2>
+
+<p>https://github.com/Tencent/ncnn/wiki#print-mat-content</p>
+
+<p>Mat类是NCNN中一个很重要的类，blob的feature数据类型就是Mat，了解Mat类对理解算子的实现十分重要。</p>
+
+<p>源码量很多，这里仅挑一些常用的基本操作介绍。</p>
+
+<p>头文件</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+</pre></td><td class="rouge-code"><pre><span class="c1">// ncnn/src/mat.h</span>
+
+<span class="k">class</span> <span class="nc">NCNN_EXPORT</span> <span class="n">Mat</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="c1">// empty -&gt; dims=0, w=0, h=0, c=0, cstep=0</span>
+    <span class="n">Mat</span><span class="p">();</span>
+    <span class="c1">// vec   -&gt; dims=1, w=w, h=1, c=1, cstep=w</span>
+    <span class="n">Mat</span><span class="p">(</span><span class="kt">int</span> <span class="n">w</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">elemsize</span> <span class="o">=</span> <span class="mi">4u</span><span class="p">,</span> <span class="n">Allocator</span><span class="o">*</span> <span class="n">allocator</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="c1">// image -&gt; dims=2, w=w, h=h, c=1, cstep=(size_t)w * h</span>
+    <span class="n">Mat</span><span class="p">(</span><span class="kt">int</span> <span class="n">w</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">elemsize</span> <span class="o">=</span> <span class="mi">4u</span><span class="p">,</span> <span class="n">Allocator</span><span class="o">*</span> <span class="n">allocator</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="c1">// dim   -&gt; dims=3, w=w, h=h, c=c, cstep=alignSize((size_t)w * h * elemsize, 16) / elemsize;</span>
+    <span class="n">Mat</span><span class="p">(</span><span class="kt">int</span> <span class="n">w</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">elemsize</span> <span class="o">=</span> <span class="mi">4u</span><span class="p">,</span> <span class="n">Allocator</span><span class="o">*</span> <span class="n">allocator</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="c1">// packed vec, image, dim ...</span>
+    <span class="c1">// external vec, image, dim ...</span>
+    <span class="c1">// external packed vec, image, dim ...</span>
+
+    <span class="n">Mat</span><span class="p">(</span><span class="k">const</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">m</span><span class="p">);</span>             <span class="c1">// copy</span>
+    <span class="o">~</span><span class="n">Mat</span><span class="p">();</span>                        <span class="c1">// release</span>
+    <span class="n">Mat</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Mat</span><span class="o">&amp;</span> <span class="n">m</span><span class="p">);</span>  <span class="c1">// assign</span>
+    <span class="c1">// set all</span>
+    <span class="kt">void</span> <span class="n">fill</span><span class="p">(</span><span class="kt">float</span> <span class="n">v</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="n">fill</span><span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">);</span>
+
+    <span class="c1">// refcount++</span>
+    <span class="kt">void</span> <span class="n">addref</span><span class="p">();</span>
+    <span class="c1">// refcount--</span>
+    <span class="kt">void</span> <span class="n">release</span><span class="p">();</span>
+
+    <span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">total</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="c1">// bits per element</span>
+    <span class="kt">int</span> <span class="n">elembits</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="c1">// shape only</span>
+    <span class="n">Mat</span> <span class="n">shape</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>    
+
+    <span class="c1">// data reference</span>
+    <span class="n">Mat</span> <span class="n">channel</span><span class="p">(</span><span class="kt">int</span> <span class="n">c</span><span class="p">);</span>                <span class="c1">//创建了一个新Mat，其首地址指向原Mat的channel c起始处</span>
+    <span class="k">const</span> <span class="n">Mat</span> <span class="n">channel</span><span class="p">(</span><span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">float</span><span class="o">*</span> <span class="n">row</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">);</span>
+    <span class="k">const</span> <span class="kt">float</span><span class="o">*</span> <span class="n">row</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">row</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">);</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+    <span class="k">const</span> <span class="n">T</span><span class="o">*</span> <span class="n">row</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="c1">// range reference</span>
+    <span class="n">Mat</span> <span class="n">channel_range</span><span class="p">(</span><span class="kt">int</span> <span class="n">c</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">);</span>
+    <span class="k">const</span> <span class="n">Mat</span> <span class="n">channel_range</span><span class="p">(</span><span class="kt">int</span> <span class="n">c</span><span class="p">,</span> <span class="kt">int</span> <span class="n">channels</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">Mat</span> <span class="n">row_range</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rows</span><span class="p">);</span>
+    <span class="k">const</span> <span class="n">Mat</span> <span class="n">row_range</span><span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rows</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">Mat</span> <span class="n">range</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+    <span class="k">const</span> <span class="n">Mat</span> <span class="n">range</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="c1">// access raw data</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+    <span class="k">operator</span> <span class="n">T</span><span class="o">*</span><span class="p">();</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+    <span class="k">operator</span> <span class="k">const</span> <span class="n">T</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="c1">// convenient access float vec element</span>
+    <span class="kt">float</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">[](</span><span class="kt">size_t</span> <span class="n">i</span><span class="p">);</span>
+    <span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">[](</span><span class="kt">size_t</span> <span class="n">i</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+
+    <span class="c1">// substract channel-wise mean values, then multiply by normalize values, pass 0 to skip</span>
+    <span class="kt">void</span> <span class="n">substract_mean_normalize</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span><span class="o">*</span> <span class="n">mean_vals</span><span class="p">,</span> <span class="k">const</span> <span class="kt">float</span><span class="o">*</span> <span class="n">norm_vals</span><span class="p">);</span>
+
+    <span class="c1">// convenient construct from half precision floating point data</span>
+    <span class="k">static</span> <span class="n">Mat</span> <span class="n">from_float16</span><span class="p">(</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">short</span><span class="o">*</span> <span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">);</span>
+
+    <span class="c1">// pointer to the data</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">data</span><span class="p">;</span>
+
+    <span class="c1">// pointer to the reference counter</span>
+    <span class="c1">// when points to user-allocated data, the pointer is NULL</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">refcount</span><span class="p">;</span>
+
+    <span class="c1">// element size in bytes</span>
+    <span class="c1">// 4 = float32/int32</span>
+    <span class="c1">// 2 = float16</span>
+    <span class="c1">// 1 = int8/uint8</span>
+    <span class="c1">// 0 = empty</span>
+    <span class="kt">size_t</span> <span class="n">elemsize</span><span class="p">;</span>
+
+    <span class="c1">// packed count inside element</span>
+    <span class="c1">// c/1-h-w-1  h/1-w-1  w/1-1  scalar</span>
+    <span class="c1">// c/4-h-w-4  h/4-w-4  w/4-4  sse/neon</span>
+    <span class="c1">// c/8-h-w-8  h/8-w-8  w/8-8  avx/fp16</span>
+    <span class="kt">int</span> <span class="n">elempack</span><span class="p">;</span>
+
+    <span class="c1">// the allocator</span>
+    <span class="n">Allocator</span><span class="o">*</span> <span class="n">allocator</span><span class="p">;</span>
+
+    <span class="c1">// the dimension rank</span>
+    <span class="kt">int</span> <span class="n">dims</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">w</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">h</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
+
+    <span class="kt">size_t</span> <span class="n">cstep</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>太过具体的内存分配现在还不太明确，目前就按照：</p>
+
+<ul>
+  <li>
+    <p>对于一维数据，按照一维内存分布存储；</p>
+  </li>
+  <li>
+    <p>对于二维数据，按照w*h长的一维内存分布存储（row major）；</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre> * B Matrix:
+ *    b00 b01 b02 b03 b04
+ *    b10 b11 b12 b13 b14
+ *    b20 b21 b22 b23 b24
+ *
+ * B layout in memory (row major):
+ *    b00 b01 b02 b03 b04 b10 b11 b12 b13 b14 b20 b21 b22 b23 b24
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+  <li>
+    <p>对于三维数据，按照c*(w*h)的二维内存分布存储。</p>
+  </li>
+</ul>
+
+<p><a href="https://github.com/Tencent/ncnn/issues/334">这里</a>有一个up主提供的例子：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre>mat shape w=3 h=2 c=4
+
+internal memory layout
+a00 a01 a02 a10 a11 a12 pad pad
+b00 b01 b02 b10 b11 b12 pad pad
+c00 c01 c02 c10 c11 c12 pad pad
+d00 d01 d02 d10 d11 d12 pad pad
+
+each channel is 16byte aligned, padding values may be filled in channel gaps
+mat.data -&gt; address of a00
+mat.row(1) -&gt; address of a10
+mat.channel(0).row(1) -&gt; address of a10
+mat.channel(1).row(1) -&gt; address of b10
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><a href="https://zhuanlan.zhihu.com/p/336359747">这里</a>有一个较为详细的讲解，但目前还不太能读懂。</p>
+
+<p><code class="language-plaintext highlighter-rouge">ncnn/src/concat.cpp</code>是一个比较好的学习素材。</p>

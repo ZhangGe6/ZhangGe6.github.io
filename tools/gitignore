@@ -15,10 +15,3 @@ vendor
 # npm dependencies
 node_modules
 package-lock.json
-
-# constructing blogs
-/constructing_blogs
-
-# some temporal local things
-*.ppt
-*.pptx

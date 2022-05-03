@@ -136,7 +136,11 @@ sudo add-apt-repository ppa:graphics-drivers/ppa && sudo apt update
 ## 下载并安装cuda
 从[CUDA Toolkit Archive](https://developer.nvidia.com/cuda-toolkit-archive)找到所需的cuda版本，选择`runfile`类型文件下载。
 
-进入刚才下载文件所在的目录，执行以下命令进行安装（执行本命令前请先看下面的**注**）
+进入刚才下载文件所在的目录，执行以下命令进行安装
+
+> （执行本命令前请先看下面的**注**）
+{: .prompt-warning }
+
 ```bash
 sudo ./cuda_<your_version>_linux.run  
 ```

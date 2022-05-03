@@ -1,13 +1,16 @@
 ---
 title: Text and Typography
-author: Cotes Chung
+author: cotes
 date: 2019-08-08 11:33:00 +0800
-categories: [Blog_tutorial]
+categories: [Blogging, Demo]
 tags: [typography]
 math: true
 mermaid: true
 image:
-  src: https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/commons/devices-mockup.png
+  path: /commons/devices-mockup.png
+  width: 800
+  height: 500
+  alt: Responsive rendering of Chirpy theme on multiple devices.
 ---
 
 This post is to show Markdown syntax rendering on [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/fork), you can also use it as an example of writing. Now, let's start looking at text and typography.
@@ -50,14 +53,13 @@ Fluttering and dancing in the breeze.
 ### Unordered list
 
 - Chapter
-	- Setcion
-      - Paragraph
+  - Section
+    - Paragraph
 
 ### Task list
 
 - [ ] TODO
 - [x] Completed
-- Hold on
 - [ ] Defeat COVID-19
   - [x] Vaccine production
   - [ ] Economic recovery
@@ -71,10 +73,23 @@ Sun
 Moon
 : the natural satellite of the earth, visible by reflected light from the sun
 
-
 ## Block Quote
 
-> This line to shows the Block Quote.
+> This line shows the _block quote_.
+
+## Prompts
+
+> An example showing the `tip` type prompt.
+{: .prompt-tip }
+
+> An example showing the `info` type prompt.
+{: .prompt-info }
+
+> An example showing the `warning` type prompt.
+{: .prompt-warning }
+
+> An example showing the `danger` type prompt.
+{: .prompt-danger }
 
 ## Tables
 
@@ -88,44 +103,42 @@ Moon
 
 <http://127.0.0.1:4000>
 
-
 ## Footnote
 
 Click the hook will locate the footnote[^footnote], and here is another footnote[^fn-nth-2].
-
 
 ## Images
 
 - Default (with caption)
 
-![Desktop View](https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/posts/20190808/mockup.png)
+![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" }
 _Full screen width and center alignment_
 
 <br>
 
-- Specify width
+- Shadow
 
-![Desktop View](https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/posts/20190808/mockup.png){: width="400"}
-_400px image width_
+![Window shadow](/posts/20190808/window.png){: .shadow width="1548" height="864" style="max-width: 90%" }
+_shadow effect (visible in light mode)_
 
 <br>
 
 - Left aligned
 
-![Desktop View](https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/posts/20190808/mockup.png){: width="350" .normal}
+![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" style="max-width: 70%" .normal}
 
 <br>
 
 - Float to left
 
-  ![Desktop View](https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/posts/20190808/mockup.png){: width="240" .left}
+  ![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" style="max-width: 200px" .left}
   "A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space."
 
 <br>
 
 - Float to right
 
-  ![Desktop View](https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/posts/20190808/mockup.png){: width="240" .right}
+  ![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" style="max-width: 200px" .right}
   "A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space. A repetitive and meaningless text is used to fill the space."
 
 <br>
@@ -140,22 +153,23 @@ _400px image width_
   cherry :active, c, after b a, 1d
 ```
 
-
 ## Mathematics
 
 The mathematics powered by [**MathJax**](https://www.mathjax.org/):
 
 $$ \sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6} $$
 
-When \\(a \ne 0\\), there are two solutions to \\(ax^2 + bx + c = 0\\) and they are
+When $a \ne 0$, there are two solutions to $ax^2 + bx + c = 0$ and they are
 
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
-
 
 ## Inline code
 
 This is an example of `Inline Code`.
 
+## Filepath
+
+Here is the `/path/to/the/file.extend`{: .filepath}.
 
 ## Code block
 
@@ -175,44 +189,23 @@ SHELL=/usr/local/bin/bash
 PYENV_SHELL=bash
 ```
 
-#### Ruby
-
-```ruby
-def sum_eq_n?(arr, n)
-  return true if arr.empty? && n == 0
-  arr.product(arr).reject { |a,b| a == b }.any? { |a,b| a + b == n }
-end
-```
-
 #### Shell
 
-```shell
+```bash
 if [ $? -ne 0 ]; then
     echo "The command was not successful.";
     #do the needful / exit
 fi;
 ```
 
-#### Liquid
+### Specific filename
 
-{% raw %}
-```liquid
-{% if product.title contains 'Pack' %}
-  This product's title contains the word Pack.
-{% endif %}
+```sass
+@import
+  "colors/light-typography",
+  "colors/dark-typography"
 ```
-{% endraw %}
-
-#### Java
-
-```java
-private void writeObject(java.io.ObjectOutputStream s)
-  throws java.io.IOException {
-  // Write out any hidden serialization magic
-  s.defaultWriteObject();
-  for (E e: map.keySet()) s.writeObject(e);
-}
-```
+{: file='_sass/jekyll-theme-chirpy.scss'}
 
 ## Reverse Footnote
 

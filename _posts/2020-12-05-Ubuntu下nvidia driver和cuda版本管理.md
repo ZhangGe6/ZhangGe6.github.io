@@ -24,11 +24,15 @@ tags: [ubuntu, nvidia driver, cuda]
 # 安装/更新英伟达驱动(nvidia driver)
 ## 卸载原驱动(如若需要)
 ```bash
-sudo apt-get purge "nvidia*"
+sudo nvidia-uninstall
+sudo apt-get --purge remove nvidia-*
 
 # ./NVIDIA-Linux-x86_64-390.48.run --uninstall
 ```
+> 第一个弹窗选`yes` [参考 20:43](https://www.bilibili.com/video/BV1kx411m7Fk?p=4)
+
 ## 下载正确版本的驱动
+
 ### 查看显卡型号
  ```bash
  lspci | grep -i nvidia

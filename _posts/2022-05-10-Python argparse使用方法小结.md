@@ -1,7 +1,7 @@
 ---
 title: Python argparse使用方法小结
 author: Zhang Ge
-date: 202２-05-10 19:42:00 +0800
+date: 2022-05-10 19:42:00 +0800
 categories: [实践, 框架学习]
 tags: [Python, argparse]
 ---

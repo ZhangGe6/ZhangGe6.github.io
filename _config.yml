@@ -98,6 +98,7 @@ comments:
     repo:         # <gh-username>/<repo>
     issue_term:   # < url | pathname | title | ...>
   # Giscus options › https://giscus.app
+  # How to configure it: https://vuepress-theme-hope.github.io/v2/comment/zh/guide/giscus.html#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C
   giscus:
     repo:    ZhangGe6/ZhangGe6.github.io         # <gh-username>/<repo>
     repo_id: "R_kgDOHRk9Cg"

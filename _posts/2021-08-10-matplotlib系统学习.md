@@ -147,6 +147,17 @@ ax.legend()
 
 - 保存图像：`plt.savefig(PATH)`
 
+- 把图例放在图像外：[参考](https://matplotlib.org/3.5.0/api/_as_gen/matplotlib.pyplot.legend.html)，调节`legend()`参数，一个示例如下：
+
+  ```python
+  # plt.figure(figsize=(8, 4.8))   # 可能需要调节画布大小，防止图像本身被图例空间过度压缩
+  
+  # 把图例的左上角对齐到图的右上角
+  plt.legend(loc='upper left', bbox_to_anchor=(1., 1.))
+  plt.tight_layout()   # 没有这一行，图例可能被裁切掉
+  ```
+
+  
 
 ## 图像属性设置
 

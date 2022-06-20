@@ -65,7 +65,7 @@ for name, param in model.named_parameters():
 
 坑1：**到`HISTOGRAMS`栏查看直方图**（有一次我在`DISRUBUTIONS`栏看了半天愣是啥也看不到）
 
-坑2：记得最后调用`writer.close()`，否则最后一层的权重分布图（我这边）时看不到的
+坑2：记得最后调用`writer.close()`，否则最后一层的权重分布图（我这边）是看不到的
 
 ### 显示matplotlib图像
 

@@ -87,17 +87,17 @@ There is a detailed [tutorial](https://developers.google.com/analytics/solutions
 
     ```console
     [root@bc96abf71ef8 /]# gcloud init
-
+    
     ~snip~
-
+    
     Go to the following link in your browser:
-
+    
         https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=XYZ.apps.googleusercontent.com&redirect_uri=ABCDEFG
-
+    
     Enter verification code: <VERIFICATION CODE THAT YOU GET AFTER YOU VISIT AND AUTHENTICATE FROM THE ABOVE LINK>
-
+    
     You are logged in as: [blah_blah@gmail.com].
-
+    
     Pick cloud project to use:
     [1] chirpy-test-300716
     [2] Create a new project
@@ -153,7 +153,7 @@ There is a detailed [tutorial](https://developers.google.com/analytics/solutions
     ```console
     [root@bc96abf71ef8 src]# gcloud app deploy
     Services to deploy:
-
+    
     descriptor:      [/tmp/google-analytics-super-proxy/src/app.yaml]
     source:          [/tmp/google-analytics-super-proxy/src]
     target project:  [chirpy-test-XXXX]
@@ -163,7 +163,7 @@ There is a detailed [tutorial](https://developers.google.com/analytics/solutions
 
 
     Do you want to continue (Y/n)? Y
-
+    
     Beginning deployment of service [default]...
     ╔════════════════════════════════════════════════════════════╗
     ╠═ Uploading 1 file to Google Cloud Storage                 ═╣
@@ -172,10 +172,10 @@ There is a detailed [tutorial](https://developers.google.com/analytics/solutions
     Updating service [default]...done.
     Setting traffic split for service [default]...done.
     Deployed service [default] to [https://chirpy-test-XXXX.ue.r.appspot.com]
-
+    
     You can stream logs from the command line by running:
     $ gcloud app logs tail -s default
-
+    
     To view your application in the web browser run:
     $ gcloud app browse
     ```

@@ -45,7 +45,7 @@ tensorboard --logdir=runs
 ### 绘制scalar曲线
 
 ```python
-writer.add_scalar(tag, value, global_step)
+writer.add_scalar(tag, scalar_value, global_step)
 ```
 
 若要把多张图像绘制在一张图上，则使用：[参考](https://pytorch.org/docs/stable/tensorboard.html#torch.utils.tensorboard.writer.SummaryWriter.add_scalars)

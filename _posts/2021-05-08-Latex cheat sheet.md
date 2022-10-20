@@ -33,6 +33,20 @@ math: true
   f(x)= \begin{cases} 0 & condition1 \\ 1 & condition2 \end{cases}
   $$
 
+- 换行对齐
+
+  ```
+  \begin{aligend}
+  	f(x) &= ax + b \\
+  	g(x) &= cx + d
+  \end{aligend}
+  ```
+
+  
+
+- 范数
+
+  $\Vert s \Vert_p$：`\Vert s \Vert_p`
 
 # 图片
 

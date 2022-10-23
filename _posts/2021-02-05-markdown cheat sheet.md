@@ -13,7 +13,8 @@ math: true
 
 and this：[rxaviers/7360908](https://gist.github.com/rxaviers/7360908)
 
-有的emoji因为各种原因在目前的markdown中不支持，可以在[这里](https://emojipedia.org/)搜索，跳过markdown编码，直接复制表情。如这个:partying_face: 🥳
+- 可以先到[这里](https://www.emojiall.com/zh-hans)搜关键词，找到图标，然后到[这里](https://gist.github.com/rxaviers/7360908)直接搜图标得到markdown代码。
+- 有的emoji因为各种原因在目前的markdown中不支持，可以在[这里](https://emojipedia.org/)搜索，跳过markdown编码，直接复制表情。如这个:partying_face: 🥳
 
 
 

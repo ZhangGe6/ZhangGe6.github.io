@@ -136,7 +136,7 @@ math: true
 \end{table}
 ```
 
-# 双栏模板下，要插入跨栏图表
+## 双栏模板下，要插入跨栏图表
 
 将
 
@@ -156,7 +156,8 @@ math: true
 
 即可。表格table同理。
 
-# 代码段
+# 代码和算法
+## 代码段
 
 ```latex
 \begin{lstlisting}[language=Python]
@@ -164,9 +165,39 @@ math: true
 \end{lstlisting} 
 ```
 
-# 伪代码
+## 伪代码
 
 [参考](https://blog.csdn.net/golden1314521/article/details/40923377)
+
+# 引用
+
+## BibTeX
+
+[参考](https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management#BibTeX)
+
+```tex
+% main.tex
+\begin{document}
+
+Here~\cite{zhang2022integer} is a sample citation.
+
+\bibliographystyle{plain}
+\bibliography{citations.bib} 
+
+\end{document}
+```
+
+```bib
+% citations.bib
+@inproceedings{zhang2022integer,
+  title={...},
+  author={...}
+}
+...
+```
+
+
+
 
 # 其他
 

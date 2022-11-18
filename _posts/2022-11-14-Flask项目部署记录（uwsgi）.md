@@ -6,7 +6,7 @@ categories: [实践, 硬技能]
 tags: [Flask, uwsgi]
 ---
 
-[Flask](https://dormousehole.readthedocs.io/en/latest/quickstart.html)是一个使用Python编写的轻量级Web应用框架。基于它可以很方便地搭建起一个Web应用，但其内建服务器不适用于生产环境。所以当在本地完成了一个Flask应用，为了让它更高效、安全、稳定地把它展示给全世界，是时候部署它了！
+[Flask](https://dormousehole.readthedocs.io/en/latest/quickstart.html)是一个使用Python编写的轻量级Web应用框架。基于它可以很方便地搭建起一个Web应用，但其内建服务器不适用于生产环境。所以当在本地完成了一个Flask应用，为了更高效、安全、稳定地把它展示给全世界，是时候部署它了！
 
 本页记录我把一个Flask应用部署到腾讯云服务器上的操作过程，用到了[`uwsgi`](https://uwsgi-docs.readthedocs.io/en/latest/index.html)。
 

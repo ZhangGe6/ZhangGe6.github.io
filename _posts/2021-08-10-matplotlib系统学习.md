@@ -138,8 +138,15 @@ ax.legend()
 - 水平线：`ax.axhline(y=5, xmin=0.1, xmax=0.9, linestyle="--")`
 - 竖直线：`ax.axvline(x=5, ymin=0.1, ymax=0.9, linestyle="--")`
 
-### 绘制直方图
+### 绘制柱状图
 [参考](https://www.geeksforgeeks.org/bar-plot-in-matplotlib/)
+
+### 绘制直方图
+[参考](mail.sjtu.edu.cn/zimbra/mail#1)
+```python
+ax.hist(dist, bins=n_bins)
+```
+
 
 # 其他
 
@@ -163,8 +170,10 @@ ax.legend()
 
 - 设置`Figure`大小：`plt.figure(figsize=(width, height)) ` 
   - 默认是`(6.4, 4.8)` [参考](https://www.geeksforgeeks.org/how-to-change-the-size-of-figures-drawn-with-matplotlib/)
-
 - 设定图像分辨率：`plt.figure(dpi=1200)`
+- 设置字体大小：`plt.rcParams.update({'font.size': 22})`
+  - 默认是10，[参考](https://stackoverflow.com/a/3900167/10096987)
+
 
 # 参考
 

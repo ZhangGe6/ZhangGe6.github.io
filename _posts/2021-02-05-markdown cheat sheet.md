@@ -7,6 +7,9 @@ tags: [cheat sheets, 转载]
 math: true
 ---
 
+镇楼：没有什么比[Markdown官方教程](https://markdown.com.cn/)更懂Markdown.
+
+
 # Markdown emoji
 
 :point_right:See this github repo:  [ikatyang/emoji-cheat-sheet](https://github.com/ikatyang/emoji-cheat-sheet)

@@ -22,31 +22,63 @@ math: true
 - 分段函数
 
   ```latex
-  f(x)= \begin{cases} 
-  		0 & condition1 \\   
-  		1 & condition2 
-  	   \end{cases} 
+  f(x)= 
+  \begin{cases} 
+  	0 & condition1 \\   
+  	1 & condition2 
+  \end{cases} 
   ```
 
-  
-  $$
-  f(x)= \begin{cases} 0 & condition1 \\ 1 & condition2 \end{cases}
-  $$
+
+$$
+  f(x)= 
+  \begin{cases} 
+  	0 & condition1 \\   
+  	1 & condition2 
+  \end{cases}
+$$
 
 - 换行对齐
 
   ```
-  \begin{aligend}
+  \begin{aligned}
   	f(x) &= ax + b \\
   	g(x) &= cx + d
-  \end{aligend}
+  \end{aligned}
   ```
+
+  $$
+  \begin{aligned}
+  	f(x) &= ax + b \\
+  	g(x) &= cx + d
+  \end{aligned}
+  $$
 
   
 
-- 范数
+- 一些数学符号：
 
-  $\Vert s \Vert_p$：`\Vert s \Vert_p`
+  - 范数：`\Vert x \Vert _p` $$\rightarrow$$ $\Vert x \Vert _p$
+  - 连乘：`\prod`  $$\rightarrow$$ $\prod$
+  - 积分：`\int`  $$\rightarrow$$ $\int$
+  - 正比于：`\propto`  $$\rightarrow$$ $\propto$
+  
+- 一些数学字体
+  - 空心字体：`$\mathbb{R}$` $$\rightarrow$$ $$\mathbb{R}$$  
+  - 加粗字体：`$\mathbf{R}$` $$\rightarrow$$  $$\mathbf{R}$$ 
+  - 花体：`$\mathcal{R}$` $$\rightarrow$$  $\mathcal{R}$
+
+- 一些上标：
+  - `$\hat{x}$` $$\rightarrow$$  $\hat{x}$
+
+  - `$\tilde{x}$` $$\rightarrow$$  $\tilde{x}$
+
+  - `$\overline{x}$` $$\rightarrow$$  $\overline{x}$
+
+  - `$\dot{x}$` $$\rightarrow$$  $\dot{x}$
+
+    
+
 
 # 图片
 
@@ -101,18 +133,19 @@ math: true
 % 两图并排放置（共用图编号）
 \begin{figure}[!htp]
   \centering
-  \begin{subfigure}{0.3\textwidth}
-    \centering
-    \includegraphics[height=2cm]{sjtu-badge.pdf}
-    \caption{校徽}
-  \end{subfigure}
-  \hspace{1cm}
   \begin{subfigure}{0.4\textwidth}
     \centering
-    \includegraphics[height=1.5cm]{sjtu-name.pdf}
-    \caption{校名。注意这个图略矮些，subfigure 中同一行的子图在顶端对齐。}
+    \includegraphics[height=2cm]{sjtu-badge.pdf} % width=0.3\linewidth
+    \caption{子图1名}
   \end{subfigure}
-  \caption{包含子图题的范例（使用 subfigure）}
+  % \hspace{1cm}
+
+  \begin{subfigure}{0.4\textwidth}
+    \centering
+    \includegraphics[height=2cm]{sjtu-name.pdf} % width=0.3\linewidth
+    \caption{子图2名}
+  \end{subfigure}
+  \caption{图名}
   \label{fig:subfigure}
 \end{figure}
 ```
@@ -123,18 +156,20 @@ math: true
 
 ```latex
 \begin{table}[!htp]
-\centering
-\caption{tab_caption}
-\label{tab:tab_label}
-    \begin{tabular}{|c| m{3cm}| m{5cm}| m{4cm}| }
-    \hline
-      &   &   & \\
-    \hline
-      &   &   & \\
-    \hline
-    \end{tabular}
+  \centering
+  \label{tab:labelOfTable}
+  \caption{captionOfTable}
+  \begin{tabular}{|c|c|c|c|}
+      \hline
+        &   &   & \\
+      \hline
+        &   &   & \\
+      \hline
+  \end{tabular}
 \end{table}
 ```
+
+合并单元格：[参考](https://blog.csdn.net/wzxlovesy/article/details/69063271)
 
 ## 双栏模板下，要插入跨栏图表
 
@@ -182,7 +217,7 @@ math: true
 Here~\cite{zhang2022integer} is a sample citation.
 
 \bibliographystyle{plain}
-\bibliography{citations.bib} 
+\bibliography{citations} 
 
 \end{document}
 ```
@@ -204,6 +239,8 @@ Here~\cite{zhang2022integer} is a sample citation.
 - 文字居中：`\centerline{}`
 
 - 文字下划线：`\uline{}`
+
+- 调节行距：`\linespread{} `：`\linespread{1.3} ` $$\rightarrow$$ 1.3倍行距 [参考](https://zhuanlan.zhihu.com/p/138408387)
 
 - 另起一页：`\clearpage`
 

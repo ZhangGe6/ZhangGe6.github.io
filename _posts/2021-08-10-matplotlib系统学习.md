@@ -142,7 +142,7 @@ ax.legend()
 [参考](https://www.geeksforgeeks.org/bar-plot-in-matplotlib/)
 
 ### 绘制直方图
-[参考](mail.sjtu.edu.cn/zimbra/mail#1)
+[参考](https://matplotlib.org/stable/gallery/statistics/hist.html)
 ```python
 ax.hist(dist, bins=n_bins)
 ```

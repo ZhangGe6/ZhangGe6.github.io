@@ -123,6 +123,10 @@ ax.plot(A, B, marker='o')
 ax.plot(A, B, color='b')
 ```
 
+> - `matplotlib`也支持根据关键字指定颜色，如`color=#C6FDFA`
+>
+> - 配色方案参考：[配色卡](https://peiseka.com/)
+
 #### 一个`ax`上绘制多条曲线并添加图例
 
 ```python
@@ -139,7 +143,11 @@ ax.legend()
 - 竖直线：`ax.axvline(x=5, ymin=0.1, ymax=0.9, linestyle="--")`
 
 ### 绘制柱状图
-[参考](https://www.geeksforgeeks.org/bar-plot-in-matplotlib/)
+[参考](https://www.geeksforgeeks.org/bar-plot-in-matplotlib/) 
+
+给柱状图增加annotation的方案：
+
+- [参考](https://matplotlib.org/stable/gallery/lines_bars_and_markers/barchart.html)
 
 ### 绘制直方图
 [参考](https://matplotlib.org/stable/gallery/statistics/hist.html)
@@ -147,6 +155,25 @@ ax.legend()
 ax.hist(dist, bins=n_bins)
 ```
 
+### 绘制带colorbar的(二维特征)图
+
+[参考](https://matplotlib.org/stable/gallery/subplots_axes_and_figures/subplots_adjust.html#sphx-glr-gallery-subplots-axes-and-figures-subplots-adjust-py) [参考](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.colorbar.html)
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+plt.imshow(np.random.random((100, 100)))
+plt.colorbar()
+# plt.show()
+plt.savefig("colorbar.png")
+```
+
+### 绘制箱型图
+
+[参考](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.boxplot.html)
+
+[参考](https://matplotlib.org/stable/gallery/statistics/boxplot_demo.html#boxplots)
 
 # 其他
 
@@ -162,6 +189,17 @@ ax.hist(dist, bins=n_bins)
   # 把图例的左上角对齐到图的右上角
   plt.legend(loc='upper left', bbox_to_anchor=(1., 1.))
   plt.tight_layout()   # 没有这一行，图例可能被裁切掉
+  ```
+
+- 关闭坐标轴：`plt.axis('off')`
+
+- 解决中文无法显示：[参考](https://blog.csdn.net/u014779536/article/details/108843288)
+
+  ```python
+  import matplotlib.pyplot as plt
+  
+  plt.rcParams['font.sans-serif'] = ['SimHei'] # 步骤一（替换sans-serif字体）
+  plt.rcParams['axes.unicode_minus'] = False   # 步骤二（解决坐标轴负数的负号显示问题）
   ```
 
   

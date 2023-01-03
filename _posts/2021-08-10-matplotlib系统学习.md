@@ -150,7 +150,8 @@ ax.legend()
 - [参考](https://matplotlib.org/stable/gallery/lines_bars_and_markers/barchart.html)
 
 ### 绘制直方图
-[参考](https://matplotlib.org/stable/gallery/statistics/hist.html)
+[参考](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.hist.html) [参考](https://matplotlib.org/stable/gallery/statistics/hist.html)
+
 ```python
 ax.hist(dist, bins=n_bins)
 ```

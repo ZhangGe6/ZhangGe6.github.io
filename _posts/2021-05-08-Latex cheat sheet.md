@@ -299,3 +299,13 @@ Here~\cite{zhang2022integer} is a sample citation.
 - 参考文献显示问号的解决
 
   [参考](https://blog.csdn.net/blgpb/article/details/84885762)
+  
+- 以矢量图形式插入PPT中绘制的图
+
+
+  - PPT中选中图形，右键 $\rightarrow$ 另存为图片 $\rightarrow$ 保存为`.svg`格式
+  - 将`.svg`转化为`.pdf`：[INKSCAPE](https://inkscape.org/)
+
+    - 打开`.svg`文件
+    - 另存为`.pdf`文件
+  - 在Latex中插入`.pdf`文件

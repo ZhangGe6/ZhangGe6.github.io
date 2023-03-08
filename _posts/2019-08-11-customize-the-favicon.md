@@ -14,6 +14,10 @@ Prepare a square image (PNG, JPG, or SVG) with a size of 512x512 or more, and th
 
 In the next step, the webpage will show all usage scenarios. You can keep the default options, scroll to the bottom of the page, and click the button <kbd>Generate your Favicons and HTML code</kbd> to generate the favicon.
 
+As  `Real Favicon Generator` only allows to create favicons from pictures that are up to 2 MB in size, the tool [**websiteplanet**](https://www.websiteplanet.com/webtools/favicon-generator/) allows to create favicons from pictures that are up to 5 MB from either JPG, PNG or GIF or even from a gallery. It is worthy to try this if we care about the favicon size limit. (Thanks Emma for recommanding the tool !) 
+
+[**website planet**](https://www.websiteplanet.com/webtools/favicon-generator/) and click the button <kbd>Generate!</kbd> 
+
 ## Download & Replace
 
 Download the generated package, unzip and delete the following two from the extracted files:

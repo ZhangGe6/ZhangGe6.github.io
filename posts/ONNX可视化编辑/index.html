@@ -1,0 +1,287 @@
+<!DOCTYPE html><html lang="zh" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="onnx-modifier ONNX可视化编辑!" /><meta name="author" content="Zhang Ge" /><meta property="og:locale" content="zh" /><meta name="description" content="A minimal, responsive, and powerful Jekyll theme for presenting professional writing." /><meta property="og:description" content="A minimal, responsive, and powerful Jekyll theme for presenting professional writing." /><link rel="canonical" href="https://zhangge6.github.io/posts/ONNX%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BC%96%E8%BE%91/" /><meta property="og:url" content="https://zhangge6.github.io/posts/ONNX%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BC%96%E8%BE%91/" /><meta property="og:site_name" content="ZhangGe’s Blog" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2022-05-01T14:00:00+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="onnx-modifier ONNX可视化编辑!" /><meta name="twitter:site" content="@twitter_username" /><meta name="twitter:creator" content="@Zhang Ge" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Zhang Ge"},"dateModified":"2022-06-20T22:26:28+08:00","datePublished":"2022-05-01T14:00:00+08:00","description":"A minimal, responsive, and powerful Jekyll theme for presenting professional writing.","headline":"onnx-modifier ONNX可视化编辑!","mainEntityOfPage":{"@type":"WebPage","@id":"https://zhangge6.github.io/posts/ONNX%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BC%96%E8%BE%91/"},"url":"https://zhangge6.github.io/posts/ONNX%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BC%96%E8%BE%91/"}</script><title>onnx-modifier ONNX可视化编辑! | ZhangGe's Blog</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="ZhangGe's Blog"><meta name="application-name" content="ZhangGe's Blog"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end">
+<div class="profile-wrapper text-center">
+<div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/commons/avatar.jpg%20" alt="avatar" onerror="this.style.display='none'"> </a>
+</div>
+<div class="site-title mt-3"> <a href="/">ZhangGe's Blog</a>
+</div>
+<div class="site-subtitle font-italic">Stay hungry, stay foolish.</div>
+</div>
+<ul class="w-100">
+<li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a>
+</li>
+</ul>
+<div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/ZhangGe6" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20%5B'sjtu.zg123','gmail.com'%5D.join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a>
+</div>
+</div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>onnx-modifier ONNX可视化编辑!</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div>
+<i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel">Cancel</span>
+</div></div><div id="main-wrapper">
+<div id="main">
+<div class="row">
+<div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<h1 data-toc-skip>onnx-modifier ONNX可视化编辑!</h1>
+<div class="post-meta text-muted">
+<div> By <em> <a href="https://twitter.com/username">ZhangGe</a> </em>
+</div>
+<div class="d-flex"><div> <span> Posted <em class="timeago" data-ts="1651384800" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"> 2022-05-01 </em> </span> <span> Updated <em class="timeago" data-ts="1655735188" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"> 2022-06-20 </em> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="2361 words"> <em>13 min</em> read</span>
+</div></div>
+</div>
+<div class="post-content">
+<p><img data-src="/assets/img/20220429/onnx_modifier_logo.png" alt="" data-proofer-ignore></p>
+<blockquote><p>本文可能未及时更新，请点击 <a href="https://github.com/ZhangGe6/onnx-modifier">onnx-modifier github仓库</a> 查看最新版本和特性。</p></blockquote>
+<p><code class="language-plaintext highlighter-rouge">ONNX</code>(Open Neural Network Exchange) 是一种针对机器学习所设计的开放式的文件格式，经常作为不同框架模型转化的中间文件。有时我们拿到ONNX文件，想将它进行一些修改，比如：</p>
+<ul>
+<li>
+<strong>删除部分节点</strong>。 比如，<code class="language-plaintext highlighter-rouge">ONNX</code>文件中一些前后处理的算子节点，以方便后续部署。</li>
+<li>
+<strong>修改节点输入输出名</strong>。 比如修改某一节点的输入输出名称，更改模型拓扑结构。</li>
+<li>
+<strong>编辑节点属性值</strong>。</li>
+<li>
+<strong>增加新节点</strong>。</li>
+</ul>
+<p>目前常用的方法是，先可视化模型图结构，然后基于<code class="language-plaintext highlighter-rouge">ONNX</code>的Python API编写脚本，对模型图结构进行编辑。但这可能需要我们在可视化-脚本-可视化-…之间反复横跳。而且在一张庞大的图上搜集想要修改的节点，也比较繁琐耗时。👋</p>
+<p>能不能有一个工具，可以<strong>实时预览编辑后的可视化效果，从而更方便，快捷，直观地实现<code class="language-plaintext highlighter-rouge">ONNX</code>模型的编辑</strong>呢？<img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20"> 这便是<code class="language-plaintext highlighter-rouge">onnx-modifier</code> (<a href="">github</a>)开发的动机。所有的编辑信息将最终汇总，统一送由ONNX Python API处理，得到编辑后的ONNX模型文件。</p>
+<p>目前已支持下列操作：</p>
+<ul class="task-list">
+<li class="task-list-item" hide-bullet>
+<input type="checkbox" class="task-list-item-checkbox" disabled checked>删除/恢复节点<ul>
+<li>删除单个节点</li>
+<li>删除一个节点及所有以该节点为根节点的子节点</li>
+<li>恢复误删的节点</li>
+</ul>
+</li>
+<li class="task-list-item" hide-bullet>
+<input type="checkbox" class="task-list-item-checkbox" disabled checked>修改节点输入输出名</li>
+<li class="task-list-item" hide-bullet>
+<input type="checkbox" class="task-list-item-checkbox" disabled checked>编辑节点属性值</li>
+<li class="task-list-item" hide-bullet>
+<input type="checkbox" class="task-list-item-checkbox" disabled checked>增加新节点（beta）</li>
+</ul>
+<p><code class="language-plaintext highlighter-rouge">onnx-modifier</code>基于流行的模型可视化工具 <a href="https://github.com/lutzroeder/netron">Netron</a> 和轻量级Web应用框架 <a href="https://github.com/pallets/flask">flask</a> 开发。希望它能给社区带来一些贡献~</p>
+<h1 id="安装与运行">安装与运行</h1>
+<p>目前支持两种方法运行<code class="language-plaintext highlighter-rouge">onnx-modifier</code>：</p>
+<h2 id="源码命令行启动">
+<span class="mr-2">源码+命令行启动</span><a href="#%E6%BA%90%E7%A0%81%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%90%AF%E5%8A%A8" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<ul>
+<li>
+<p>拉取<code class="language-plaintext highlighter-rouge">onnx-modifier</code>，安装所需要的Python库</p>
+<div class="language-bash highlighter-rouge">
+<div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td>
+<td class="rouge-code"><pre>git clone git@github.com:ZhangGe6/onnx-modifier.git
+<span class="nb">cd </span>onnx-modifier
+  
+pip <span class="nb">install </span>onnx
+pip <span class="nb">install </span>flask
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+<li>
+<p>运行</p>
+<div class="language-bash highlighter-rouge">
+<div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>python app.py
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+</ul>
+<h2 id="从可执行文件启动">
+<span class="mr-2">从可执行文件启动</span><a href="#%E4%BB%8E%E5%8F%AF%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6%E5%90%AF%E5%8A%A8" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<ul><li>Windows: 下载可执行文件<a href="https://drive.google.com/file/d/1y7mYlvF0G5iiNDgOFh1ESXlTs8I2ipVQ/view?usp=sharing">onnx-modifier.exe (27.6MB)</a>，双击即可启动。<ul><li>默认使用Edge浏览器作为运行环境。<blockquote><p>生成可执行文件的步骤记录在<code class="language-plaintext highlighter-rouge">app_desktop.py</code>文件中。未来会为其他平台生成可执行文件。</p></blockquote>
+</li></ul>
+</li></ul>
+<p>点击输出中的url（如<code class="language-plaintext highlighter-rouge">http://127.0.0.1:5000/</code>），即可在浏览器中进入onnx-modifier界面。点击<code class="language-plaintext highlighter-rouge">Open Model...</code>，上传所需要编辑的模型文件，上传完毕后，网络可视化结构会自动显示。</p>
+<h1 id="用法">用法</h1>
+<p>图结构层级的操作按钮放置在可视化页面的左上角，目前有四个：<code class="language-plaintext highlighter-rouge">Refresh</code>，<code class="language-plaintext highlighter-rouge">Reset</code>，<code class="language-plaintext highlighter-rouge">Download</code>和<code class="language-plaintext highlighter-rouge">Add node</code>. 它们的功能分别为：</p>
+<ul>
+<li>
+<p><code class="language-plaintext highlighter-rouge">Refresh</code>：刷新界面，预览当前编辑得到的模型图结构；</p>
+<blockquote><p>在当前版本里，模型图结构会在每次编辑操作后即时自动更新，无需手动刷新。所以该按钮用到的次数会比之前的版本里少上不少（解放双手<img class="emoji" title=":raised_hands:" alt=":raised_hands:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f64c.png" height="20" width="20">）。</p></blockquote>
+</li>
+<li><p><code class="language-plaintext highlighter-rouge">Reset</code>：重置模型图结构为导入时的初始状态；</p></li>
+<li><p><code class="language-plaintext highlighter-rouge">Download</code>：保存编辑后的模型文件到本地。</p></li>
+<li><p><code class="language-plaintext highlighter-rouge">Add node</code>：向当前模型中，添加新节点。</p></li>
+</ul>
+<p>节点层级的操作都在节点侧边栏里，点击某一节点后即可弹出。</p>
+<p>一起来详细康康。</p>
+<h2 id="删除恢复节点">
+<span class="mr-2">删除/恢复节点</span><a href="#%E5%88%A0%E9%99%A4%E6%81%A2%E5%A4%8D%E8%8A%82%E7%82%B9" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>删除节点有两种模式：<code class="language-plaintext highlighter-rouge">Delete With Children</code> 和 <code class="language-plaintext highlighter-rouge">Delete Single Node</code>. 后者只删除当前单个节点；而前者还会自动删除以这个节点为根节点的所有子节点，当我们需要删除一长串节点时，这个功能会比较有用。</p>
+<blockquote><p><code class="language-plaintext highlighter-rouge">Delete With Children</code>基于回溯算法实现。</p></blockquote>
+<p>执行删除操作后，被删除的节点首先会变灰显示，以供预览。如果某一个节点被误删了，在该节点的侧边栏点击<code class="language-plaintext highlighter-rouge">Recover Node</code>即可以将其恢复到图中。预览确认删除操作无误后，点击<code class="language-plaintext highlighter-rouge">Enter</code>，图结构会刷新，显示节点删除后的状态。</p>
+<p>一个典型的删除操作如下图所示：</p>
+<p><img data-src="/assets/img/20220429/delete_node.gif" alt="" data-proofer-ignore></p>
+<h2 id="修改节点输入输出名">
+<span class="mr-2">修改节点输入输出名</span><a href="#%E4%BF%AE%E6%94%B9%E8%8A%82%E7%82%B9%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%90%8D" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>通过修改节点的输出输出名，我们可以对模型拓扑结构进行修改（如删除一些预处理/后处理节点）。该功能同样可以用在更改模型的输出的名称（即修改模型叶子节点的输出名）。</p>
+<p>那在<code class="language-plaintext highlighter-rouge">onnx-modifer</code>中要怎么做呢？很简单，找到节点侧边栏的输入输出对应的输入框，键入新的名称就可以啦。图结构会根据键入的名称即时自动刷新。</p>
+<p>举个栗子，在下图所示的模型中，我们想要删除预处理对应的节点（<code class="language-plaintext highlighter-rouge">Sub-&gt;Mul-&gt;Sub-&gt;Transpose</code>），可以这样做：</p>
+<ol>
+<li>点击第一个<code class="language-plaintext highlighter-rouge">Conv</code>节点，在弹出的属性栏中，将输入名称改为<em>serving_default_input:0</em> (<code class="language-plaintext highlighter-rouge">data_0</code>节点的输出名)；</li>
+<li>图结构自动刷新，可以发现，输入节点已经和第一个<code class="language-plaintext highlighter-rouge">Conv</code>节点直接相连，几个预处理节点也已经从前向图中分离出来，将它们删除；</li>
+<li>完工（点击<code class="language-plaintext highlighter-rouge">Download</code>就可以获得编辑后的ONNX模型啦）。</li>
+</ol>
+<blockquote><p>如果我们希望通过修改，让节点$A$（比如上例中的<code class="language-plaintext highlighter-rouge">data_0</code>节点）连向节点$B$（比如上例中的第一个<code class="language-plaintext highlighter-rouge">Conv</code>节点），建议的方式是：将节点$B$的输入名称修改为节点$A$的输出名称，而不是把$A$的输出名称修改为节点$B$的输入名称。 因为节点$B$的输入名称可能同时为其他节点（比如上例中的<code class="language-plaintext highlighter-rouge">Transpose</code>节点）的输出名称，会导致一些预料外的结果。</p></blockquote>
+<p>上例的修改过程如下图所示：</p>
+<p><img data-src="/assets/img/20220429/rename_io.gif" alt="" data-proofer-ignore></p>
+<h2 id="编辑节点属性值">
+<span class="mr-2">编辑节点属性值</span><a href="#%E7%BC%96%E8%BE%91%E8%8A%82%E7%82%B9%E5%B1%9E%E6%80%A7%E5%80%BC" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>在节点侧边栏对应的属性值输入框中，键入新的属性值即可。</p>
+<blockquote><p>点击属性值输入框右侧的<code class="language-plaintext highlighter-rouge">+</code>，可显示该属性的参考信息。</p></blockquote>
+<p><img data-src="/assets/img/20220429/change_attr.gif" alt="" data-proofer-ignore></p>
+<h2 id="增加新节点beta">
+<span class="mr-2">增加新节点（beta）</span><a href="#%E5%A2%9E%E5%8A%A0%E6%96%B0%E8%8A%82%E7%82%B9beta" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>有时候我们希望向模型中添加新节点。<code class="language-plaintext highlighter-rouge">onnx-modifier</code>已开始支持该功能。</p>
+<p>在主页面的左上方，有一个<code class="language-plaintext highlighter-rouge">Add node</code>按钮和一个selector选择器，我们可以通过这二者的配合，完成节点的添加，只需3步：</p>
+<ol>
+<li>
+<p>在selector中选择要添加的节点类型，在点击<code class="language-plaintext highlighter-rouge">Add node</code>按钮后，一个对应类型的新节点将自动出现在图上。</p>
+<blockquote><p>selector中包含来自<code class="language-plaintext highlighter-rouge">ai.onnx</code>(171), <code class="language-plaintext highlighter-rouge">ai.onnx.preview.training</code>(4), <code class="language-plaintext highlighter-rouge">ai.onnx.ml</code>(18) 和 <code class="language-plaintext highlighter-rouge">com.microsoft</code>(1)的所有节点类型。</p></blockquote>
+</li>
+<li>点击这个新节点，在弹出的侧边栏中进行节点的编辑：<ul>
+<li>节点属性：初始化为<code class="language-plaintext highlighter-rouge">null</code> （显示为<code class="language-plaintext highlighter-rouge">undefined</code>）。同上节，在对应的属性框中输入新值即可。</li>
+<li>修改节点输入输出名。输入输出名决定了节点将插入在图结构中的位置。</li>
+</ul>
+</li>
+<li>完工（点击<code class="language-plaintext highlighter-rouge">Download</code>即可获得编辑后的ONNX模型）。</li>
+</ol>
+<p><img data-src="/assets/img/20220429/add_new_node.gif" alt="" data-proofer-ignore></p>
+<p>以下是该功能的一些提醒和小tip：</p>
+<ol>
+<li>在当前版本中，是不支持添加含有参数的节点的（比如<code class="language-plaintext highlighter-rouge">Conv</code>, <code class="language-plaintext highlighter-rouge">BatchNormalization</code>）。其他大多数节点，在我的测试中，可正确添加（比如<code class="language-plaintext highlighter-rouge">Flatten</code>, <code class="language-plaintext highlighter-rouge">ArgMax</code>, <code class="language-plaintext highlighter-rouge">Concat</code>）。</li>
+<li>点击selector，输入要添加的节点的首字母（比如<code class="language-plaintext highlighter-rouge">Flatten</code>的<code class="language-plaintext highlighter-rouge">f</code>），可帮我们定位到以该字母开头的节点列表区域，加快检索速度。</li>
+<li>点击节点侧边栏的<code class="language-plaintext highlighter-rouge">NODE PROPERTIES</code>的<code class="language-plaintext highlighter-rouge">type</code>框右侧的<code class="language-plaintext highlighter-rouge">?</code>，和节点属性框右侧的<code class="language-plaintext highlighter-rouge">+</code>，可以显示关于当前节点类型/属性值的参考信息。</li>
+<li>为确保正确性，节点的各属性值建议全部填写（而不是留着<code class="language-plaintext highlighter-rouge">undefined</code>）。默认值在当前版本可能支持得还不够好。</li>
+<li>如果一个属性值是列表类型，则各元素之间使用‘<code class="language-plaintext highlighter-rouge">,</code>’分隔。</li>
+<li>在当前版本中，如果一个节点的输入/输出是一个列表类型（如<code class="language-plaintext highlighter-rouge">Concat</code>），限制最多显示8个。如果一个节点实际输入/输出小于8个，则填写对应数目的输入输出即可，多出来的应以<code class="language-plaintext highlighter-rouge">list_custom</code>开头，它们会在后续处理中自动被忽略。</li>
+<li>这个功能还处在开发中，可能会不够鲁棒。所以如果大家在实际使用时碰到问题，非常欢迎提issue!</li>
+</ol>
+<p><code class="language-plaintext highlighter-rouge">onnx-modifer</code>正在活跃地更新中<img class="emoji" title=":hammer_and_wrench:" alt=":hammer_and_wrench:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f6e0.png" height="20" width="20">。 欢迎使用，提issue，如果有帮助的话，感谢给个<img class="emoji" title=":star:" alt=":star:" src="https://github.githubassets.com/images/icons/emoji/unicode/2b50.png" height="20" width="20">~</p>
+<h1 id="示例模型文件">示例模型文件</h1>
+<p>为方便测试，以下提供一些典型的样例模型文件，主要来自于<a href="https://github.com/onnx/models">onnx model zoo</a></p>
+<ul>
+<li>squeezeNet <a href="https://github.com/onnx/models/blob/main/vision/classification/squeezenet/model/squeezenet1.0-12.onnx">链接 (4.72MB)</a>
+</li>
+<li>MobileNet <a href="https://github.com/onnx/models/blob/main/vision/classification/mobilenet/model/mobilenetv2-7.onnx">链接 (13.3MB)</a>
+</li>
+<li>ResNet50-int8 <a href="https://github.com/onnx/models/blob/main/vision/classification/resnet/model/resnet50-v1-12-int8.onnx">链接 (24.6MB)</a>
+</li>
+<li>movenet-lightning <a href="https://pan.baidu.com/s/1MVheshDu58o4AAgoR9awRQ?pwd=jub9">链接 (9.01MB)</a><ul>
+<li>将Google提供的预训练<a href="https://tfhub.dev/google/movenet/singlepose/lightning/4">tflite模型</a>，使用<a href="https://github.com/onnx/tensorflow-onnx">tensorflow-onnx</a>转换得到；</li>
+<li>模型中包含前处理和一大块后处理节点。</li>
+</ul>
+</li>
+</ul>
+<h1 id="参考资料">参考资料</h1>
+<ul>
+<li><a href="https://github.com/lutzroeder/netron">Netron</a></li>
+<li><a href="https://github.com/pallets/flask">flask</a></li>
+<li>ONNX IR <a href="https://github.com/onnx/onnx/blob/main/docs/IR.md">Official doc</a>
+</li>
+<li>ONNX Python API <a href="https://github.com/onnx/onnx/blob/main/docs/PythonAPIOverview.md">Official doc</a>, <a href="https://leimao.github.io/blog/ONNX-Python-API/">Leimao’s Blog</a>
+</li>
+<li>ONNX IO Stream <a href="https://leimao.github.io/blog/ONNX-IO-Stream/">Leimao’s Blog</a>
+</li>
+<li><a href="https://github.com/saurabh-shandilya/onnx-utils">onnx-utils</a></li>
+<li><a href="https://github.com/t4t5/sweetalert">sweetalert</a></li>
+</ul>
+</div>
+<div class="post-tail-wrapper text-muted">
+<div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href="/categories/%E4%B8%93%E4%B8%9A%E7%A7%AF%E7%B4%AF/">专业积累</a>, <a href="/categories/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/">工具开发</a>
+</div>
+<div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/onnx/" class="post-tag no-text-decoration">onnx</a>
+</div>
+<div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2">
+<div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div>
+<div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=onnx-modifier%20ONNX%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BC%96%E8%BE%91!%20-%20ZhangGe's%20Blog&amp;url=https://zhangge6.github.io/posts/ONNX%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BC%96%E8%BE%91/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=onnx-modifier%20ONNX%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BC%96%E8%BE%91!%20-%20ZhangGe's%20Blog&amp;u=https://zhangge6.github.io/posts/ONNX%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BC%96%E8%BE%91/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https://zhangge6.github.io/posts/ONNX%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BC%96%E8%BE%91/&amp;text=onnx-modifier%20ONNX%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BC%96%E8%BE%91!%20-%20ZhangGe's%20Blog" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" data-title-succeed="Link copied successfully!"> </i> </span>
+</div>
+</div>
+</div>
+</div></div>
+<div id="panel-wrapper" class="col-xl-3 pl-2 text-muted">
+<div class="access">
+<div id="access-lastmod" class="post">
+<div class="panel-heading">Recently Updated</div>
+<ul class="post-content pl-0 pb-1 ml-1 mt-2">
+<li><a href="/posts/Ubuntu%E5%9F%BA%E7%A1%80%E6%93%8D%E4%BD%9C/">Ubuntu基础操作</a></li>
+<li><a href="/posts/Git%E5%AD%A6%E4%B9%A0/">Git学习</a></li>
+<li><a href="/posts/VS-code%E4%BD%BF%E7%94%A8/">VS code使用</a></li>
+<li><a href="/posts/Shell%E5%AD%A6%E4%B9%A0/">Shell学习</a></li>
+<li><a href="/posts/gdb%E5%AD%A6%E4%B9%A0/">gdb学习</a></li>
+</ul>
+</div>
+<div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a> <a class="post-tag" href="/tags/argparse/">argparse</a>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+<div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
+<nav id="toc" data-toggle="toc"></nav>
+</div>
+</div>
+</div>
+<div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<div id="related-posts" class="mt-5 mb-2 mb-sm-4">
+<h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3>
+<div class="card-deck mb-4">
+<div class="card"> <a href="/posts/%E9%83%A8%E7%BD%B2%E7%BB%8F%E9%AA%8C%E7%A7%AF%E7%B4%AF/"><div class="card-body"> <em class="timeago small" data-ts="1649997060"> 2022-04-15 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>部署经验总结</h3>
+<div class="text-muted small"><p> 预处理 ncnn的substract_mean_normalize ​ 该函数输入像素范围在[0,255]，对于不同的框架可能需要进行转换，具体参见这里。 安卓端部署 Android Studio 打包APK</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/Python%E7%A7%AF%E7%B4%AF/"><div class="card-body"> <em class="timeago small" data-ts="1607667300"> 2020-12-11 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Python积累</h3>
+<div class="text-muted small"><p> 关于本页 一些Python的基本知识、操作积累，记录下方便日后查找使用。 python文件读写模式 参考：Stack Overflow | r r+ w w+ a a+ ------------------|-------------------------- read | + + + ...</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/How-to-inquire-a-dataset/"><div class="card-body"> <em class="timeago small" data-ts="1610354280"> 2021-01-11 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>How to inquire a dataset</h3>
+<div class="text-muted small"><p> One example Dear Miss/Mr., Good day. We have the honor to read the project of CMDFALL and are full of interest in the dataset. We extremely hope to be able to compare our new algorithm with oth...</p></div>
+</div></a>
+</div>
+</div>
+</div>
+<div class="post-navigation d-flex justify-content-between"> <a href="/posts/%E9%83%A8%E7%BD%B2%E7%BB%8F%E9%AA%8C%E7%A7%AF%E7%B4%AF/" class="btn btn-outline-primary" prompt="Older"><p>部署经验总结</p></a> <a href="/posts/Python-argparse%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E5%B0%8F%E7%BB%93/" class="btn btn-outline-primary" prompt="Newer"><p>Python argparse使用方法小结</p></a>
+</div>
+<script type="text/javascript"> $(function () { const origin = "https://giscus.app"; const iframe = "iframe.giscus-frame"; const lightTheme = "light"; const darkTheme = "dark_dimmed"; let initTheme = lightTheme; if ($("html[data-mode=dark]").length > 0 || ($("html[data-mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches)) { initTheme = darkTheme; } let giscusAttributes = { "src": "https://giscus.app/client.js", "data-repo": "ZhangGe6/ZhangGe6.github.io", "data-repo-id": "R_kgDOHRk9Cg", "data-category": "Announcements", "data-category-id": "DIC_kwDOHRk9Cs4CPOm5", "data-mapping": "pathname", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-theme": initTheme, "data-input-position": "bottom", "data-lang": "en", "crossorigin": "anonymous", "async": "" }; let giscusScript = document.createElement("script"); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value)); document.getElementById("tail-wrapper").appendChild(giscusScript); addEventListener("message", (event) => { if (event.source === window && event.data && event.data.direction === ModeToggle.ID) { /* global theme mode changed */ const mode = event.data.message; const theme = (mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme); const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); }); </script>
+</div></div></div>
+<footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted">
+<div class="footer-left"><p class="mb-0"> © 2023 <a href="https://twitter.com/username">ZhangGe</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div>
+<div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div>
+</div></footer>
+</div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content">
+<div id="search-hints"><div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a> <a class="post-tag" href="/tags/argparse/">argparse</a>
+</div>
+</div></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script>

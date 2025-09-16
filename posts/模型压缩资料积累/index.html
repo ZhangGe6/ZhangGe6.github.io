@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="zh" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="模型压缩资料积累" /><meta name="author" content="Zhang Ge" /><meta property="og:locale" content="zh" /><meta name="description" content="深度学习的模型压缩可能就是自己硕士阶段的研究课题啦，这篇博客记录在学习过程中遇到的比较好的资料，作为积累和备忘。" /><meta property="og:description" content="深度学习的模型压缩可能就是自己硕士阶段的研究课题啦，这篇博客记录在学习过程中遇到的比较好的资料，作为积累和备忘。" /><link rel="canonical" href="https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%B5%84%E6%96%99%E7%A7%AF%E7%B4%AF/" /><meta property="og:url" content="https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%B5%84%E6%96%99%E7%A7%AF%E7%B4%AF/" /><meta property="og:site_name" content="ZhangGe’s Blog" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-02-27T22:41:00+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="模型压缩资料积累" /><meta name="twitter:site" content="@twitter_username" /><meta name="twitter:creator" content="@Zhang Ge" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Zhang Ge"},"dateModified":"2021-02-27T22:41:00+08:00","datePublished":"2021-02-27T22:41:00+08:00","description":"深度学习的模型压缩可能就是自己硕士阶段的研究课题啦，这篇博客记录在学习过程中遇到的比较好的资料，作为积累和备忘。","headline":"模型压缩资料积累","mainEntityOfPage":{"@type":"WebPage","@id":"https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%B5%84%E6%96%99%E7%A7%AF%E7%B4%AF/"},"url":"https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%B5%84%E6%96%99%E7%A7%AF%E7%B4%AF/"}</script><title>模型压缩资料积累 | ZhangGe's Blog</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="ZhangGe's Blog"><meta name="application-name" content="ZhangGe's Blog"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end">
+<div class="profile-wrapper text-center">
+<div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/commons/avatar.jpg%20" alt="avatar" onerror="this.style.display='none'"> </a>
+</div>
+<div class="site-title mt-3"> <a href="/">ZhangGe's Blog</a>
+</div>
+<div class="site-subtitle font-italic">Stay hungry, stay foolish.</div>
+</div>
+<ul class="w-100">
+<li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a>
+</li>
+</ul>
+<div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/ZhangGe6" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20%5B'sjtu.zg123','gmail.com'%5D.join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a>
+</div>
+</div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>模型压缩资料积累</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div>
+<i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel">Cancel</span>
+</div></div><div id="main-wrapper">
+<div id="main">
+<div class="row">
+<div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<h1 data-toc-skip>模型压缩资料积累</h1>
+<div class="post-meta text-muted">
+<div> By <em> <a href="https://twitter.com/username">ZhangGe</a> </em>
+</div>
+<div class="d-flex"><div> <span> Posted <em class="timeago" data-ts="1614436860" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"> 2021-02-27 </em> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="358 words"> <em>1 min</em> read</span>
+</div></div>
+</div>
+<div class="post-content">
+<p>深度学习的模型压缩可能就是自己硕士阶段的研究课题啦，这篇博客记录在学习过程中遇到的比较好的资料，作为积累和备忘。</p>
+<h1 id="github-awesome-collections">github awesome collections</h1>
+<ul>
+<li>
+<a href="https://github.com/htqin/awesome-model-quantization">htqin/awesome-model-quantization</a><img data-src="https://img.shields.io/github/stars/htqin/awesome-model-quantization.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore><ul><li>A list of papers, docs, codes about model quantization. This repo is aimed to provide the info for model quantization research.</li></ul>
+</li>
+<li>
+<a href="https://github.com/csyhhu/Awesome-Deep-Neural-Network-Compression">csyhhu/Awesome-Deep-Neural-Network-Compression</a><img data-src="https://img.shields.io/github/stars/csyhhu/Awesome-Deep-Neural-Network-Compression.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore><ul><li>Summary, Code for Deep Neural Network Quantization</li></ul>
+</li>
+<li>
+<a href="https://github.com/chester256/Model-Compression-Papers">chester256/Model-Compression-Papers</a><img data-src="https://img.shields.io/github/stars/chester256/Model-Compression-Papers.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore><ul><li>Papers for deep neural network compression and acceleration</li></ul>
+</li>
+<li>
+<a href="https://github.com/juliagusak/model-compression-and-acceleration-progress">juliagusak/model-compression-and-acceleration-progress</a><img data-src="https://img.shields.io/github/stars/juliagusak/model-compression-and-acceleration-progress.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore>
+</li>
+<li>
+<a href="https://github.com/he-y/Awesome-Pruning">he-y/Awesome-Pruning</a><ul><li>A curated list of neural network pruning resources.</li></ul>
+</li>
+<li>
+<a href="https://github.com/FLHonker/Awesome-Knowledge-Distillation">FLHonker/Awesome-Knowledge-Distillation</a><img data-src="https://img.shields.io/github/stars/FLHonker/Awesome-Knowledge-Distillation.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore><ul><li>Awesome Knowledge-Distillation. 分类整理的知识蒸馏paper(2014-2021)。</li></ul>
+</li>
+</ul>
+<h1 id="github-project-repo">github project repo</h1>
+<ul>
+<li>
+<a href="https://github.com/IntelLabs/distiller">IntelLabs/distiller</a><img data-src="https://img.shields.io/github/stars/IntelLabs/distiller.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore><ul><li>Neural Network Distiller by Intel AI Lab: a Python package for neural network compression research.</li></ul>
+</li>
+<li><p><a href="https://github.com/j-marple-dev/model_compression">j-marple-dev/model_compression</a><img data-src="https://img.shields.io/github/stars/j-marple-dev/model_compression.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore></p></li>
+<li>
+<a href="https://github.com/lucamocerino/Binary-Neural-Networks-PyTorch-1.0">lucamocerino/Binary-Neural-Networks-PyTorch-1.0</a><img data-src="https://img.shields.io/github/stars/lucamocerino/Binary-Neural-Networks-PyTorch-1.0.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore><ul><li>BNNs (XNOR, BNN and DoReFa) implementation for PyTorch 1.0+</li></ul>
+</li>
+<li>
+<a href="https://github.com/jiecaoyu/XNOR-Net-PyTorch">jiecaoyu/XNOR-Net-PyTorch</a><img data-src="https://img.shields.io/github/stars/jiecaoyu/XNOR-Net-PyTorch.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore>
+</li>
+<li>
+<p><a href="https://github.com/666DZY666/micronet">666DZY666/micronet</a><img data-src="https://img.shields.io/github/stars/666DZY666/micronet.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore></p>
+<ul><li>可供模型压缩加速入门参考</li></ul>
+</li>
+<li>
+<a href="https://github.com/JDAI-CV/dabnn">JDAI-CV/dabnn</a><img data-src="https://img.shields.io/github/stars/JDAI-CV/dabnn.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore>
+</li>
+<li>dabnn is an accelerated binary neural networks inference framework for mobile platform</li>
+<li>
+<p><a href="https://github.com/flame">flame</a>/<strong><a href="https://github.com/flame/how-to-optimize-gemm">how-to-optimize-gemm</a></strong></p>
+<ul><li>A step-by-step gemm optimization tutorial</li></ul>
+</li>
+</ul>
+<h1 id="attractive-blogs">Attractive blogs</h1>
+<h2 id="量化">
+<span class="mr-2">量化</span><a href="#%E9%87%8F%E5%8C%96" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<ul>
+<li>
+<img class="emoji" title=":star:" alt=":star:" src="https://github.githubassets.com/images/icons/emoji/unicode/2b50.png" height="20" width="20"> <a href="https://zhuanlan.zhihu.com/p/270184068">二值化神经网络(BNN)综述 - Ironboy的文章 - 知乎</a>
+</li>
+<li><a href="http://chenrudan.github.io/blog/2018/10/02/networkquantization.html">神经网络模型量化方法简介</a></li>
+<li><p><a href="https://g.yuque.com/u1267820/ynt2l2/wrbzgy">模型压缩算法汇总</a></p></li>
+<li><p><a href="https://sahnimanas.github.io/post/quantization-in-tflite/">Making Neural Nets Work With Low Precision</a></p></li>
+<li><a href="https://software.intel.com/content/www/us/en/develop/articles/compression-and-acceleration-of-high-dimensional-neural-networks.html">Compression and Acceleration of High-dimensional Neural Networks</a></li>
+<li><a href="https://intellabs.github.io/distiller/algo_quantization.html">distiller - 非对称量化和对称量化的理论推导</a></li>
+<li>
+<a href="https://docs.nvidia.com/deeplearning/performance/index.html">NVIDIA Deep Learning Performance Documentation</a> ——英伟达yyds!</li>
+<li><a href="https://jinzhuojun.blog.csdn.net/article/details/106955059">闲话模型压缩之量化（Quantization）篇</a></li>
+<li><a href="https://sahnimanas.github.io/post/anatomy-of-a-high-performance-convolution/">Anatomy of a High-Speed Convolution</a></li>
+</ul>
+<h2 id="剪枝">
+<span class="mr-2">剪枝</span><a href="#%E5%89%AA%E6%9E%9D" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<ul>
+<li><p><a href="https://xmfbit.github.io/2018/10/03/paper-summary-model-pruning/">论文总结 - 模型剪枝 Model Pruning</a></p></li>
+<li><p><a href="https://blog.csdn.net/jinzhuojun/article/details/100621397">闲话模型压缩之网络剪枝（Network Pruning）篇</a></p></li>
+<li><p>https://www.yuque.com/yahei/hey-yahei/opsummary.mxnet)</p></li>
+<li><p>https://segmentfault.com/a/1190000020993594)</p></li>
+</ul>
+<h2 id="bilibili">
+<span class="mr-2">BiliBili</span><a href="#bilibili" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<h3 id="量化-1">
+<span class="mr-2">量化</span><a href="#%E9%87%8F%E5%8C%96-1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<ul>
+<li><p>神经网络量化 <a href="https://www.bilibili.com/video/BV1u7411W7zL/?spm_id_from=333.788.recommend_more_video.2">BiliBili</a> <a href="https://github.com/mepeichun/Efficient-Neural-Network-Bilibili">code</a></p></li>
+<li><p><a href="https://www.bilibili.com/video/BV1RJ411g7Hr/?spm_id_from=333.788.recommend_more_video.14">Google Developer Days - 模型优化与量化</a></p></li>
+<li><p><a href="https://www.bilibili.com/video/BV19J411R7t2/?spm_id_from=333.788.recommend_more_video.21"> <img class="emoji" title=":star:" alt=":star:" src="https://github.githubassets.com/images/icons/emoji/unicode/2b50.png" height="20" width="20"> 哈佛大学在读博士董鑫：模型量化—更小更快更强</a></p></li>
+</ul>
+</div>
+<div class="post-tail-wrapper text-muted">
+<div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href="/categories/%E4%B8%93%E4%B8%9A%E7%A7%AF%E7%B4%AF/">专业积累</a>, <a href="/categories/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9/">模型压缩</a>
+</div>
+<div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2">
+<div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div>
+<div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%B5%84%E6%96%99%E7%A7%AF%E7%B4%AF%20-%20ZhangGe's%20Blog&amp;url=https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%B5%84%E6%96%99%E7%A7%AF%E7%B4%AF/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%B5%84%E6%96%99%E7%A7%AF%E7%B4%AF%20-%20ZhangGe's%20Blog&amp;u=https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%B5%84%E6%96%99%E7%A7%AF%E7%B4%AF/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%B5%84%E6%96%99%E7%A7%AF%E7%B4%AF/&amp;text=%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%B5%84%E6%96%99%E7%A7%AF%E7%B4%AF%20-%20ZhangGe's%20Blog" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" data-title-succeed="Link copied successfully!"> </i> </span>
+</div>
+</div>
+</div>
+</div></div>
+<div id="panel-wrapper" class="col-xl-3 pl-2 text-muted">
+<div class="access">
+<div id="access-lastmod" class="post">
+<div class="panel-heading">Recently Updated</div>
+<ul class="post-content pl-0 pb-1 ml-1 mt-2">
+<li><a href="/posts/Git%E5%AD%A6%E4%B9%A0/">Git学习</a></li>
+<li><a href="/posts/VS-code%E4%BD%BF%E7%94%A8/">VS code使用</a></li>
+<li><a href="/posts/Docker%E5%AD%A6%E4%B9%A0/">Docker学习</a></li>
+<li><a href="/posts/GPU%E9%80%9A%E4%BF%A1%E5%85%83%E8%AF%AD/">GPU通信元语</a></li>
+<li><a href="/posts/%E5%AF%B9Roofline%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%90%86%E8%A7%A3/">对Roofline模型的理解</a></li>
+</ul>
+</div>
+<div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+<div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
+<nav id="toc" data-toggle="toc"></nav>
+</div>
+</div>
+</div>
+<div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<div id="related-posts" class="mt-5 mb-2 mb-sm-4">
+<h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3>
+<div class="card-deck mb-4">
+<div class="card"> <a href="/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%87%AA%E5%B7%B1%E7%9A%84%E6%80%BB%E7%BB%93/"><div class="card-body"> <em class="timeago small" data-ts="1614732300"> 2021-03-03 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>模型压缩自己的总结</h3>
+<div class="text-muted small"><p> 关于STE(straight through estimator) 以二值网络为例，对网络进行训练时，需要对参数做\(sign\)操作后参与运算，有 \[q = sign(r)\] 但由于\(sign\)函数在\(r=0\)处不可导，在\(r \neq 0\)处导数为\(0\)，因此反向传播在这一步是失效的，不能有效实现参数的更新。 STE本身的模样 straight through...</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E5%AE%9E%E6%88%98/"><div class="card-body"> <em class="timeago small" data-ts="1615856880"> 2021-03-16 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>模型压缩实战</h3>
+<div class="text-muted small"><p> 666DZY666/micronet github repo Pytorch official Quantization intro 知乎 - Gemfield - PyTorch的量化 A developer-friendly guide to model quantization with PyTorch ...</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/%E5%85%B3%E4%BA%8E%E5%8A%A0%E9%80%9F%E4%B8%8A%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8C%87%E6%A0%87/"><div class="card-body"> <em class="timeago small" data-ts="1629002460"> 2021-08-15 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>关于加速上的一些指标</h3>
+<div class="text-muted small"><p> 本文总结记录一些衡量压缩算法速度/复杂度的一些指标。 FLOPs FLOPs全称为floating point operations，意指浮点运算数，理解为计算量，可以用来衡量算法/模型的复杂度。 与FLOPS，flops or flop/s区分开来，它们是floating point operations per second的缩写，意指每秒（最多）浮点运算次数，理解为计算速度...</p></div>
+</div></a>
+</div>
+</div>
+</div>
+<div class="post-navigation d-flex justify-content-between"> <a href="/posts/%E8%B5%84%E6%96%99%E6%9D%82%E8%AE%B0/" class="btn btn-outline-primary" prompt="Older"><p>资料杂记</p></a> <a href="/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%87%AA%E5%B7%B1%E7%9A%84%E6%80%BB%E7%BB%93/" class="btn btn-outline-primary" prompt="Newer"><p>模型压缩自己的总结</p></a>
+</div>
+<script type="text/javascript"> $(function () { const origin = "https://giscus.app"; const iframe = "iframe.giscus-frame"; const lightTheme = "light"; const darkTheme = "dark_dimmed"; let initTheme = lightTheme; if ($("html[data-mode=dark]").length > 0 || ($("html[data-mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches)) { initTheme = darkTheme; } let giscusAttributes = { "src": "https://giscus.app/client.js", "data-repo": "ZhangGe6/ZhangGe6.github.io", "data-repo-id": "R_kgDOHRk9Cg", "data-category": "Announcements", "data-category-id": "DIC_kwDOHRk9Cs4CPOm5", "data-mapping": "pathname", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-theme": initTheme, "data-input-position": "bottom", "data-lang": "en", "crossorigin": "anonymous", "async": "" }; let giscusScript = document.createElement("script"); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value)); document.getElementById("tail-wrapper").appendChild(giscusScript); addEventListener("message", (event) => { if (event.source === window && event.data && event.data.direction === ModeToggle.ID) { /* global theme mode changed */ const mode = event.data.message; const theme = (mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme); const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); }); </script>
+</div></div></div>
+<footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted">
+<div class="footer-left"><p class="mb-0"> © 2025 <a href="https://twitter.com/username">ZhangGe</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div>
+<div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div>
+</div></footer>
+</div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content">
+<div id="search-hints"><div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script>

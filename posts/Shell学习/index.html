@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="zh" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="Shell学习" /><meta name="author" content="Zhang Ge" /><meta property="og:locale" content="zh" /><meta name="description" content="shell语法不多，不算难，这里作为一项硬技能，自己总结一下。主体内容来自于菜鸟教程。" /><meta property="og:description" content="shell语法不多，不算难，这里作为一项硬技能，自己总结一下。主体内容来自于菜鸟教程。" /><link rel="canonical" href="https://zhangge6.github.io/posts/Shell%E5%AD%A6%E4%B9%A0/" /><meta property="og:url" content="https://zhangge6.github.io/posts/Shell%E5%AD%A6%E4%B9%A0/" /><meta property="og:site_name" content="ZhangGe’s Blog" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-09-23T09:30:00+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="Shell学习" /><meta name="twitter:site" content="@twitter_username" /><meta name="twitter:creator" content="@Zhang Ge" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Zhang Ge"},"dateModified":"2023-11-20T23:38:44+08:00","datePublished":"2021-09-23T09:30:00+08:00","description":"shell语法不多，不算难，这里作为一项硬技能，自己总结一下。主体内容来自于菜鸟教程。","headline":"Shell学习","mainEntityOfPage":{"@type":"WebPage","@id":"https://zhangge6.github.io/posts/Shell%E5%AD%A6%E4%B9%A0/"},"url":"https://zhangge6.github.io/posts/Shell%E5%AD%A6%E4%B9%A0/"}</script><title>Shell学习 | ZhangGe's Blog</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="ZhangGe's Blog"><meta name="application-name" content="ZhangGe's Blog"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src=" https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/commons/avatar.jpg " alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title mt-3"> <a href="/">ZhangGe's Blog</a></div><div class="site-subtitle font-italic">Stay hungry, stay foolish.</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/ZhangGe6" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['sjtu.zg123','gmail.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>Shell学习</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper"><div id="main"><div class="row"><div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>Shell学习</h1><div class="post-meta text-muted"><div> By <em> <a href="https://twitter.com/username">ZhangGe</a> </em></div><div class="d-flex"><div> <span> Posted <em class="timeago" data-ts="1632360600" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" > 2021-09-23 </em> </span> <span> Updated <em class="timeago" data-ts="1700494724" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" > 2023-11-20 </em> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1756 words"> <em>9 min</em> read</span></div></div></div><div class="post-content"><p>shell语法不多，不算难，这里作为一项硬技能，自己总结一下。主体内容来自于<a href="https://www.runoob.com/linux/linux-shell.html">菜鸟教程</a>。</p><h1 id="shell变量">shell变量</h1><p>定义变量时，<strong>变量名和等号之间不能有空格</strong></p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="nv">your_name</span><span class="o">=</span><span class="s2">"runoob.com"</span>
+</pre></table></code></div></div><p>使用变量加美元符号，变量名外面的花括号从语法层面上是可选的，加不加都行。不过加上可以帮助解释器识别变量的边界。</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="nb">echo</span> <span class="nv">$your_name</span>       <span class="c"># "runoob.com"</span>
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">your_name</span><span class="k">}</span>     <span class="c"># "runoob.com"</span>
+</pre></table></code></div></div><h2 id="数组"><span class="mr-2">数组</span><a href="#数组" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>Bash Shell 只支持一维数组（不支持多维数组），数组元素的下标由 0 开始，Shell 数组用括号来表示，元素用”空格”符号分割开。</p><p>定义数组：</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="nv">array</span><span class="o">=(</span>value1 value2 ... valuen<span class="o">)</span>
+
+<span class="c"># example</span>
+<span class="nv">array</span><span class="o">=(</span>1 2 3 4<span class="o">)</span>
+</pre></table></code></div></div><p>索引数组：</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="k">${</span><span class="nv">array</span><span class="p">[index]</span><span class="k">}</span>
+</pre></table></code></div></div><p>获取数组的所有元素：</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre><td class="rouge-code"><pre><span class="k">${</span><span class="nv">array</span><span class="p">[@]</span><span class="k">}</span>
+
+<span class="c"># demo</span>
+<span class="nv">array</span><span class="o">=(</span>1 2 3 4<span class="o">)</span>
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">array</span><span class="k">}</span> <span class="c"># 1</span>
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">array</span><span class="p">[@]</span><span class="k">}</span> <span class="c"># 1 2 3 4</span>
+</pre></table></code></div></div><p>获取数组的长度：</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="k">${#</span><span class="nv">array</span><span class="p">[@]</span><span class="k">}</span>
+</pre></table></code></div></div><p>遍历数组：</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="k">for </span>v <span class="k">in</span> <span class="k">${</span><span class="nv">array</span><span class="p">[@]</span><span class="k">}</span><span class="p">;</span> <span class="k">do
+  </span><span class="nb">echo</span> <span class="s2">"</span><span class="k">${</span><span class="nv">v</span><span class="k">}</span><span class="s2">"</span><span class="p">;</span>
+<span class="k">done</span>
+</pre></table></code></div></div><h2 id="字符串"><span class="mr-2">字符串</span><a href="#字符串" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>定义字符串可以用单引号，也可以用双引号。</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="nv">str1</span><span class="o">=</span><span class="s1">'string1'</span>
+<span class="nv">str2</span><span class="o">=</span><span class="s2">"string2"</span>
+</pre></table></code></div></div><p>拼接字符串，写在一起即可</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="nv">str3</span><span class="o">=</span><span class="k">${</span><span class="nv">str1</span><span class="k">}${</span><span class="nv">str2</span><span class="k">}</span>
+<span class="nb">echo </span>str3      <span class="c"># string1string2</span>
+</pre></table></code></div></div><p>获取字符串长度</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="nb">echo</span> <span class="k">${#</span><span class="nv">str1</span><span class="k">}</span>
+</pre></table></code></div></div><p>提取子字符串，语法为<code class="language-plaintext highlighter-rouge">${variable:offset:length}</code></p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre><span class="nv">string</span><span class="o">=</span><span class="s2">"welcome"</span>
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">string</span>:1:4<span class="k">}</span> <span class="c"># 从index为1的位置开始，读取4个元素。输出 elco</span>
+</pre></table></code></div></div><p>字符串运算符</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre><td class="rouge-code"><pre><span class="nv">a</span><span class="o">=</span><span class="s2">"abc"</span>
+<span class="nv">b</span><span class="o">=</span><span class="s2">"efg"</span>
+
+<span class="o">[</span> <span class="nv">$a</span> <span class="o">=</span> <span class="nv">$b</span> <span class="o">]</span> <span class="c"># 判断是否相等，返回 false。</span>
+<span class="o">[</span> <span class="nv">$a</span> <span class="o">!=</span> <span class="nv">$b</span> <span class="o">]</span> <span class="c"># 判断是否不等，返回 true。</span>
+<span class="c"># 更多运算符参见https://www.runoob.com/linux/linux-shell-basic-operators.html</span>
+</pre></table></code></div></div><h1 id="向shell脚本传入参数">向shell脚本传入参数</h1><p>使用<code class="language-plaintext highlighter-rouge">$</code>获取传入的参数。<code class="language-plaintext highlighter-rouge">$1</code>表示第一个参数，<code class="language-plaintext highlighter-rouge">$2</code>表示第二个参数… （<code class="language-plaintext highlighter-rouge">$0</code>是执行的bash脚本路径）</p><p><strong>示例：</strong></p><p>建立<code class="language-plaintext highlighter-rouge">test.sh</code>如下</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="c">#!/bin/bash</span>
+<span class="nb">echo</span> <span class="s2">"脚本路径: </span><span class="nv">$0</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"第一个参数: </span><span class="nv">$1</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"第二个参数: </span><span class="nv">$2</span><span class="s2">"</span>
+</pre></table></code></div></div><p>执行</p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>./test.sh 1 2
+</pre></table></code></div></div><p>得到输出：</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre>脚本路径: path/to/test.sh
+第一个参数: 1
+第二个参数: 2
+</pre></table></code></div></div><p>获取更多传入参数的信息，参见<a href="https://www.runoob.com/linux/linux-shell-passing-arguments.html">菜鸟教程-Shell 传递参数</a></p><h1 id="基本运算符">基本运算符</h1><p>参见<a href="https://www.runoob.com/linux/linux-shell-basic-operators.html">菜鸟教程-Shell 基本运算符</a></p><h2 id="算术运算符"><span class="mr-2">算术运算符</span><a href="#算术运算符" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>原生bash不支持简单的数学运算，可借助<code class="language-plaintext highlighter-rouge">expr</code>实现。</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre><td class="rouge-code"><pre><span class="nv">a</span><span class="o">=</span>2
+<span class="nv">b</span><span class="o">=</span>2
+<span class="nb">echo</span> <span class="s2">"两数之和为 : </span><span class="sb">`</span><span class="nb">expr</span> <span class="nv">$a</span> + <span class="nv">$b</span><span class="sb">`</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"两数之差为 : </span><span class="sb">`</span><span class="nb">expr</span> <span class="nv">$a</span> - <span class="nv">$b</span><span class="sb">`</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"两数之积为 : </span><span class="sb">`</span><span class="nb">expr</span> <span class="nv">$a</span> <span class="se">\*</span> <span class="nv">$b</span><span class="sb">`</span><span class="s2">"</span>   <span class="c"># 注意，单纯的*会报语法错误，要用\*</span>
+<span class="nb">echo</span> <span class="s2">"两数之积为 : </span><span class="sb">`</span><span class="nb">expr</span> <span class="nv">$a</span> / <span class="nv">$b</span><span class="sb">`</span><span class="s2">"</span>
+</pre></table></code></div></div><p>需要注意：</p><ul><li>完整的表达式要被 ` 包含，注意这个字符不是常用的单引号，是在 Esc 键下边的反引号。<li>表达式和运算符之间要有空格</ul><h2 id="关系运算符"><span class="mr-2">关系运算符</span><a href="#关系运算符" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>参见<a href="https://www.runoob.com/linux/linux-shell-basic-operators.html">菜鸟教程-Shell 基本运算符</a></p><h2 id="布尔运算符"><span class="mr-2">布尔运算符</span><a href="#布尔运算符" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>参见<a href="https://www.runoob.com/linux/linux-shell-basic-operators.html">菜鸟教程-Shell 基本运算符</a></p><h1 id="let语句">let语句</h1><p>let 命令是 BASH 中用于计算的工具，用于执行一个或多个表达式，变量计算中<strong>不需要</strong>加上<code class="language-plaintext highlighter-rouge">$</code> 来表示变量。<a href="https://www.runoob.com/linux/linux-comm-let.html">菜鸟教程-Linux let 命令</a></p><p><strong>示例</strong></p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="nv">a</span><span class="o">=</span>1
+<span class="nv">b</span><span class="o">=</span>2
+<span class="nb">let </span><span class="nv">c</span><span class="o">=</span>a+b  <span class="c"># 不用加$</span>
+<span class="nb">echo</span> <span class="nv">$c</span>    <span class="c"># 3</span>
+</pre></table></code></div></div><h1 id="shell流程控制">shell流程控制</h1><h2 id="分支"><span class="mr-2">分支</span><a href="#分支" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p><strong>if</strong></p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre><td class="rouge-code"><pre><span class="k">if </span>condition
+<span class="k">then
+    </span>command1 
+    ...
+    commandN 
+<span class="k">fi</span>
+</pre></table></code></div></div><p><strong>if else</strong></p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre><td class="rouge-code"><pre><span class="k">if </span>condition
+<span class="k">then
+    </span>command1 
+    ...
+    commandN
+<span class="k">else
+    </span><span class="nb">command
+</span><span class="k">fi</span>
+</pre></table></code></div></div><p><strong>if else if</strong></p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre><td class="rouge-code"><pre><span class="k">if </span>condition1
+<span class="k">then
+    </span>command1
+<span class="k">elif </span>condition2 
+<span class="k">then 
+    </span>command2
+<span class="k">else
+    </span>commandN
+<span class="k">fi</span>
+</pre></table></code></div></div><p>使用<code class="language-plaintext highlighter-rouge">((...))</code>作为判断语句。</p><p><strong>示例</strong></p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="k">if</span> <span class="o">((</span> <span class="nv">$a</span> <span class="o">==</span> <span class="nv">$b</span> <span class="o">))</span>
+<span class="k">then
+   </span><span class="nb">echo</span> <span class="s2">"a 等于 b"</span>
+<span class="k">fi</span>
+</pre></table></code></div></div><h2 id="for循环"><span class="mr-2">for循环</span><a href="#for循环" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre><td class="rouge-code"><pre><span class="k">for </span>var <span class="k">in </span>item1 ... itemN
+<span class="k">do
+    </span>command1
+    ...
+    commandn
+<span class="k">done</span>
+</pre></table></code></div></div><p>写成一行</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="k">for </span>var <span class="k">in </span>item1 item2 ... itemN<span class="p">;</span> <span class="k">do </span>command1<span class="p">;</span> ...<span class="p">;</span> commandn<span class="p">;</span> <span class="k">done</span><span class="p">;</span>
+</pre></table></code></div></div><p><strong>示例</strong></p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="k">for </span>loop <span class="k">in </span>1 2 3 4 5
+<span class="k">do
+    </span><span class="nb">echo</span> <span class="s2">"The value is: </span><span class="nv">$loop</span><span class="s2">"</span>
+<span class="k">done</span>
+</pre></table></code></div></div><h2 id="while循环"><span class="mr-2">while循环</span><a href="#while循环" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre><td class="rouge-code"><pre><span class="k">while </span>condition
+<span class="k">do
+    </span><span class="nb">command
+</span><span class="k">done</span>
+</pre></table></code></div></div><p><strong>示例</strong></p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre><td class="rouge-code"><pre><span class="nv">val</span><span class="o">=</span>1
+<span class="k">while</span><span class="o">((</span> <span class="nv">$val</span>&lt;<span class="o">=</span>5 <span class="o">))</span>
+<span class="k">do
+    </span><span class="nb">echo</span> <span class="nv">$val</span>
+    <span class="nb">let </span>val++
+<span class="k">done</span>
+</pre></table></code></div></div><h2 id="break和continue"><span class="mr-2">break和continue</span><a href="#break和continue" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p><code class="language-plaintext highlighter-rouge">break</code>和<code class="language-plaintext highlighter-rouge">continue</code>作为一条command出现在bash脚本中。其含义与其他语言一致。</p><h1 id="shell函数">shell函数</h1><p>基本格式</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre>funname<span class="o">()</span>
+<span class="o">{</span>
+    ...
+    <span class="o">[</span><span class="k">return </span>sth<span class="p">;</span><span class="o">]</span>
+<span class="o">}</span>
+</pre></table></code></div></div><ul><li>可以向函数传入参数，参见下面的示例<li>在函数体内部，通过 <code class="language-plaintext highlighter-rouge">$n</code> 的形式来获取传入的参数值。<code class="language-plaintext highlighter-rouge">$1</code>表示第一个参数，<code class="language-plaintext highlighter-rouge">$2</code>表示第二个参数… （<code class="language-plaintext highlighter-rouge">$0</code>是执行的bash脚本路径）<li>如果函数有返回值，则函数返回值在调用该函数后通过使用<code class="language-plaintext highlighter-rouge">$?</code>获得</ul><p><strong>示例</strong></p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre><td class="rouge-code"><pre>add<span class="o">(){</span>
+    <span class="nb">echo</span> <span class="s2">"第一个参数为 </span><span class="nv">$1</span><span class="s2">"</span>
+    <span class="nb">echo</span> <span class="s2">"第二个参数为 </span><span class="nv">$2</span><span class="s2">"</span>
+
+    <span class="nb">let </span><span class="nv">val</span><span class="o">=</span><span class="nv">$1</span>+<span class="nv">$2</span>
+    <span class="k">return</span> <span class="nv">$val</span>
+<span class="o">}</span>
+add 1 2
+<span class="nb">echo</span> <span class="s2">"输入的两个数字之和为 </span><span class="nv">$?</span><span class="s2">"</span>  <span class="c"># 3</span>
+</pre></table></code></div></div><h1 id="shell输出">shell输出</h1><p>可用<code class="language-plaintext highlighter-rouge">echo</code>和<code class="language-plaintext highlighter-rouge">printf</code>方法。<code class="language-plaintext highlighter-rouge">printf</code>比较类似C语言中的<code class="language-plaintext highlighter-rouge">printf</code>，支持格式化输出。</p><p>参见 <a href="https://www.runoob.com/linux/linux-shell-echo.html">菜鸟教程-Shell echo命令</a> 和 <a href="https://www.runoob.com/linux/linux-shell-printf.html">菜鸟教程-Shell printf 命令</a>。</p><h1 id="shell-输入输出重定向">shell 输入输出重定向</h1><blockquote><p>大多数 UNIX 系统命令从你的终端接受输入并将所产生的输出发送回到您的终端。一个命令通常从一个叫标准输入的地方读取输入，默认情况下，这恰好是你的终端。同样，一个命令通常将其输出写入到标准输出，默认情况下，这也是你的终端。<a href="https://www.runoob.com/linux/linux-shell-io-redirections.html">菜鸟教程-Shell 输入/输出重定向</a></p></blockquote><p>将输出重定向到 file （file已经存在的内容将被清空替代）</p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>command &gt; file
+</pre></table></code></div></div><p>将输出重定向到 file （在file结尾追加）</p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>command &gt;&gt; file
+</pre></table></code></div></div><p>将输入重定向到 file</p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>command &lt; file
+</pre></table></code></div></div><h2 id="示例"><span class="mr-2">示例</span><a href="#示例" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><h3 id="输入重定向"><span class="mr-2">输入重定向：</span><a href="#输入重定向" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="c"># in.txt</span>
+1
+2
+</pre></table></code></div></div><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre><td class="rouge-code"><pre><span class="c"># demo.sh</span>
+add<span class="o">(){</span>
+	<span class="nb">read </span>a
+    <span class="nb">echo</span> <span class="s2">"第一个参数为 </span><span class="nv">$a</span><span class="s2">"</span>
+    <span class="nb">read </span>b
+    <span class="nb">echo</span> <span class="s2">"第二个参数为 </span><span class="nv">$b</span><span class="s2">"</span>
+
+    <span class="nb">let </span><span class="nv">val</span><span class="o">=</span><span class="nv">$a</span>+<span class="nv">$b</span>
+    <span class="k">return</span> <span class="nv">$val</span>
+<span class="o">}</span>
+add 
+<span class="nb">echo</span> <span class="s2">"输入的两个数字之和为 </span><span class="nv">$?</span><span class="s2">"</span>
+</pre></table></code></div></div><p>执行</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre>bash ./str_demo.sh &lt; <span class="k">in</span>.txt
+<span class="c"># 从in.txt读取输入，在终端输出结果</span>
+</pre></table></code></div></div><h3 id="输出重定向"><span class="mr-2">输出重定向：</span><a href="#输出重定向" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3></h3><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre><td class="rouge-code"><pre><span class="c"># demo.sh</span>
+add<span class="o">(){</span>
+    <span class="nb">echo</span> <span class="s2">"第一个参数为 </span><span class="nv">$1</span><span class="s2">"</span>
+    <span class="nb">echo</span> <span class="s2">"第二个参数为 </span><span class="nv">$2</span><span class="s2">"</span>
+
+    <span class="nb">let </span><span class="nv">val</span><span class="o">=</span><span class="nv">$1</span>+<span class="nv">$2</span>
+    <span class="k">return</span> <span class="nv">$val</span>
+<span class="o">}</span>
+add 1 2
+<span class="nb">echo</span> <span class="s2">"输入的两个数字之和为 </span><span class="nv">$?</span><span class="s2">"</span>  <span class="c"># 3</span>
+</pre></table></code></div></div><p>执行</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre>bash ./str_demo.sh <span class="o">&gt;</span> out.txt
+<span class="c"># 输出将写入out.txt，而不显示在终端</span>
+</pre></table></code></div></div><p>当然，也可以选择性地把部分语句重定向，如</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre><td class="rouge-code"><pre><span class="c"># demo.sh</span>
+add<span class="o">(){</span>
+    <span class="nb">echo</span> <span class="s2">"第一个参数为 </span><span class="nv">$1</span><span class="s2">"</span>
+    <span class="nb">echo</span> <span class="s2">"第二个参数为 </span><span class="nv">$2</span><span class="s2">"</span>
+
+    <span class="nb">let </span><span class="nv">val</span><span class="o">=</span><span class="nv">$1</span>+<span class="nv">$2</span>
+    <span class="k">return</span> <span class="nv">$val</span>
+<span class="o">}</span>
+add 1 2
+<span class="nb">echo</span> <span class="s2">"输入的两个数字之和为 </span><span class="nv">$?</span><span class="s2">"</span>  <span class="o">&gt;</span> out.txt
+</pre></table></code></div></div><p>执行</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre>bash ./str_demo.sh
+<span class="c"># 只会把最后一句的输出重定向到out.txt</span>
+</pre></table></code></div></div><h1 id="其他">其他</h1><h2 id="q1"><span class="mr-2">Q1</span><a href="#q1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>加入现在有一个<code class="language-plaintext highlighter-rouge">demo.sh</code>文件，使用</p><ul><li><code class="language-plaintext highlighter-rouge">bash ./demo.sh</code><li><code class="language-plaintext highlighter-rouge">sh ./demo.sh</code><li><code class="language-plaintext highlighter-rouge">./demo.sh</code></ul><p>这三者的区别？</p><p>答：TODO。参考https://stackoverflow.com/a/20616103/10096987</p></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/%E5%AE%9E%E8%B7%B5/'>实践</a>, <a href='/categories/%E7%A1%AC%E6%8A%80%E8%83%BD/'>硬技能</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/shell/" class="post-tag no-text-decoration" >shell</a> <a href="/tags/sh/" class="post-tag no-text-decoration" >sh</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=Shell学习 - ZhangGe&#39;s Blog&amp;url=https://zhangge6.github.io/posts/Shell%E5%AD%A6%E4%B9%A0/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=Shell学习 - ZhangGe&#39;s Blog&amp;u=https://zhangge6.github.io/posts/Shell%E5%AD%A6%E4%B9%A0/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https://zhangge6.github.io/posts/Shell%E5%AD%A6%E4%B9%A0/&amp;text=Shell学习 - ZhangGe&#39;s Blog" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" data-title-succeed="Link copied successfully!"> </i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted"><div class="access"><div id="access-lastmod" class="post"><div class="panel-heading">Recently Updated</div><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/Git%E5%AD%A6%E4%B9%A0/">Git学习</a><li><a href="/posts/VS-code%E4%BD%BF%E7%94%A8/">VS code使用</a><li><a href="/posts/Docker%E5%AD%A6%E4%B9%A0/">Docker学习</a><li><a href="/posts/GPU%E9%80%9A%E4%BF%A1%E5%85%83%E8%AF%AD/">GPU通信元语</a><li><a href="/posts/%E5%AF%B9Roofline%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%90%86%E8%A7%A3/">对Roofline模型的理解</a></ul></div><div id="access-tags"><div class="panel-heading">Trending Tags</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a></div></div></div><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5"><div class="panel-heading pl-3 pt-2 mb-2">Contents</div><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/Regex%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/"><div class="card-body"> <em class="timeago small" data-ts="1660791240" > 2022-08-18 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Regex正则表达式学习与使用</h3><div class="text-muted small"><p> 感觉Regex正则表达式是这样一种东西： 没有需求时去学习它：天啊这一串符号都是什么东西，怎么学啊！ 当有需求用到它并且成功应用时：真是太方便了！真香，要学习！ 动机 最近实习的时候，需要协助处理代码审查系统的告警，其中有大量（约1.6k）的命名风格的问题，需要对原有的变量命名进行批量替换。我用的编辑器是VS Code，它的朴素的字符串替换功能已经不能满足需求了，比如我需要做...</p></div></div></a></div><div class="card"> <a href="/posts/Makefile%E5%AD%A6%E4%B9%A0/"><div class="card-body"> <em class="timeago small" data-ts="1602227880" > 2020-10-09 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>makefile学习</h3><div class="text-muted small"><p> 本文是一些自己学习makefile时的笔记。以下内容主要摘取自陈皓编写的跟我一起写Makefile，这是一个很好的学习资料。 makefile介绍 参考 makefile的核心规则 target : prerequisites command target是目标文件，prerequisites是生成target的依赖文件。当target不存在，或prerequisites...</p></div></div></a></div><div class="card"> <a href="/posts/g++%E7%BC%96%E8%AF%91%E5%AD%A6%E4%B9%A0/"><div class="card-body"> <em class="timeago small" data-ts="1602331200" > 2020-10-10 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>g++编译学习</h3><div class="text-muted small"><p> 动机 之前对g++/gcc编译过程和编译选项只有浅显了解，因为项目需要，将其学习一下。以下是学习笔记。 g++和gcc GNU Compiler Collection即GUN 编译器集合，它可以编译C、C++、JAV、Fortran、Pascal、Object-C、Ada等语言。gcc是GCC中的GUN C Compiler（C 编译器）；g++是GCC中的GUN C++ Compil...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/posts/%E7%BD%91%E7%BB%9C%E6%8E%A8%E7%90%86%E5%8A%A0%E9%80%9F%E7%9A%84%E4%B8%80%E4%BA%9B%E6%93%8D%E4%BD%9C/" class="btn btn-outline-primary" prompt="Older"><p>网络推理加速的一些基础操作</p></a> <a href="/posts/tqdm%E4%BD%BF%E7%94%A8/" class="btn btn-outline-primary" prompt="Newer"><p>tqdm常用操作</p></a></div><script type="text/javascript"> $(function () { const origin = "https://giscus.app"; const iframe = "iframe.giscus-frame"; const lightTheme = "light"; const darkTheme = "dark_dimmed"; let initTheme = lightTheme; if ($("html[data-mode=dark]").length > 0 || ($("html[data-mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches)) { initTheme = darkTheme; } let giscusAttributes = { "src": "https://giscus.app/client.js", "data-repo": "ZhangGe6/ZhangGe6.github.io", "data-repo-id": "R_kgDOHRk9Cg", "data-category": "Announcements", "data-category-id": "DIC_kwDOHRk9Cs4CPOm5", "data-mapping": "pathname", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-theme": initTheme, "data-input-position": "bottom", "data-lang": "en", "crossorigin": "anonymous", "async": "" }; let giscusScript = document.createElement("script"); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value)); document.getElementById("tail-wrapper").appendChild(giscusScript); addEventListener("message", (event) => { if (event.source === window && event.data && event.data.direction === ModeToggle.ID) { /* global theme mode changed */ const mode = event.data.message; const theme = (mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme); const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); }); </script></div></div></div><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted"><div class="footer-left"><p class="mb-0"> © 2025 <a href="https://twitter.com/username">ZhangGe</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><div id="access-tags"><div class="panel-heading">Trending Tags</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a></div></div></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script>

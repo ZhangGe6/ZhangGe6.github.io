@@ -1,0 +1,589 @@
+<!DOCTYPE html><html lang="zh" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="Latex cheat sheet" /><meta name="author" content="Zhang Ge" /><meta property="og:locale" content="zh" /><meta name="description" content="各种符号" /><meta property="og:description" content="各种符号" /><link rel="canonical" href="https://zhangge6.github.io/posts/Latex-cheat-sheet/" /><meta property="og:url" content="https://zhangge6.github.io/posts/Latex-cheat-sheet/" /><meta property="og:site_name" content="ZhangGe’s Blog" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-05-08T10:46:00+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="Latex cheat sheet" /><meta name="twitter:site" content="@twitter_username" /><meta name="twitter:creator" content="@Zhang Ge" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Zhang Ge"},"dateModified":"2023-01-03T15:56:30+08:00","datePublished":"2021-05-08T10:46:00+08:00","description":"各种符号","headline":"Latex cheat sheet","mainEntityOfPage":{"@type":"WebPage","@id":"https://zhangge6.github.io/posts/Latex-cheat-sheet/"},"url":"https://zhangge6.github.io/posts/Latex-cheat-sheet/"}</script><title>Latex cheat sheet | ZhangGe's Blog</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="ZhangGe's Blog"><meta name="application-name" content="ZhangGe's Blog"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end">
+<div class="profile-wrapper text-center">
+<div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/commons/avatar.jpg%20" alt="avatar" onerror="this.style.display='none'"> </a>
+</div>
+<div class="site-title mt-3"> <a href="/">ZhangGe's Blog</a>
+</div>
+<div class="site-subtitle font-italic">Stay hungry, stay foolish.</div>
+</div>
+<ul class="w-100">
+<li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a>
+</li>
+</ul>
+<div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/ZhangGe6" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20%5B'sjtu.zg123','gmail.com'%5D.join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a>
+</div>
+</div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>Latex cheat sheet</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div>
+<i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel">Cancel</span>
+</div></div><div id="main-wrapper">
+<div id="main">
+<div class="row">
+<div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<h1 data-toc-skip>Latex cheat sheet</h1>
+<div class="post-meta text-muted">
+<div> By <em> <a href="https://twitter.com/username">ZhangGe</a> </em>
+</div>
+<div class="d-flex"><div> <span> Posted <em class="timeago" data-ts="1620441960" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"> 2021-05-08 </em> </span> <span> Updated <em class="timeago" data-ts="1672732590" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"> 2023-01-03 </em> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="777 words"> <em>4 min</em> read</span>
+</div></div>
+</div>
+<div class="post-content">
+<h1 id="各种符号">各种符号</h1>
+<p>可参考这篇<a href="https://snaildove.github.io/2017/08/20/LaTeX_symbols/">博客</a>。</p>
+<p>另外总结一些平时用到的符号：</p>
+<ul>
+<li>
+<p>组合数</p>
+<p>\(\tbinom{n}{r}\)形式：<code class="language-plaintext highlighter-rouge">\tbinom{n}{r}</code></p>
+<p>\(C_n^r\)形式：<code class="language-plaintext highlighter-rouge">C_n^r</code></p>
+</li>
+<li>
+<p>分段函数</p>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td>
+<td class="rouge-code"><pre>f(x)= 
+<span class="nt">\begin{cases}</span> 
+	0 <span class="p">&amp;</span> condition1 <span class="k">\\</span>   
+	1 <span class="p">&amp;</span> condition2 
+<span class="nt">\end{cases}</span> 
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+</ul>\[f(x)= \begin{cases} 0 &amp; condition1 \\ 1 &amp; condition2 \end{cases}\]<ul>
+<li>
+<p>换行对齐</p>
+<div class="language-plaintext highlighter-rouge">
+<div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td>
+<td class="rouge-code"><pre>\begin{aligned}
+	f(x) &amp;= ax + b \\
+	g(x) &amp;= cx + d
+\end{aligned}
+</pre></td>
+</tr></tbody></table></code></div>
+</div>\[\begin{aligned} f(x) &amp;= ax + b \\ g(x) &amp;= cx + d \end{aligned}\]</li>
+<li>
+<p>一些数学符号：</p>
+<ul>
+<li>范数：<code class="language-plaintext highlighter-rouge">\Vert x \Vert _p</code> \(\rightarrow\) $\Vert x \Vert _p$</li>
+<li>连乘：<code class="language-plaintext highlighter-rouge">\prod</code> \(\rightarrow\) $\prod$</li>
+<li>积分：<code class="language-plaintext highlighter-rouge">\int</code> \(\rightarrow\) $\int$</li>
+<li>正比于：<code class="language-plaintext highlighter-rouge">\propto</code> \(\rightarrow\) $\propto$</li>
+</ul>
+</li>
+<li>一些数学字体<ul>
+<li>空心字体：<code class="language-plaintext highlighter-rouge">$\mathbb{R}$</code> \(\rightarrow\) \(\mathbb{R}\)</li>
+<li>加粗字体：<code class="language-plaintext highlighter-rouge">$\mathbf{R}$</code> \(\rightarrow\) \(\mathbf{R}\)</li>
+<li>花体：<code class="language-plaintext highlighter-rouge">$\mathcal{R}$</code> \(\rightarrow\) $\mathcal{R}$</li>
+</ul>
+</li>
+<li>一些上标：<ul>
+<li><p><code class="language-plaintext highlighter-rouge">$\hat{x}$</code> \(\rightarrow\) $\hat{x}$</p></li>
+<li><p><code class="language-plaintext highlighter-rouge">$\tilde{x}$</code> \(\rightarrow\) $\tilde{x}$</p></li>
+<li><p><code class="language-plaintext highlighter-rouge">$\overline{x}$</code> \(\rightarrow\) $\overline{x}$</p></li>
+<li><p><code class="language-plaintext highlighter-rouge">$\dot{x}$</code> \(\rightarrow\) $\dot{x}$</p></li>
+</ul>
+</li>
+</ul>
+<h1 id="图片">图片</h1>
+<p>在document开始前，定义定义图片文件目录与扩展名</p>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td>
+<td class="rouge-code"><pre><span class="c">% 定义图片文件目录与扩展名</span>
+<span class="k">\graphicspath</span><span class="p">{</span> <span class="p">{</span>figures/<span class="p">}</span> <span class="p">}</span>
+<span class="k">\DeclareGraphicsExtensions</span><span class="p">{</span>.pdf,.eps,.png,.jpg,.jpeg<span class="p">}</span>
+
+<span class="nt">\begin{document}</span>
+...
+...
+<span class="nt">\end{document}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h2 id="单张图片">
+<span class="mr-2">单张图片</span><a href="#%E5%8D%95%E5%BC%A0%E5%9B%BE%E7%89%87" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td>
+<td class="rouge-code"><pre><span class="nt">\begin{figure}</span>[!htp]
+    <span class="k">\centering</span>
+    <span class="k">\includegraphics</span><span class="na">[width=0.3\linewidth]</span><span class="p">{</span>fig<span class="p">_</span>path<span class="p">}</span>  <span class="c">% [height=2cm]</span>
+    <span class="k">\caption</span><span class="p">{</span>fig<span class="p">_</span>caption<span class="p">}</span>
+    <span class="k">\label</span><span class="p">{</span>fig:<span class="p">}</span>
+<span class="nt">\end{figure}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h2 id="两多图并排放置不共用图编号">
+<span class="mr-2">两（多）图并排放置（不共用图编号）</span><a href="#%E4%B8%A4%E5%A4%9A%E5%9B%BE%E5%B9%B6%E6%8E%92%E6%94%BE%E7%BD%AE%E4%B8%8D%E5%85%B1%E7%94%A8%E5%9B%BE%E7%BC%96%E5%8F%B7" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td>
+<td class="rouge-code"><pre><span class="c">% 两图并排放置（不共用图编号）</span>
+<span class="nt">\begin{figure}</span>[!htp]
+    <span class="nt">\begin{minipage}</span><span class="p">{</span>0.48<span class="k">\textwidth</span><span class="p">}</span>
+      <span class="k">\centering</span>
+      <span class="k">\includegraphics</span><span class="na">[height=3cm]</span><span class="p">{</span>fig<span class="p">_</span>path<span class="p">}</span>
+      <span class="k">\caption</span><span class="p">{</span>验电器示意<span class="p">}</span>
+      <span class="k">\label</span><span class="p">{</span>fig:parallel1<span class="p">}</span>
+    <span class="nt">\end{minipage}</span><span class="k">\hfill</span>
+    <span class="nt">\begin{minipage}</span><span class="p">{</span>0.48<span class="k">\textwidth</span><span class="p">}</span>
+      <span class="k">\centering</span>
+      <span class="k">\includegraphics</span><span class="na">[height=3cm]</span><span class="p">{</span>fig<span class="p">_</span>path<span class="p">}</span>
+      <span class="k">\caption</span><span class="p">{</span>场景<span class="p">}</span>
+      <span class="k">\label</span><span class="p">{</span>fig:parallel2<span class="p">}</span>
+<span class="nt">\end{minipage}</span>
+<span class="nt">\end{figure}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h2 id="两图并排放置共用图编号">
+<span class="mr-2">两图并排放置（共用图编号）</span><a href="#%E4%B8%A4%E5%9B%BE%E5%B9%B6%E6%8E%92%E6%94%BE%E7%BD%AE%E5%85%B1%E7%94%A8%E5%9B%BE%E7%BC%96%E5%8F%B7" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td>
+<td class="rouge-code"><pre><span class="k">\usepackage</span><span class="p">{</span>subcaption<span class="p">}</span>  <span class="c">% package `subcaption` is needed</span>
+
+<span class="c">% 两图并排放置（共用图编号）</span>
+<span class="nt">\begin{figure}</span>[!htp]
+  <span class="k">\centering</span>
+  <span class="nt">\begin{subfigure}</span><span class="p">{</span>0.4<span class="k">\textwidth</span><span class="p">}</span>
+    <span class="k">\centering</span>
+    <span class="k">\includegraphics</span><span class="na">[height=2cm]</span><span class="p">{</span>sjtu-badge.pdf<span class="p">}</span> <span class="c">% width=0.3\linewidth</span>
+    <span class="k">\caption</span><span class="p">{</span>子图1名<span class="p">}</span>
+  <span class="nt">\end{subfigure}</span>
+  <span class="c">% \hspace{1cm}</span>
+
+  <span class="nt">\begin{subfigure}</span><span class="p">{</span>0.4<span class="k">\textwidth</span><span class="p">}</span>
+    <span class="k">\centering</span>
+    <span class="k">\includegraphics</span><span class="na">[height=2cm]</span><span class="p">{</span>sjtu-name.pdf<span class="p">}</span> <span class="c">% width=0.3\linewidth</span>
+    <span class="k">\caption</span><span class="p">{</span>子图2名<span class="p">}</span>
+  <span class="nt">\end{subfigure}</span>
+  <span class="k">\caption</span><span class="p">{</span>图名<span class="p">}</span>
+  <span class="k">\label</span><span class="p">{</span>fig:subfigure<span class="p">}</span>
+<span class="nt">\end{figure}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h1 id="表格">表格</h1>
+<p><a href="https://blog.csdn.net/JueChenYi/article/details/77116011">参考</a></p>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td>
+<td class="rouge-code"><pre><span class="nt">\begin{table}</span>[!htp]
+  <span class="k">\centering</span>
+  <span class="k">\label</span><span class="p">{</span>tab:labelOfTable<span class="p">}</span>
+  <span class="k">\caption</span><span class="p">{</span>captionOfTable<span class="p">}</span>
+  <span class="nt">\begin{tabular}</span><span class="p">{</span>|c|c|c|c|<span class="p">}</span>
+      <span class="k">\hline</span>
+        <span class="p">&amp;</span>   <span class="p">&amp;</span>   <span class="p">&amp;</span> <span class="k">\\</span>
+      <span class="k">\hline</span>
+        <span class="p">&amp;</span>   <span class="p">&amp;</span>   <span class="p">&amp;</span> <span class="k">\\</span>
+      <span class="k">\hline</span>
+  <span class="nt">\end{tabular}</span>
+<span class="nt">\end{table}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>合并单元格：<a href="https://blog.csdn.net/wzxlovesy/article/details/69063271">参考</a></p>
+<h2 id="双栏模板下要插入跨栏图表">
+<span class="mr-2">双栏模板下，要插入跨栏图表</span><a href="#%E5%8F%8C%E6%A0%8F%E6%A8%A1%E6%9D%BF%E4%B8%8B%E8%A6%81%E6%8F%92%E5%85%A5%E8%B7%A8%E6%A0%8F%E5%9B%BE%E8%A1%A8" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>将</p>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nt">\begin{figure}</span>
+...
+<span class="nt">\end{figure}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>替换为</p>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nt">\begin{figure*}</span>
+...
+<span class="nt">\end{figure*}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>即可。表格table同理。</p>
+<h1 id="代码和算法">代码和算法</h1>
+<h2 id="代码段">
+<span class="mr-2">代码段</span><a href="#%E4%BB%A3%E7%A0%81%E6%AE%B5" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="nt">\begin{lstlisting}</span>[language=Python]
+
+<span class="nt">\end{lstlisting}</span> 
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h2 id="伪代码">
+<span class="mr-2">伪代码</span><a href="#%E4%BC%AA%E4%BB%A3%E7%A0%81" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p><a href="https://blog.csdn.net/golden1314521/article/details/40923377">参考</a></p>
+<h1 id="引用">引用</h1>
+<h2 id="bibtex">
+<span class="mr-2">BibTeX</span><a href="#bibtex" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p><a href="https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management#BibTeX">参考</a></p>
+<div class="language-tex highlighter-rouge">
+<div class="code-header"> <span data-label-text="TeX"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td>
+<td class="rouge-code"><pre><span class="c">% main.tex</span>
+<span class="nt">\begin{document}</span>
+
+Here~<span class="k">\cite</span><span class="p">{</span>zhang2022integer<span class="p">}</span> is a sample citation.
+
+<span class="k">\bibliographystyle</span><span class="p">{</span>plain<span class="p">}</span>
+<span class="k">\bibliography</span><span class="p">{</span>citations<span class="p">}</span> 
+
+<span class="nt">\end{document}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<div class="language-bib highlighter-rouge">
+<div class="code-header"> <span data-label-text="Bib"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td>
+<td class="rouge-code"><pre><span class="c">% citations.bib</span>
+<span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">zhang2022integer</span><span class="p">,</span>
+  <span class="na">title</span><span class="p">=</span><span class="s">{...}</span><span class="p">,</span>
+  <span class="na">author</span><span class="p">=</span><span class="s">{...}</span>
+<span class="p">}</span>
+<span class="c">...</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<h1 id="其他">其他</h1>
+<ul>
+<li><p>文字居中：<code class="language-plaintext highlighter-rouge">\centerline{}</code></p></li>
+<li><p>文字下划线：<code class="language-plaintext highlighter-rouge">\uline{}</code></p></li>
+<li><p>调节行距：<code class="language-plaintext highlighter-rouge">\linespread{} </code>：<code class="language-plaintext highlighter-rouge">\linespread{1.3} </code> \(\rightarrow\) 1.3倍行距 <a href="https://zhuanlan.zhihu.com/p/138408387">参考</a></p></li>
+<li><p>另起一页：<code class="language-plaintext highlighter-rouge">\clearpage</code></p></li>
+<li><p>公示中插入中文<code class="language-plaintext highlighter-rouge">\mbox{}</code>：<code class="language-plaintext highlighter-rouge">\sin(\mbox{狗})</code> \(\rightarrow\) \(\sin(\mbox{狗})\)</p></li>
+<li>
+<p>创建新的格式（如加框文字）</p>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td>
+<td class="rouge-code"><pre><span class="c">% 在\begin{document}之前</span>
+<span class="k">\usepackage</span><span class="p">{</span>environ<span class="p">}</span>
+<span class="k">\usepackage</span><span class="p">{</span>tikz<span class="p">}</span>
+<span class="k">\NewEnviron</span><span class="p">{</span>elaboration<span class="p">}{</span>
+<span class="k">\par</span>
+<span class="nt">\begin{tikzpicture}</span>
+<span class="k">\node</span><span class="na">[rectangle,minimum width=0.9\textwidth]</span> (m) <span class="p">{</span><span class="nt">\begin{minipage}</span><span class="p">{</span>0.85<span class="k">\textwidth</span><span class="p">}</span><span class="k">\BODY</span><span class="nt">\end{minipage}</span><span class="p">}</span>;
+<span class="k">\draw</span><span class="na">[dashed]</span> (m.south west) rectangle (m.north east);
+<span class="nt">\end{tikzpicture}</span>
+<span class="p">}</span>
+  
+<span class="c">% 在正文中</span>
+<span class="nt">\begin{elaboration}</span>
+what you write...
+<span class="nt">\end{elaboration}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+<li>
+<p>添加附录</p>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td>
+<td class="rouge-code"><pre><span class="k">\usepackage</span><span class="na">[title]</span><span class="p">{</span>appendix<span class="p">}</span>
+  
+<span class="nt">\begin{document}</span>
+...
+  
+<span class="nt">\begin{appendices}</span>
+<span class="k">\section</span><span class="p">{</span>Some Notation<span class="p">}</span>
+<span class="nt">\end{appendices}</span>
+  
+<span class="nt">\end{document}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+<li>
+<p>手动缩小间距</p>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre><span class="k">\vspace</span><span class="p">{</span>-0.8cm<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+<li>
+<p>参考文献中使用<code class="language-plaintext highlighter-rouge">first author et al.</code>格式（缩减参考文献篇幅）</p>
+<p><a href="https://tex.stackexchange.com/a/123607">参考</a></p>
+<div class="language-latex highlighter-rouge">
+<div class="code-header"> <span data-label-text="LaTex"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td>
+<td class="rouge-code"><pre>author=<span class="p">{</span>Alpher, R. and others<span class="p">}</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+</li>
+<li>
+<p>参考文献显示问号的解决</p>
+<p><a href="https://blog.csdn.net/blgpb/article/details/84885762">参考</a></p>
+</li>
+<li>
+<p>以矢量图形式插入PPT中绘制的图</p>
+<ul>
+<li>PPT中选中图形，右键 $\rightarrow$ 另存为图片 $\rightarrow$ 保存为<code class="language-plaintext highlighter-rouge">.svg</code>格式</li>
+<li>
+<p>将<code class="language-plaintext highlighter-rouge">.svg</code>转化为<code class="language-plaintext highlighter-rouge">.pdf</code>：<a href="https://inkscape.org/">INKSCAPE</a></p>
+<ul>
+<li>打开<code class="language-plaintext highlighter-rouge">.svg</code>文件</li>
+<li>另存为<code class="language-plaintext highlighter-rouge">.pdf</code>文件</li>
+</ul>
+</li>
+<li>在Latex中插入<code class="language-plaintext highlighter-rouge">.pdf</code>文件</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="post-tail-wrapper text-muted">
+<div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href="/categories/%E6%9C%89%E8%B6%A3-%E6%9C%89%E7%94%A8%E7%9A%84%E8%B5%84%E6%96%99/">有趣/有用的资料</a>, <a href="/categories/cheat-sheets/">cheat sheets</a>
+</div>
+<div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/cheat-sheets/" class="post-tag no-text-decoration">cheat sheets</a>
+</div>
+<div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2">
+<div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div>
+<div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=Latex%20cheat%20sheet%20-%20ZhangGe's%20Blog&amp;url=https://zhangge6.github.io/posts/Latex-cheat-sheet/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=Latex%20cheat%20sheet%20-%20ZhangGe's%20Blog&amp;u=https://zhangge6.github.io/posts/Latex-cheat-sheet/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https://zhangge6.github.io/posts/Latex-cheat-sheet/&amp;text=Latex%20cheat%20sheet%20-%20ZhangGe's%20Blog" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" data-title-succeed="Link copied successfully!"> </i> </span>
+</div>
+</div>
+</div>
+</div></div>
+<div id="panel-wrapper" class="col-xl-3 pl-2 text-muted">
+<div class="access">
+<div id="access-lastmod" class="post">
+<div class="panel-heading">Recently Updated</div>
+<ul class="post-content pl-0 pb-1 ml-1 mt-2">
+<li><a href="/posts/Git%E5%AD%A6%E4%B9%A0/">Git学习</a></li>
+<li><a href="/posts/VS-code%E4%BD%BF%E7%94%A8/">VS code使用</a></li>
+<li><a href="/posts/Docker%E5%AD%A6%E4%B9%A0/">Docker学习</a></li>
+<li><a href="/posts/GPU%E9%80%9A%E4%BF%A1%E5%85%83%E8%AF%AD/">GPU通信元语</a></li>
+<li><a href="/posts/%E5%AF%B9Roofline%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%90%86%E8%A7%A3/">对Roofline模型的理解</a></li>
+</ul>
+</div>
+<div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+<div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
+<nav id="toc" data-toggle="toc"></nav>
+</div>
+</div>
+</div>
+<div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<div id="related-posts" class="mt-5 mb-2 mb-sm-4">
+<h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3>
+<div class="card-deck mb-4">
+<div class="card"> <a href="/posts/markdown-cheat-sheet/"><div class="card-body"> <em class="timeago small" data-ts="1612535460"> 2021-02-05 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>markdown cheat sheet</h3>
+<div class="text-muted small"><p> 镇楼：没有什么比Markdown官方教程更懂Markdown. Markdown emoji <img class="emoji" title=":point_right:" alt=":point_right:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f449.png" height="20" width="20">See this github repo: ikatyang/emoji-cheat-sheet and this：rxaviers/7360908 可以先到这里搜关键词，找到图标，然后到这里直接搜图标得到markdown代码。 有的emoji因为各种原...</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/%E4%B8%89%E9%98%B6%E9%AD%94%E6%96%B9%E5%A4%8D%E5%8E%9F%E6%96%B9%E6%B3%95/"><div class="card-body"> <em class="timeago small" data-ts="1612704660"> 2021-02-07 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>三阶魔方复原方法</h3>
+<div class="text-muted small"><p> 以下内容来自知乎用户@小狼啊小狼的魔方那点事专栏。 依次做完下面这八步，魔方就能复原啦🥳，要想熟练得需要多多练习。 <img class="emoji" title=":one:" alt=":one:" src="https://github.githubassets.com/images/icons/emoji/unicode/0031-20e3.png" height="20" width="20">【初级篇】（一）最简单的三阶魔方入门教程——魔方概述 <img class="emoji" title=":two:" alt=":two:" src="https://github.githubassets.com/images/icons/emoji/unicode/0032-20e3.png" height="20" width="20">【初级篇】（二）最简单的三阶魔方入门教程——底面十字 <img class="emoji" title=":three:" alt=":three:" src="https://github.githubassets.com/images/icons/emoji/unicode/0033-20e3.png" height="20" width="20">【初级篇】（三）最简单的三阶魔方入门教程——底层还原 左右手公式初遇：右手公式：URU'R'，左手公式：U'L'...</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/%E8%B5%84%E6%96%99%E6%9D%82%E8%AE%B0/"><div class="card-body"> <em class="timeago small" data-ts="1613802660"> 2021-02-20 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>资料杂记</h3>
+<div class="text-muted small"><p> github repo lufficc/SSD 一个SSD算法的实现 jbhuang0604/awesome-computer-vision A curated list of awesome computer vision resources AgaMiko/data-augme...</p></div>
+</div></a>
+</div>
+</div>
+</div>
+<div class="post-navigation d-flex justify-content-between"> <a href="/posts/Follow!/" class="btn btn-outline-primary" prompt="Older"><p>Follow!</p></a> <a href="/posts/matplotlib%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/" class="btn btn-outline-primary" prompt="Newer"><p>matplotlib系统学习</p></a>
+</div>
+<script type="text/javascript"> $(function () { const origin = "https://giscus.app"; const iframe = "iframe.giscus-frame"; const lightTheme = "light"; const darkTheme = "dark_dimmed"; let initTheme = lightTheme; if ($("html[data-mode=dark]").length > 0 || ($("html[data-mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches)) { initTheme = darkTheme; } let giscusAttributes = { "src": "https://giscus.app/client.js", "data-repo": "ZhangGe6/ZhangGe6.github.io", "data-repo-id": "R_kgDOHRk9Cg", "data-category": "Announcements", "data-category-id": "DIC_kwDOHRk9Cs4CPOm5", "data-mapping": "pathname", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-theme": initTheme, "data-input-position": "bottom", "data-lang": "en", "crossorigin": "anonymous", "async": "" }; let giscusScript = document.createElement("script"); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value)); document.getElementById("tail-wrapper").appendChild(giscusScript); addEventListener("message", (event) => { if (event.source === window && event.data && event.data.direction === ModeToggle.ID) { /* global theme mode changed */ const mode = event.data.message; const theme = (mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme); const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); }); </script>
+</div></div></div>
+<footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted">
+<div class="footer-left"><p class="mb-0"> © 2025 <a href="https://twitter.com/username">ZhangGe</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div>
+<div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div>
+</div></footer>
+</div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content">
+<div id="search-hints"><div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script> /* see: <https://docs.mathjax.org/en/latest/options/input/tex.html#tex-options> */ MathJax = { tex: { inlineMath: [ /* start/end delimiter pairs for in-line math */ ['$','$'], ['\\(','\\)'] ], displayMath: [ /* start/end delimiter pairs for display math */ ['$$', '$$'], ['\\[', '\\]'] ] } }; </script> <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script>

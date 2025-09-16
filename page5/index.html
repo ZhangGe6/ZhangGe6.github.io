@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="zh" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="ZhangGe’s Blog" /><meta property="og:locale" content="zh" /><meta name="description" content="A minimal, responsive, and powerful Jekyll theme for presenting professional writing." /><meta property="og:description" content="A minimal, responsive, and powerful Jekyll theme for presenting professional writing." /><link rel="canonical" href="https://zhangge6.github.io/page5/" /><meta property="og:url" content="https://zhangge6.github.io/page5/" /><meta property="og:site_name" content="ZhangGe’s Blog" /><meta property="og:type" content="website" /><link rel="prev" href="https://zhangge6.github.io/page4" /><link rel="next" href="https://zhangge6.github.io/page6" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="ZhangGe’s Blog" /><meta name="twitter:site" content="@twitter_username" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"WebPage","description":"A minimal, responsive, and powerful Jekyll theme for presenting professional writing.","headline":"ZhangGe’s Blog","url":"https://zhangge6.github.io/page5/"}</script><title>ZhangGe's Blog</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="ZhangGe's Blog"><meta name="application-name" content="ZhangGe's Blog"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end">
+<div class="profile-wrapper text-center">
+<div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/commons/avatar.jpg%20" alt="avatar" onerror="this.style.display='none'"> </a>
+</div>
+<div class="site-title mt-3"> <a href="/">ZhangGe's Blog</a>
+</div>
+<div class="site-subtitle font-italic">Stay hungry, stay foolish.</div>
+</div>
+<ul class="w-100">
+<li class="nav-item active"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a>
+</li>
+</ul>
+<div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/ZhangGe6" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20%5B'sjtu.zg123','gmail.com'%5D.join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a>
+</div>
+</div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span>Home</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> ZhangGe's Blog</div>
+<i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel">Cancel</span>
+</div></div><div id="main-wrapper">
+<div id="main">
+<div class="row">
+<div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<div id="post-list">
+<div class="post-preview">
+<h1> <a href="/posts/%E9%A2%91%E5%9F%9F%E8%A7%92%E5%BA%A6%E7%90%86%E8%A7%A3%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-F-principle/">频域角度理解深度学习 F-principle</a>
+</h1>
+<div class="post-content"><p> \(F-Principle\)定理： DNN倾向于按从低频到高频的顺序来拟合训练数据。 实验 Spatial Domain Red: the target function; Blue: DNN output. Abscissa: input; Ordinate: output. Fourier Domain Red: FFT of the target func...</p></div>
+<div class="post-meta text-muted d-flex"><div class="mr-auto"> <i class="far fa-calendar fa-fw"></i> <em class="timeago" data-ts="1613224800" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" data-capitalize="true"> 2021-02-13 </em> <i class="far fa-clock fa-fw"></i> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="300 words"> <em>1 min</em></span> <i class="far fa-folder-open fa-fw"></i> <span> 专业积累, 基础知识 </span>
+</div></div>
+</div>
+<div class="post-preview">
+<h1> <a href="/posts/%E5%85%B3%E4%BA%8EBatch-Normalization/">关于Batch Normalization</a>
+</h1>
+<div class="post-content"><p> Batch-Normalization (BN) 通过使用当前batch数据的均值mean和方差variance对它们进行标准化处理，可以使得模型的训练更加快速和稳定。实践中会把BN一般放在非线性激活函数的上一层或者下一层。 原理 训练时 BN之所以称之为batch normalization，就是因为normalization是沿batch_size维度进行的。 设某一个神经元对一...</p></div>
+<div class="post-meta text-muted d-flex"><div class="mr-auto"> <i class="far fa-calendar fa-fw"></i> <em class="timeago" data-ts="1612850940" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" data-capitalize="true"> 2021-02-09 </em> <i class="far fa-clock fa-fw"></i> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1401 words"> <em>7 min</em></span> <i class="far fa-folder-open fa-fw"></i> <span> 专业积累, 基础知识 </span>
+</div></div>
+</div>
+<div class="post-preview">
+<h1> <a href="/posts/Pytorch%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/">Pytorch系统学习</a>
+</h1>
+<div class="post-content"><p> 读取数据 参考 官方示例 和 这个github repo (recommanded) Dataset类 需要继承torch.utils.data.Dataset 且重写__len__和__getitem__。__len__返回数据集的大小，__getitem__根据索引值\(i\)从数据集中返回第\(i​\)个样本。 一个简单的示例 import os from torch.uti...</p></div>
+<div class="post-meta text-muted d-flex"><div class="mr-auto"> <i class="far fa-calendar fa-fw"></i> <em class="timeago" data-ts="1612775160" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" data-capitalize="true"> 2021-02-08 </em> <i class="far fa-clock fa-fw"></i> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="2584 words"> <em>14 min</em></span> <i class="far fa-folder-open fa-fw"></i> <span> 实践, 框架学习 </span>
+</div></div>
+</div>
+<div class="post-preview">
+<h1> <a href="/posts/%E4%B8%89%E9%98%B6%E9%AD%94%E6%96%B9%E5%A4%8D%E5%8E%9F%E6%96%B9%E6%B3%95/">三阶魔方复原方法</a>
+</h1>
+<div class="post-content"><p> 以下内容来自知乎用户@小狼啊小狼的魔方那点事专栏。 依次做完下面这八步，魔方就能复原啦🥳，要想熟练得需要多多练习。 <img class="emoji" title=":one:" alt=":one:" src="https://github.githubassets.com/images/icons/emoji/unicode/0031-20e3.png" height="20" width="20">【初级篇】（一）最简单的三阶魔方入门教程——魔方概述 <img class="emoji" title=":two:" alt=":two:" src="https://github.githubassets.com/images/icons/emoji/unicode/0032-20e3.png" height="20" width="20">【初级篇】（二）最简单的三阶魔方入门教程——底面十字 <img class="emoji" title=":three:" alt=":three:" src="https://github.githubassets.com/images/icons/emoji/unicode/0033-20e3.png" height="20" width="20">【初级篇】（三）最简单的三阶魔方入门教程——底层还原 左右手公式初遇：右手公式：URU'R'，左手公式：U'L'...</p></div>
+<div class="post-meta text-muted d-flex"><div class="mr-auto"> <i class="far fa-calendar fa-fw"></i> <em class="timeago" data-ts="1612704660" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" data-capitalize="true"> 2021-02-07 </em> <i class="far fa-clock fa-fw"></i> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="583 words"> <em>3 min</em></span> <i class="far fa-folder-open fa-fw"></i> <span> 有趣/有用的资料, 休闲 </span>
+</div></div>
+</div>
+<div class="post-preview">
+<h1> <a href="/posts/markdown-cheat-sheet/">markdown cheat sheet</a>
+</h1>
+<div class="post-content"><p> 镇楼：没有什么比Markdown官方教程更懂Markdown. Markdown emoji <img class="emoji" title=":point_right:" alt=":point_right:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f449.png" height="20" width="20">See this github repo: ikatyang/emoji-cheat-sheet and this：rxaviers/7360908 可以先到这里搜关键词，找到图标，然后到这里直接搜图标得到markdown代码。 有的emoji因为各种原...</p></div>
+<div class="post-meta text-muted d-flex"><div class="mr-auto"> <i class="far fa-calendar fa-fw"></i> <em class="timeago" data-ts="1612535460" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" data-capitalize="true"> 2021-02-05 </em> <i class="far fa-clock fa-fw"></i> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="187 words"> <em>1 min</em></span> <i class="far fa-folder-open fa-fw"></i> <span> 有趣/有用的资料, cheat sheets </span>
+</div></div>
+</div>
+<div class="post-preview">
+<h1> <a href="/posts/%E8%A7%A3%E5%86%B3github%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BD%E5%A4%B4%E5%83%8F%E5%92%8C%E5%9B%BE%E7%89%87/">github无法加载头像和图片</a>
+</h1>
+<div class="post-content"><p> 参考这一篇，2.3 修改 hosts。测试有效。 注：不保证长期有效，如果失效，请以原博客更新为准。 Windows系统的hosts文件在C:\Windows\System32\drivers\etc\hosts，打开后在文件末尾添加： # GitHub Start 140.82.113.3 github.com 140.82.114.20 gist.git...</p></div>
+<div class="post-meta text-muted d-flex"><div class="mr-auto"> <i class="far fa-calendar fa-fw"></i> <em class="timeago" data-ts="1612402680" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" data-capitalize="true"> 2021-02-04 </em> <i class="far fa-clock fa-fw"></i> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="203 words"> <em>1 min</em></span> <i class="far fa-folder-open fa-fw"></i> <span> 实践, 实践杂记 </span>
+</div></div>
+</div>
+<div class="post-preview">
+<h1> <a href="/posts/jekell%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E6%B5%81%E7%A8%8B%E8%AE%B0%E5%BD%95/">Jekyll博客搭建流程记录</a>
+</h1>
+<div class="post-content"><p> 环境配置 安装Ruby, Bundler.（看这里，更详细的看这里） 挑选jekyll模板 来这里挑选中意的模板。模板一般会有配置的说明，可以按照模板说明一步步来，把模板用起来。 模板配置(以chirpy为例) chirpy模板页，点击homepage跳转到其对应的github页，按照readme配置即可。以下简要记录下实际配置chirpy的过程。 点击use t...</p></div>
+<div class="post-meta text-muted d-flex"><div class="mr-auto"> <i class="far fa-calendar fa-fw"></i> <em class="timeago" data-ts="1612356900" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" data-capitalize="true"> 2021-02-03 </em> <i class="far fa-clock fa-fw"></i> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="574 words"> <em>3 min</em></span> <i class="far fa-folder-open fa-fw"></i> <span> Blog_tutorial </span>
+</div></div>
+</div>
+<div class="post-preview">
+<h1> <a href="/posts/ubuntu%E9%87%8D%E8%A3%85%E7%B3%BB%E7%BB%9F%E8%AE%B0%E5%BD%95/">Ubuntu重装系统后配置流程记录</a>
+</h1>
+<div class="post-content"><p> 下载安装包 以Ubuntu 18.04为例， 进入清华镜像源，选择：ubuntu-18.04.5-desktop-amd64.iso下载。 制作系统盘与重启安装 参考 制作系统盘 使用UltraISO。 打开UltraISO后，点击上边栏文件-打开，选择上面下载好的Ubuntu安装镜像文件。 点击上边栏启动-写入硬盘镜像，在跳出的窗口确认写入的硬盘驱动器（如要写入的U盘），点...</p></div>
+<div class="post-meta text-muted d-flex"><div class="mr-auto"> <i class="far fa-calendar fa-fw"></i> <em class="timeago" data-ts="1611816780" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" data-capitalize="true"> 2021-01-28 </em> <i class="far fa-clock fa-fw"></i> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="532 words"> <em>2 min</em></span> <i class="far fa-folder-open fa-fw"></i> <span> 实践, 环境配置 </span>
+</div></div>
+</div>
+<div class="post-preview">
+<h1> <a href="/posts/%E4%B8%80%E4%B8%AA%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E6%A1%86%E6%9E%B6-Markdown%E6%A0%BC%E5%BC%8F/">一个论文笔记框架（Markdown格式）</a>
+</h1>
+<div class="post-content"><p> # Title ## Summary 写完笔记之后最后填，概述文章的内容，以后查阅笔记的时候先看这一段。注：写文章summary切记需要通过自己的思考，用自己的语言描述。忌讳直接Ctrl + c原文。 ## Research Objective(s) 作者的研究目标是什么？ ## Background / Problem Statement 研究的背景以及问题陈述：作者需要解决的问题是什...</p></div>
+<div class="post-meta text-muted d-flex"><div class="mr-auto"> <i class="far fa-calendar fa-fw"></i> <em class="timeago" data-ts="1611556320" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" data-capitalize="true"> 2021-01-25 </em> <i class="far fa-clock fa-fw"></i> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="357 words"> <em>1 min</em></span> <i class="far fa-folder-open fa-fw"></i> <span> 专业积累, 杂记 </span>
+</div></div>
+</div>
+<div class="post-preview">
+<h1> <a href="/posts/Docker%E5%AD%A6%E4%B9%A0/">Docker学习</a>
+</h1>
+<div class="post-content"><p> docker原理 docker原理框架 生成镜像的两种方式 通过Dockerfile构建。 Dockerfile是一个用来构建镜像的文本文件，包含了一条条构建镜像所需的指令和说明，可参考Dockerfile文件详解。 通过docker build命令来从Dockerfile构建镜像，可参照Docker build 命令。 docker build [OPTIONS] PA...</p></div>
+<div class="post-meta text-muted d-flex"><div class="mr-auto"> <i class="far fa-calendar fa-fw"></i> <em class="timeago" data-ts="1611150900" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" data-capitalize="true"> 2021-01-20 </em> <i class="far fa-clock fa-fw"></i> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="721 words"> <em>4 min</em></span> <i class="far fa-folder-open fa-fw"></i> <span> 实践, 硬技能 </span>
+</div></div>
+</div>
+</div>
+<ul class="pagination align-items-center mt-4 mb-0 pl-lg-2">
+<li class="page-item "> <a class="page-link btn-box-shadow" href="/page4" aria-label="previous-page"> <i class="fas fa-angle-left"></i> </a>
+</li>
+<li class="page-item "> <a class="page-link btn-box-shadow" href="/">1</a>
+</li>
+<li class="page-item disabled"> <span class="page-link btn-box-shadow">...</span>
+</li>
+<li class="page-item "> <a class="page-link btn-box-shadow" href="/page4/">4</a>
+</li>
+<li class="page-item active"> <a class="page-link btn-box-shadow" href="/page5/">5</a>
+</li>
+<li class="page-item "> <a class="page-link btn-box-shadow" href="/page6/">6</a>
+</li>
+<li class="page-item "> <a class="page-link btn-box-shadow" href="/page7/">7</a>
+</li>
+<li class="page-index align-middle"> <span>5</span> <span class="text-muted">/ 7</span>
+</li>
+<li class="page-item "> <a class="page-link btn-box-shadow" href="/page6" aria-label="next-page"> <i class="fas fa-angle-right"></i> </a>
+</li>
+</ul>
+</div></div>
+<div id="panel-wrapper" class="col-xl-3 pl-2 text-muted"><div class="access">
+<div id="access-lastmod" class="post">
+<div class="panel-heading">Recently Updated</div>
+<ul class="post-content pl-0 pb-1 ml-1 mt-2">
+<li><a href="/posts/Git%E5%AD%A6%E4%B9%A0/">Git学习</a></li>
+<li><a href="/posts/VS-code%E4%BD%BF%E7%94%A8/">VS code使用</a></li>
+<li><a href="/posts/Docker%E5%AD%A6%E4%B9%A0/">Docker学习</a></li>
+<li><a href="/posts/GPU%E9%80%9A%E4%BF%A1%E5%85%83%E8%AF%AD/">GPU通信元语</a></li>
+<li><a href="/posts/%E5%AF%B9Roofline%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%90%86%E8%A7%A3/">对Roofline模型的理解</a></li>
+</ul>
+</div>
+<div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div>
+</div></div>
+</div>
+<footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted">
+<div class="footer-left"><p class="mb-0"> © 2025 <a href="https://twitter.com/username">ZhangGe</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div>
+<div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div>
+</div></footer>
+</div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content">
+<div id="search-hints"><div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/home.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script>

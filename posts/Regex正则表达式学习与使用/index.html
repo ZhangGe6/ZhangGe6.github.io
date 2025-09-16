@@ -1,0 +1,256 @@
+<!DOCTYPE html><html lang="zh" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="Regex正则表达式学习与使用" /><meta name="author" content="Zhang Ge" /><meta property="og:locale" content="zh" /><meta name="description" content="感觉Regex正则表达式是这样一种东西： 没有需求时去学习它：天啊这一串符号都是什么东西，怎么学啊！ 当有需求用到它并且成功应用时：真是太方便了！真香，要学习！" /><meta property="og:description" content="感觉Regex正则表达式是这样一种东西： 没有需求时去学习它：天啊这一串符号都是什么东西，怎么学啊！ 当有需求用到它并且成功应用时：真是太方便了！真香，要学习！" /><link rel="canonical" href="https://zhangge6.github.io/posts/Regex%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/" /><meta property="og:url" content="https://zhangge6.github.io/posts/Regex%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/" /><meta property="og:site_name" content="ZhangGe’s Blog" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2022-08-18T10:54:00+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="Regex正则表达式学习与使用" /><meta name="twitter:site" content="@twitter_username" /><meta name="twitter:creator" content="@Zhang Ge" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Zhang Ge"},"dateModified":"2022-09-03T20:48:25+08:00","datePublished":"2022-08-18T10:54:00+08:00","description":"感觉Regex正则表达式是这样一种东西： 没有需求时去学习它：天啊这一串符号都是什么东西，怎么学啊！ 当有需求用到它并且成功应用时：真是太方便了！真香，要学习！","headline":"Regex正则表达式学习与使用","mainEntityOfPage":{"@type":"WebPage","@id":"https://zhangge6.github.io/posts/Regex%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/"},"url":"https://zhangge6.github.io/posts/Regex%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/"}</script><title>Regex正则表达式学习与使用 | ZhangGe's Blog</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="ZhangGe's Blog"><meta name="application-name" content="ZhangGe's Blog"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end">
+<div class="profile-wrapper text-center">
+<div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/commons/avatar.jpg%20" alt="avatar" onerror="this.style.display='none'"> </a>
+</div>
+<div class="site-title mt-3"> <a href="/">ZhangGe's Blog</a>
+</div>
+<div class="site-subtitle font-italic">Stay hungry, stay foolish.</div>
+</div>
+<ul class="w-100">
+<li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a>
+</li>
+</ul>
+<div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/ZhangGe6" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20%5B'sjtu.zg123','gmail.com'%5D.join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a>
+</div>
+</div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>Regex正则表达式学习与使用</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div>
+<i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel">Cancel</span>
+</div></div><div id="main-wrapper">
+<div id="main">
+<div class="row">
+<div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<h1 data-toc-skip>Regex正则表达式学习与使用</h1>
+<div class="post-meta text-muted">
+<div> By <em> <a href="https://twitter.com/username">ZhangGe</a> </em>
+</div>
+<div class="d-flex"><div> <span> Posted <em class="timeago" data-ts="1660791240" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"> 2022-08-18 </em> </span> <span> Updated <em class="timeago" data-ts="1662209305" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"> 2022-09-03 </em> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1034 words"> <em>5 min</em> read</span>
+</div></div>
+</div>
+<div class="post-content">
+<p>感觉Regex正则表达式是这样一种东西：</p>
+<ul>
+<li>没有需求时去学习它：天啊这一串符号都是什么东西，怎么学啊！</li>
+<li>当有需求用到它并且成功应用时：真是太方便了！真香，要学习！</li>
+</ul>
+<h1 id="动机">动机</h1>
+<p>最近实习的时候，需要协助处理代码审查系统的告警，其中有大量（约1.6k）的命名风格的问题，需要对原有的变量命名进行批量替换。我用的编辑器是VS Code，它的朴素的字符串替换功能已经不能满足需求了，比如我需要做以下一些替换：</p>
+<div class="language-plaintext highlighter-rouge">
+<div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre>src0_32f -&gt; vSrc0
+dst0_32f -&gt; vDst0
+...
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p>想到的是，用正则表达式匹配与替换，对于这个例子，所采用的方法是：</p>
+<p>搜索框填：<code class="language-plaintext highlighter-rouge">([a-z])(\w+)_32f</code></p>
+<p>替换框填：<code class="language-plaintext highlighter-rouge">v\U$1$2</code></p>
+<p>真是方便！这促使我开启regex正则表达式的学习和积累。</p>
+<h1 id="基础">基础</h1>
+<blockquote><p>在处理字符串时，经常会有查找符合某些复杂规则的字符串的需要。<strong>正则表达式</strong>就是用于描述这些规则的工具。</p></blockquote>
+<p>正则表达式的资料，网上已经有很多了，这里列举几个对我帮助比较大的：</p>
+<ul>
+<li>
+<a href="https://deerchao.cn/tutorials/regex/regex.htm#top">正则表达式30分钟入门教程</a><ul><li>中文，介绍正则表达式的一些基本概念。</li></ul>
+</li>
+<li>
+<a href="https://www.programiz.com/python-programming/regex">Python RegEx</a> <img class="emoji" title=":+1:" alt=":+1:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f44d.png" height="20" width="20"><ul>
+<li>提供了各种regex的实例讲解。</li>
+<li>本页以下内容主要基于此整理而成。</li>
+</ul>
+</li>
+</ul>
+<h2 id="元字符metacharacters">
+<span class="mr-2">元字符（Metacharacters）</span><a href="#%E5%85%83%E5%AD%97%E7%AC%A6metacharacters" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>Regex的元字符有：<code class="language-plaintext highlighter-rouge">[]</code> <code class="language-plaintext highlighter-rouge">.</code> <code class="language-plaintext highlighter-rouge">^</code> <code class="language-plaintext highlighter-rouge">$</code> <code class="language-plaintext highlighter-rouge">*</code> <code class="language-plaintext highlighter-rouge">+</code> <code class="language-plaintext highlighter-rouge">?</code> <code class="language-plaintext highlighter-rouge">{}</code> <code class="language-plaintext highlighter-rouge">|</code> <code class="language-plaintext highlighter-rouge">()</code> <code class="language-plaintext highlighter-rouge">\</code></p>
+<ul>
+<li>
+<code class="language-plaintext highlighter-rouge">[]</code>：定义一个字符集合，当某一个<strong>单个字符</strong>属于该集合时，则匹配<ul>
+<li><p>如规则<code class="language-plaintext highlighter-rouge">[abc]</code>作用于<code class="language-plaintext highlighter-rouge">apple</code>会发生一次匹配</p></li>
+<li>
+<p>可使用<code class="language-plaintext highlighter-rouge">-</code>表示一个区间，如<code class="language-plaintext highlighter-rouge">[0-9]</code>等价于<code class="language-plaintext highlighter-rouge">[0123456789]</code>，<code class="language-plaintext highlighter-rouge">[a-z]</code>等价于<code class="language-plaintext highlighter-rouge">[abcd...xyz]</code>，<code class="language-plaintext highlighter-rouge">[A-Z]</code>等价于<code class="language-plaintext highlighter-rouge">[ABCD...XYZ]</code></p>
+<ul>
+<li>
+<code class="language-plaintext highlighter-rouge">[0-39]</code>等价于<code class="language-plaintext highlighter-rouge">[01239]</code>
+</li>
+<li>
+<code class="language-plaintext highlighter-rouge">[a-z0-9]</code>等价于<code class="language-plaintext highlighter-rouge">[abcd...xyz0123456789]</code>
+</li>
+</ul>
+</li>
+<li>
+<p>使用<code class="language-plaintext highlighter-rouge">^</code>取集合的补集</p>
+<ul><li>如<code class="language-plaintext highlighter-rouge">[^abc]</code>代表所有不属于<code class="language-plaintext highlighter-rouge">[abc]</code>的字符集合</li></ul>
+</li>
+</ul>
+</li>
+<li>
+<code class="language-plaintext highlighter-rouge">.</code>：匹配除换行符<code class="language-plaintext highlighter-rouge">\n</code>之外的所有<strong>单个字符</strong><ul><li>如规则<code class="language-plaintext highlighter-rouge">.</code>作用于<code class="language-plaintext highlighter-rouge">abcd</code>时会发生4次匹配（分别为<code class="language-plaintext highlighter-rouge">a</code>, <code class="language-plaintext highlighter-rouge">b</code>, <code class="language-plaintext highlighter-rouge">c</code>, <code class="language-plaintext highlighter-rouge">d</code>）；规则<code class="language-plaintext highlighter-rouge">..</code>作用于<code class="language-plaintext highlighter-rouge">abcd</code>时会发生2次匹配（分别为<code class="language-plaintext highlighter-rouge">ab</code>, <code class="language-plaintext highlighter-rouge">cd</code>）；</li></ul>
+</li>
+<li>
+<p><code class="language-plaintext highlighter-rouge">^</code>：判断以后续字符/串为<u>开头</u>的字符/串</p>
+<ul><li>如规则<code class="language-plaintext highlighter-rouge">^ab</code>作用于<code class="language-plaintext highlighter-rouge">abc</code>会发生匹配，作用于<code class="language-plaintext highlighter-rouge">acb</code>则不会发生匹配</li></ul>
+</li>
+<li>
+<p><code class="language-plaintext highlighter-rouge">$</code>：判断以前缀字符/串为<u>结尾</u>的字符/串</p>
+<ul><li>如规则<code class="language-plaintext highlighter-rouge">a$</code>作用于<code class="language-plaintext highlighter-rouge">formula</code>会发生匹配，作用于<code class="language-plaintext highlighter-rouge">cab</code>则不会发生匹配</li></ul>
+</li>
+<li>
+<p>计数元字符：<code class="language-plaintext highlighter-rouge">*</code>，<code class="language-plaintext highlighter-rouge">+</code>，<code class="language-plaintext highlighter-rouge">?</code>，<code class="language-plaintext highlighter-rouge">{}</code></p>
+<ul>
+<li>
+<code class="language-plaintext highlighter-rouge">*</code>：其左方的单个字符重复<strong>大于等于0次</strong><ul><li>如<code class="language-plaintext highlighter-rouge">ma*n</code>可匹配<code class="language-plaintext highlighter-rouge">mn</code>，<code class="language-plaintext highlighter-rouge">man</code>，<code class="language-plaintext highlighter-rouge">maaaaan</code>
+</li></ul>
+</li>
+<li>
+<code class="language-plaintext highlighter-rouge">+</code>：其左方的单个字符重复<strong>大于等于1次</strong><ul><li>如<code class="language-plaintext highlighter-rouge">ma+n</code>可匹配<code class="language-plaintext highlighter-rouge">man</code>，<code class="language-plaintext highlighter-rouge">maaaaan</code>
+</li></ul>
+</li>
+<li>
+<code class="language-plaintext highlighter-rouge">?</code>：其左方的单个字符重复<strong>0次或1次</strong><ul><li>如<code class="language-plaintext highlighter-rouge">ma?n</code>可匹配<code class="language-plaintext highlighter-rouge">mn</code>，<code class="language-plaintext highlighter-rouge">man</code>
+</li></ul>
+</li>
+<li>
+<code class="language-plaintext highlighter-rouge">{}</code> ：<code class="language-plaintext highlighter-rouge">{m, n}</code>表示重复<strong>大于等于<code class="language-plaintext highlighter-rouge">m</code>次，小于等于<code class="language-plaintext highlighter-rouge">n</code>次</strong><ul><li>比如<code class="language-plaintext highlighter-rouge">[0-9]{2, 4}</code>匹配长度在2~4之间的数字串</li></ul>
+</li>
+</ul>
+</li>
+<li>
+<code class="language-plaintext highlighter-rouge">|</code>：同<code class="language-plaintext highlighter-rouge">or</code>的含义，当某一个<strong>单个字符</strong>属于<code class="language-plaintext highlighter-rouge">|</code>连接的所有字符中的一个时，则发生匹配<ul>
+<li>如规则<code class="language-plaintext highlighter-rouge">a|b</code>作用于<code class="language-plaintext highlighter-rouge">adb</code>时，发生两次匹配（<code class="language-plaintext highlighter-rouge">a</code>和<code class="language-plaintext highlighter-rouge">b</code>）</li>
+<li>感觉有点像<code class="language-plaintext highlighter-rouge">[]</code>啊</li>
+</ul>
+</li>
+<li>
+<p><code class="language-plaintext highlighter-rouge">()</code>：分组</p>
+<ul><li>
+<p>一个<code class="language-plaintext highlighter-rouge">()</code>扣起来的为一个组。当需要把匹配字符串中的某一小组提取出来，比较有用：</p>
+<ul>
+<li>
+<p>比如要把<code class="language-plaintext highlighter-rouge">0000_32f</code>替换为<code class="language-plaintext highlighter-rouge">0000_32s</code>，则可使用：</p>
+<ul><li>
+<p>搜索框填<code class="language-plaintext highlighter-rouge">([0-9]{4})_32f</code>，替换框填<code class="language-plaintext highlighter-rouge">$1_32s</code></p>
+<ul><li>其中<code class="language-plaintext highlighter-rouge">$1</code>就表示第一组的内容（regex从1开始计数）</li></ul>
+</li></ul>
+</li>
+<li>
+<p>比如要把<code class="language-plaintext highlighter-rouge">0000_32f</code>替换为<code class="language-plaintext highlighter-rouge">0000_32F</code>，则可使用：</p>
+<ul><li>
+<p>搜索框填<code class="language-plaintext highlighter-rouge">([0-9]{4})_32(\w)</code>，替换框填<code class="language-plaintext highlighter-rouge">$1_32\U$2</code></p>
+<ul><li>其中<code class="language-plaintext highlighter-rouge">\U</code>表示将对应的字符转为大写</li></ul>
+</li></ul>
+</li>
+</ul>
+</li></ul>
+</li>
+<li>
+<code class="language-plaintext highlighter-rouge">\</code>：常见的转移字符的含义</li>
+</ul>
+<h2 id="特殊字符">
+<span class="mr-2">特殊字符</span><a href="#%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<ul>
+<li>
+<code class="language-plaintext highlighter-rouge">\d</code>：等价于<code class="language-plaintext highlighter-rouge">[0-9]</code>
+</li>
+<li>
+<code class="language-plaintext highlighter-rouge">\D</code>：等价于<code class="language-plaintext highlighter-rouge">[^0-9]</code>
+</li>
+<li>
+<code class="language-plaintext highlighter-rouge">\w</code>：等价于<code class="language-plaintext highlighter-rouge">[a-zA-Z0-9_]</code>（注意还可匹配下划线）</li>
+<li>
+<code class="language-plaintext highlighter-rouge">\W</code>：等价于<code class="language-plaintext highlighter-rouge">[^a-zA-Z0-9_]</code>
+</li>
+<li>
+<code class="language-plaintext highlighter-rouge">\s</code>：匹配一个空白位置</li>
+</ul>
+<h1 id="其他">其他</h1>
+<ul><li>在线测试正则表达式的工具：<a href="https://deerchao.cn/tools/wegester/">Wegester</a>
+</li></ul>
+</div>
+<div class="post-tail-wrapper text-muted">
+<div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href="/categories/%E5%AE%9E%E8%B7%B5/">实践</a>, <a href="/categories/%E7%A1%AC%E6%8A%80%E8%83%BD/">硬技能</a>
+</div>
+<div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/regex/" class="post-tag no-text-decoration">regex</a>
+</div>
+<div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2">
+<div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div>
+<div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=Regex%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8%20-%20ZhangGe's%20Blog&amp;url=https://zhangge6.github.io/posts/Regex%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=Regex%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8%20-%20ZhangGe's%20Blog&amp;u=https://zhangge6.github.io/posts/Regex%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https://zhangge6.github.io/posts/Regex%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8/&amp;text=Regex%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AD%A6%E4%B9%A0%E4%B8%8E%E4%BD%BF%E7%94%A8%20-%20ZhangGe's%20Blog" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" data-title-succeed="Link copied successfully!"> </i> </span>
+</div>
+</div>
+</div>
+</div></div>
+<div id="panel-wrapper" class="col-xl-3 pl-2 text-muted">
+<div class="access">
+<div id="access-lastmod" class="post">
+<div class="panel-heading">Recently Updated</div>
+<ul class="post-content pl-0 pb-1 ml-1 mt-2">
+<li><a href="/posts/Git%E5%AD%A6%E4%B9%A0/">Git学习</a></li>
+<li><a href="/posts/VS-code%E4%BD%BF%E7%94%A8/">VS code使用</a></li>
+<li><a href="/posts/Docker%E5%AD%A6%E4%B9%A0/">Docker学习</a></li>
+<li><a href="/posts/GPU%E9%80%9A%E4%BF%A1%E5%85%83%E8%AF%AD/">GPU通信元语</a></li>
+<li><a href="/posts/%E5%AF%B9Roofline%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%90%86%E8%A7%A3/">对Roofline模型的理解</a></li>
+</ul>
+</div>
+<div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+<div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
+<nav id="toc" data-toggle="toc"></nav>
+</div>
+</div>
+</div>
+<div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<div id="related-posts" class="mt-5 mb-2 mb-sm-4">
+<h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3>
+<div class="card-deck mb-4">
+<div class="card"> <a href="/posts/Makefile%E5%AD%A6%E4%B9%A0/"><div class="card-body"> <em class="timeago small" data-ts="1602227880"> 2020-10-09 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>makefile学习</h3>
+<div class="text-muted small"><p> 本文是一些自己学习makefile时的笔记。以下内容主要摘取自陈皓编写的跟我一起写Makefile，这是一个很好的学习资料。 makefile介绍 参考 makefile的核心规则 target : prerequisites command target是目标文件，prerequisites是生成target的依赖文件。当target不存在，或prerequisites...</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/g++%E7%BC%96%E8%AF%91%E5%AD%A6%E4%B9%A0/"><div class="card-body"> <em class="timeago small" data-ts="1602331200"> 2020-10-10 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>g++编译学习</h3>
+<div class="text-muted small"><p> 动机 之前对g++/gcc编译过程和编译选项只有浅显了解，因为项目需要，将其学习一下。以下是学习笔记。 g++和gcc GNU Compiler Collection即GUN 编译器集合，它可以编译C、C++、JAV、Fortran、Pascal、Object-C、Ada等语言。gcc是GCC中的GUN C Compiler（C 编译器）；g++是GCC中的GUN C++ Compil...</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/Git%E5%AD%A6%E4%B9%A0/"><div class="card-body"> <em class="timeago small" data-ts="1603029300"> 2020-10-18 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Git学习</h3>
+<div class="text-muted small"><p> 动机 久仰Git版本管理的大名，自己在做一些项目时也发现版本的管理是个头疼的问题。因此作为一项硬技能，有必要好好学一下。 Git原理 首先理解一下工作区、版本库的概念。 工作区：仓库目录下除.git之外的，用户进行一系列新建、修改文件的区域。 版本库：仓库目录下的一个(隐藏)目录.git，这个就是Git的版本库。 版本库中有暂存区(...</p></div>
+</div></a>
+</div>
+</div>
+</div>
+<div class="post-navigation d-flex justify-content-between"> <a href="/posts/Python-argparse%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%E5%B0%8F%E7%BB%93/" class="btn btn-outline-primary" prompt="Older"><p>Python argparse使用方法小结</p></a> <a href="/posts/%E5%AF%B9Roofline%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%90%86%E8%A7%A3/" class="btn btn-outline-primary" prompt="Newer"><p>对Roofline模型的理解</p></a>
+</div>
+<script type="text/javascript"> $(function () { const origin = "https://giscus.app"; const iframe = "iframe.giscus-frame"; const lightTheme = "light"; const darkTheme = "dark_dimmed"; let initTheme = lightTheme; if ($("html[data-mode=dark]").length > 0 || ($("html[data-mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches)) { initTheme = darkTheme; } let giscusAttributes = { "src": "https://giscus.app/client.js", "data-repo": "ZhangGe6/ZhangGe6.github.io", "data-repo-id": "R_kgDOHRk9Cg", "data-category": "Announcements", "data-category-id": "DIC_kwDOHRk9Cs4CPOm5", "data-mapping": "pathname", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-theme": initTheme, "data-input-position": "bottom", "data-lang": "en", "crossorigin": "anonymous", "async": "" }; let giscusScript = document.createElement("script"); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value)); document.getElementById("tail-wrapper").appendChild(giscusScript); addEventListener("message", (event) => { if (event.source === window && event.data && event.data.direction === ModeToggle.ID) { /* global theme mode changed */ const mode = event.data.message; const theme = (mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme); const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); }); </script>
+</div></div></div>
+<footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted">
+<div class="footer-left"><p class="mb-0"> © 2025 <a href="https://twitter.com/username">ZhangGe</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div>
+<div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div>
+</div></footer>
+</div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content">
+<div id="search-hints"><div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script>

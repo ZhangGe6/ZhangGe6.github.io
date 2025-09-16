@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="zh" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="模型压缩实战" /><meta name="author" content="Zhang Ge" /><meta property="og:locale" content="zh" /><meta name="description" content="666DZY666/micronet" /><meta property="og:description" content="666DZY666/micronet" /><link rel="canonical" href="https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E5%AE%9E%E6%88%98/" /><meta property="og:url" content="https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E5%AE%9E%E6%88%98/" /><meta property="og:site_name" content="ZhangGe’s Blog" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-03-16T09:08:00+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="模型压缩实战" /><meta name="twitter:site" content="@twitter_username" /><meta name="twitter:creator" content="@Zhang Ge" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Zhang Ge"},"dateModified":"2021-03-16T09:08:00+08:00","datePublished":"2021-03-16T09:08:00+08:00","description":"666DZY666/micronet","headline":"模型压缩实战","mainEntityOfPage":{"@type":"WebPage","@id":"https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E5%AE%9E%E6%88%98/"},"url":"https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E5%AE%9E%E6%88%98/"}</script><title>模型压缩实战 | ZhangGe's Blog</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="ZhangGe's Blog"><meta name="application-name" content="ZhangGe's Blog"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end">
+<div class="profile-wrapper text-center">
+<div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/commons/avatar.jpg%20" alt="avatar" onerror="this.style.display='none'"> </a>
+</div>
+<div class="site-title mt-3"> <a href="/">ZhangGe's Blog</a>
+</div>
+<div class="site-subtitle font-italic">Stay hungry, stay foolish.</div>
+</div>
+<ul class="w-100">
+<li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a>
+</li>
+</ul>
+<div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/ZhangGe6" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20%5B'sjtu.zg123','gmail.com'%5D.join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a>
+</div>
+</div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>模型压缩实战</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div>
+<i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel">Cancel</span>
+</div></div><div id="main-wrapper">
+<div id="main">
+<div class="row">
+<div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<h1 data-toc-skip>模型压缩实战</h1>
+<div class="post-meta text-muted">
+<div> By <em> <a href="https://twitter.com/username">ZhangGe</a> </em>
+</div>
+<div class="d-flex"><div> <span> Posted <em class="timeago" data-ts="1615856880" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"> 2021-03-16 </em> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="751 words"> <em>4 min</em> read</span>
+</div></div>
+</div>
+<div class="post-content">
+<h1 id="666dzy666micronet">666DZY666/micronet</h1>
+<ul><li>
+<a href="https://github.com/666DZY666/micronet">github repo</a> <img data-src="https://img.shields.io/github/stars/666DZY666/micronet.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore>
+</li></ul>
+<h1 id="pytorch-official">Pytorch official</h1>
+<ul>
+<li>
+<a href="https://pytorch.org/docs/stable/quantization.html">Quantization</a><ul>
+<li><a href="https://pytorch.org/blog/introduction-to-quantization-on-pytorch/">intro</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/299108528">知乎 - Gemfield - PyTorch的量化</a></li>
+<li><a href="https://spell.ml/blog/pytorch-quantization-X8e7wBAAACIAHPhT">A developer-friendly guide to model quantization with PyTorch</a></li>
+</ul>
+</li>
+<li><p><a href="https://engineering.fb.com/2018/11/07/ml-applications/fbgemm/">FBGEMM - Blog</a></p></li>
+<li><a href="https://pytorch.org/tutorials/intermediate/pruning_tutorial.html">Pruning</a></li>
+</ul>
+<h1 id="tensorflow-official">Tensorflow official</h1>
+<h1 id="腾讯-pocketflow">腾讯 PocketFlow</h1>
+<p><strong>基于Tensorflow开发</strong>，集成了当前主流与腾讯AI Lab自研的多个模型压缩与训练算法，方便快速地部署到移动端产品上。</p>
+<ul>
+<li><p><a href="https://github.com/Tencent/PocketFlow">github repo</a><img data-src="https://img.shields.io/github/stars/Tencent/PocketFlow.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore></p></li>
+<li><p><a href="https://www.zhihu.com/question/295045153">如何看待腾讯 AI Lab 开源的 PocketFlow？</a></p></li>
+<li><p>代码风格，文档，算法数目。看知乎的评论好像现在<strong>还不是很好用</strong>。</p></li>
+</ul>
+<h1 id="intel-distiller">Intel Distiller</h1>
+<p>基于 PyTorch 的开源神经网络压缩框架，Distiller 是由 Intel AI Lab 维护的基于 PyTorch 的开源神经网络压缩框架。主要包括：</p>
+<ol>
+<li>用于集成<strong>剪枝，正则化和量化算法</strong>的框架。</li>
+<li>一套用于<strong>分析和评估压缩性能的工具。</strong>
+</li>
+<li>现有技术压缩算法的示例实现。</li>
+</ol>
+<ul>
+<li><p><a href="https://github.com/IntelLabs/distiller">github repo</a><img data-src="https://img.shields.io/github/stars/IntelLabs/distiller.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore></p></li>
+<li><a href="http://zengzeyu.com/2020/10/30/distiller_pruning_doc/">Distiller 模型剪枝教程</a></li>
+<li><a href="https://blog.csdn.net/Yan_Joy/article/details/86007191">CSDN-Distiller:神经网络压缩研究框架</a></li>
+</ul>
+<h1 id="百度paddleslim">百度PaddleSlim</h1>
+<p>PaddlePaddle<strong>实现了目前主流的网络量化、剪枝、蒸馏三种压缩策略，并可快速配置多种压缩策略组合使用</strong>。针对体积已经很小的 <strong>MobileNet 模型</strong>，在模型效果不损失的前提下实现 <strong>70% 以上</strong>的体积压缩。</p>
+<ul>
+<li><p><a href="https://github.com/PaddlePaddle">github repo</a><img data-src="https://img.shields.io/github/stars/microsoft/nni.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore></p></li>
+<li><p><a href="https://www.jiqizhixin.com/articles/2019-05-07-12">精度无损，体积压缩70%以上，百度PaddleSlim为你的模型瘦身</a></p></li>
+<li><p><a href="https://blog.csdn.net/javastart/article/details/107095360">深度学习-模型压缩-PaddleSlim</a></p></li>
+</ul>
+<h1 id="微软nni">微软NNI</h1>
+<p><a href="https://github.com/microsoft/nni">github repo</a><img data-src="https://img.shields.io/github/stars/microsoft/nni.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore></p>
+<p>自动机器学习(AutoML)工具和框架，<strong>其中集成了多种模型压缩算法</strong>，并支持PyTorch，TensorFlow，MXNet，Caffe2等多个开源框架。不过重点不是模型压缩。</p>
+<p><a href="https://www.msra.cn/zh-cn/news/features/nni">上新了，NNI！微软开源自动机器学习工具NNI概览及新功能详解</a></p>
+<h1 id="tensorrt推理">TensorRT（推理）</h1>
+<p>一个高性能的深度学习<strong>推理</strong>（Inference）优化器，可以为深度学习应用提供低延迟、高吞吐率的部署推理。</p>
+<ul>
+<li><a href="https://arleyzhang.github.io/articles/7f4b25ce/">TensorRT(1)-介绍-使用-安装</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/88318324">如何使用TensorRT对训练好的PyTorch模型进行加速? - 伯恩legacy的文章 - 知乎</a></li>
+</ul>
+<h1 id="腾讯ncnn推理">腾讯NCNN（推理）</h1>
+<p>纯 C++ 实现，跨平台，支持 android ios</p>
+<p>ncnn 是一个为<strong>手机端</strong>极致优化的高性能神经网络<strong>前向计算框架</strong>。ncnn 从设计之初深刻考虑手机端的部署和使用。手机端 cpu 的速度快于目前所有已知的开源框架。</p>
+<p><strong>注：只包含前向计算，因此无法进行训练，需要导入其他框架训练好的模型参数。</strong></p>
+<ul>
+<li>
+<a href="https://github.com/Tencent/ncnn">github repo</a><img data-src="https://img.shields.io/github/stars/Tencent/ncnn.svg?style=flat&amp;label=Star" alt="GitHub stars" data-proofer-ignore>
+</li>
+<li><a href="http://voyagelab.github.io/2017/12/26/mobile_ML_framework_nccn/">移动端机器学习框架ncnn简介与实践</a></li>
+<li>pytorch模型的部署（系列一）–ncnn的编译和使用 - limzero的文章 - 知乎 https://zhuanlan.zhihu.com/p/137458205</li>
+<li><a href="https://cloud.tencent.com/developer/salon/live-1346">nihui-视频-谈谈ncnn的设计理念和软件工程</a></li>
+<li>
+<p>https://github.com/zchrissirhcz/awesome-ncnn</p>
+<ul><li>😎 A Collection of Awesome NCNN-based Projects</li></ul>
+</li>
+<li><a href="https://www.zhihu.com/column/c_1320446932913762304">知乎专栏-ncnn初探</a></li>
+<li>关注<a href="https://www.zhihu.com/people/nihui-2/">nihui大佬知乎</a>不迷路</li>
+<li>
+<img class="emoji" title=":star:" alt=":star:" src="https://github.githubassets.com/images/icons/emoji/unicode/2b50.png" height="20" width="20"> <a href="https://bbs.cvmart.net/topics/3972">如何阅读一个前向推理框架？以 NCNN 为例。</a>
+</li>
+</ul>
+<h1 id="腾讯tnn">腾讯TNN</h1>
+<ul><li><a href="https://github.com/Tencent/TNN">github repo</a></li></ul>
+</div>
+<div class="post-tail-wrapper text-muted">
+<div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href="/categories/%E4%B8%93%E4%B8%9A%E7%A7%AF%E7%B4%AF/">专业积累</a>, <a href="/categories/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9/">模型压缩</a>
+</div>
+<div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/%E5%AE%9E%E8%B7%B5/" class="post-tag no-text-decoration">实践</a>
+</div>
+<div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2">
+<div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div>
+<div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E5%AE%9E%E6%88%98%20-%20ZhangGe's%20Blog&amp;url=https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E5%AE%9E%E6%88%98/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E5%AE%9E%E6%88%98%20-%20ZhangGe's%20Blog&amp;u=https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E5%AE%9E%E6%88%98/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https://zhangge6.github.io/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E5%AE%9E%E6%88%98/&amp;text=%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E5%AE%9E%E6%88%98%20-%20ZhangGe's%20Blog" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" data-title-succeed="Link copied successfully!"> </i> </span>
+</div>
+</div>
+</div>
+</div></div>
+<div id="panel-wrapper" class="col-xl-3 pl-2 text-muted"><div class="access">
+<div id="access-lastmod" class="post">
+<div class="panel-heading">Recently Updated</div>
+<ul class="post-content pl-0 pb-1 ml-1 mt-2">
+<li><a href="/posts/Git%E5%AD%A6%E4%B9%A0/">Git学习</a></li>
+<li><a href="/posts/VS-code%E4%BD%BF%E7%94%A8/">VS code使用</a></li>
+<li><a href="/posts/Docker%E5%AD%A6%E4%B9%A0/">Docker学习</a></li>
+<li><a href="/posts/GPU%E9%80%9A%E4%BF%A1%E5%85%83%E8%AF%AD/">GPU通信元语</a></li>
+<li><a href="/posts/%E5%AF%B9Roofline%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%90%86%E8%A7%A3/">对Roofline模型的理解</a></li>
+</ul>
+</div>
+<div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div>
+</div></div>
+</div>
+<div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<div id="related-posts" class="mt-5 mb-2 mb-sm-4">
+<h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3>
+<div class="card-deck mb-4">
+<div class="card"> <a href="/posts/%E9%83%A8%E7%BD%B2%E7%BB%8F%E9%AA%8C%E7%A7%AF%E7%B4%AF/"><div class="card-body"> <em class="timeago small" data-ts="1649997060"> 2022-04-15 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>部署经验总结</h3>
+<div class="text-muted small"><p> 预处理 ncnn的substract_mean_normalize ​ 该函数输入像素范围在[0,255]，对于不同的框架可能需要进行转换，具体参见这里。 安卓端部署 Android Studio 打包APK</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%B5%84%E6%96%99%E7%A7%AF%E7%B4%AF/"><div class="card-body"> <em class="timeago small" data-ts="1614436860"> 2021-02-27 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>模型压缩资料积累</h3>
+<div class="text-muted small"><p> 深度学习的模型压缩可能就是自己硕士阶段的研究课题啦，这篇博客记录在学习过程中遇到的比较好的资料，作为积累和备忘。 github awesome collections htqin/awesome-model-quantization A list of papers, docs, codes about model quantization. This rep...</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9%E8%87%AA%E5%B7%B1%E7%9A%84%E6%80%BB%E7%BB%93/"><div class="card-body"> <em class="timeago small" data-ts="1614732300"> 2021-03-03 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>模型压缩自己的总结</h3>
+<div class="text-muted small"><p> 关于STE(straight through estimator) 以二值网络为例，对网络进行训练时，需要对参数做\(sign\)操作后参与运算，有 [q = sign(r)] 但由于\(sign\)函数在\(r=0\)处不可导，在\(r \neq 0\)处导数为\(0\)，因此反向传播在这一步是失效的，不能有效实现参数的更新。 STE本身的模样 straight through e...</p></div>
+</div></a>
+</div>
+</div>
+</div>
+<div class="post-navigation d-flex justify-content-between"> <a href="/posts/ResNet%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/" class="btn btn-outline-primary" prompt="Older"><p>ResNet源码阅读</p></a> <a href="/posts/Python%E5%B8%B8%E7%94%A8%E4%BB%A3%E7%A0%81%E6%AE%B5/" class="btn btn-outline-primary" prompt="Newer"><p>Python常用代码段</p></a>
+</div>
+<script type="text/javascript"> $(function () { const origin = "https://giscus.app"; const iframe = "iframe.giscus-frame"; const lightTheme = "light"; const darkTheme = "dark_dimmed"; let initTheme = lightTheme; if ($("html[data-mode=dark]").length > 0 || ($("html[data-mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches)) { initTheme = darkTheme; } let giscusAttributes = { "src": "https://giscus.app/client.js", "data-repo": "ZhangGe6/ZhangGe6.github.io", "data-repo-id": "R_kgDOHRk9Cg", "data-category": "Announcements", "data-category-id": "DIC_kwDOHRk9Cs4CPOm5", "data-mapping": "pathname", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-theme": initTheme, "data-input-position": "bottom", "data-lang": "en", "crossorigin": "anonymous", "async": "" }; let giscusScript = document.createElement("script"); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value)); document.getElementById("tail-wrapper").appendChild(giscusScript); addEventListener("message", (event) => { if (event.source === window && event.data && event.data.direction === ModeToggle.ID) { /* global theme mode changed */ const mode = event.data.message; const theme = (mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme); const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); }); </script>
+</div></div></div>
+<footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted">
+<div class="footer-left"><p class="mb-0"> © 2025 <a href="https://twitter.com/username">ZhangGe</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div>
+<div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div>
+</div></footer>
+</div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content">
+<div id="search-hints"><div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script>

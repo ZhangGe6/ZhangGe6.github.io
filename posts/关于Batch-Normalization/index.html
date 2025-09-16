@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="zh" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="关于Batch Normalization" /><meta name="author" content="Zhang Ge" /><meta property="og:locale" content="zh" /><meta name="description" content="Batch-Normalization (BN) 通过使用当前batch数据的均值mean和方差variance对它们进行标准化处理，可以使得模型的训练更加快速和稳定。实践中会把BN一般放在非线性激活函数的上一层或者下一层。" /><meta property="og:description" content="Batch-Normalization (BN) 通过使用当前batch数据的均值mean和方差variance对它们进行标准化处理，可以使得模型的训练更加快速和稳定。实践中会把BN一般放在非线性激活函数的上一层或者下一层。" /><link rel="canonical" href="https://zhangge6.github.io/posts/%E5%85%B3%E4%BA%8EBatch-Normalization/" /><meta property="og:url" content="https://zhangge6.github.io/posts/%E5%85%B3%E4%BA%8EBatch-Normalization/" /><meta property="og:site_name" content="ZhangGe’s Blog" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-02-09T14:09:00+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="关于Batch Normalization" /><meta name="twitter:site" content="@twitter_username" /><meta name="twitter:creator" content="@Zhang Ge" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Zhang Ge"},"dateModified":"2021-02-09T14:09:00+08:00","datePublished":"2021-02-09T14:09:00+08:00","description":"Batch-Normalization (BN) 通过使用当前batch数据的均值mean和方差variance对它们进行标准化处理，可以使得模型的训练更加快速和稳定。实践中会把BN一般放在非线性激活函数的上一层或者下一层。","headline":"关于Batch Normalization","mainEntityOfPage":{"@type":"WebPage","@id":"https://zhangge6.github.io/posts/%E5%85%B3%E4%BA%8EBatch-Normalization/"},"url":"https://zhangge6.github.io/posts/%E5%85%B3%E4%BA%8EBatch-Normalization/"}</script><title>关于Batch Normalization | ZhangGe's Blog</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="ZhangGe's Blog"><meta name="application-name" content="ZhangGe's Blog"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end">
+<div class="profile-wrapper text-center">
+<div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="https://cdn.jsdelivr.net/gh/cotes2020/chirpy-images/commons/avatar.jpg%20" alt="avatar" onerror="this.style.display='none'"> </a>
+</div>
+<div class="site-title mt-3"> <a href="/">ZhangGe's Blog</a>
+</div>
+<div class="site-subtitle font-italic">Stay hungry, stay foolish.</div>
+</div>
+<ul class="w-100">
+<li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a>
+</li>
+<li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a>
+</li>
+<li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a>
+</li>
+<li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a>
+</li>
+<li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a>
+</li>
+</ul>
+<div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/ZhangGe6" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/twitter_username" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href="javascript:location.href%20=%20'mailto:'%20+%20%5B'sjtu.zg123','gmail.com'%5D.join('@')" aria-label="email"> <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss"> <i class="fas fa-rss"></i> </a>
+</div>
+</div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>关于Batch Normalization</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div>
+<i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel">Cancel</span>
+</div></div><div id="main-wrapper">
+<div id="main">
+<div class="row">
+<div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<h1 data-toc-skip>关于Batch Normalization</h1>
+<div class="post-meta text-muted">
+<div> By <em> <a href="https://twitter.com/username">ZhangGe</a> </em>
+</div>
+<div class="d-flex"><div> <span> Posted <em class="timeago" data-ts="1612850940" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"> 2021-02-09 </em> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1401 words"> <em>7 min</em> read</span>
+</div></div>
+</div>
+<div class="post-content">
+<p><code class="language-plaintext highlighter-rouge">Batch-Normalization (BN)</code> 通过使用当前batch数据的均值mean和方差variance对它们进行标准化处理，可以使得模型的训练更加<strong>快速</strong>和<strong>稳定</strong>。实践中会把BN一般放在非线性激活函数的上一层或者下一层。</p>
+<h1 id="原理">原理</h1>
+<h2 id="训练时">
+<span class="mr-2">训练时</span><a href="#%E8%AE%AD%E7%BB%83%E6%97%B6" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>BN之所以称之为batch normalization，就是因为normalization是沿batch_size维度进行的。</p>
+<p>设某一个神经元对一个<code class="language-plaintext highlighter-rouge">batch</code>内的\(n\)个样本的输出为分别为\(Z^{(i)}, i=1, \cdots, n\)，BN层通过计算</p>\[\mu = \frac{1}{n}\sum_i Z^{(i)}, \ \ \ \delta = \frac{1}{n}\sum_i (Z^{(i)} - \mu) \tag{1, 2}\]<p>得到它们的均值 \(\mu\) 和方差 \(\delta\). 然后通过</p>\[Z_{norm}^{(i)} = \frac{Z^{(i)} - \mu}{\sqrt{\delta^2 - \epsilon}} \tag{3}\]<p>将原来该神经元的输出（可能是任意分布）转化到均值为0，方差为1的标准正态分布上。如<a href="https://towardsdatascience.com/batch-normalization-in-3-levels-of-understanding-14c2da90a338#b93c">图3</a>所示。</p>
+<p><img data-src="/assets/img/20210209/BNed.jpeg" alt="" data-proofer-ignore></p>
+<center>图3 batch_size为b, 3个神经元输出的示例。对于每个神经元，在使用BN前输出(沿batch_size维度)分布各异，经过BN操作后均服从相同的分布——正态分布</center>
+<p>最后，再对\(Z_{norm}^{(i)}\)做一个线性变换</p>\[\hat{Z} = \gamma \times Z_{norm}^{(i)} + \beta \tag{4}\]<p>\(\gamma\) 和 \(\beta\) 是可学习的参数，可以在正态分布的基础上调整，选择其最优的正态分布。</p>
+<p>上面的解释是基于神经元neuron的输出展开的，但是<strong>对于2D CNN中卷积得到的特征图，batch normalization是如何作用的呢？</strong></p>
+<p><img data-src="/assets/img/20210314/BN_conv.png" alt="" data-proofer-ignore></p>
+<center>图4 2D CNN下的BN操作方式示意</center>
+<p>如图4，就是将某一个channel对应的batchsize个维度为(H, W)的tensor求解出<strong>一对均值方差</strong>，对这batchsize个(H, W)的tensor，其<strong>每一个pixel value</strong>减去该均值并除以该方差。<a href="https://www.zhihu.com/question/38102762/answer/391649040">参考</a></p>
+<blockquote>
+<p>Q: bn 不是对batch维度做归一化嘛，为什么h,w维度也要做？</p>
+<p>A: 因为CNN中卷积核是共享的，所以一张特征图应该被看作一个”神经元”的输出，因此归一化的时候N,H,W应该放在一起归一化。<a href="https://blog.csdn.net/liuxiao214/article/details/81037416">参考(评论区)</a></p>
+</blockquote>
+<p>注意，BN层操作是<strong>channel-wise</strong>的：一个channel对应一对均值和方差，一对\(\gamma\) 和 \(\beta\) 。这也是在Pytorch中定义<a href="https://pytorch.org/docs/stable/generated/torch.nn.BatchNorm2d.html">BatchNorm2d</a>层时，需要传入的是channel_num的缘故。<a href="https://blog.csdn.net/qq_27261889/article/details/87284076">参考</a>和<a href="https://blog.csdn.net/weixin_38314865/article/details/104327852">参考</a></p>
+<h2 id="测试时">
+<span class="mr-2">测试时</span><a href="#%E6%B5%8B%E8%AF%95%E6%97%B6" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h2>
+<p>训练时，BN层可以为每一个<code class="language-plaintext highlighter-rouge">batch</code>输入数据计算均值和方差，但是<strong>测试时</strong>，BN层使用的均值和方差不是根据输入样本计算，而是使用训练过程中计算得到的值，直接从(3)式开始计算。可以参考这个<a href="https://github.com/Erlemar/cs231n_self/blob/master/assignment2/cs231n/layers.py#L116">demo code</a>.</p>
+<h1 id="效果">效果</h1>
+<p><img data-src="/assets/img/20210209/BN_res.png" alt="" data-proofer-ignore></p>
+<center>图5 x n代表以之前最优学习率的n倍进行训练</center>
+<p>可以看到，使用BN可以容忍更高的学习率，更快更好地收敛。</p>
+<h1 id="raising_hand_womanqa">
+<img class="emoji" title=":raising_hand_woman:" alt=":raising_hand_woman:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f64b.png" height="20" width="20">QA</h1>
+<p><strong>Q：经常见到的<code class="language-plaintext highlighter-rouge">mean = [0.485, 0.456, 0=406] ， std = [0.229, 0.224, 0.225]</code>是什么？</strong></p>
+<p><strong>A：</strong>前面的(0.485,0.456,0.406)表示均值，分别对应的是RGB三个通道；后面的(0.229,0.224,0.225)则表示的是标准差，这些值<a href="https://stackoverflow.com/questions/58151507/why-pytorch-officially-use-mean-0-485-0-456-0-406-and-std-0-229-0-224-0-2"><u>是在ImageNet数据集计算出来</u>的</a>，所以很多人都使用它们。不过在有了BN之后，它们已经<a href="https://www.zhihu.com/question/264952701/answer/289210867">不必要</a>了。</p>
+<p><strong>Q：对于RGB图而言，均值不应该是接近于128吗？为什么会是接近于0.5的数呢？</strong></p>
+<p><strong>A：</strong> 这是因为使用了<code class="language-plaintext highlighter-rouge">pytorch</code>的<a href="https://pytorch.org/vision/stable/transforms.html#torchvision.transforms.ToTensor">transforms.ToTensor()</a>对图片进行了归一化处理（另外对于PIL Image or numpy.ndarray类型的输入，还将尺寸由<code class="language-plaintext highlighter-rouge"> (H x W x C) </code>转化为了 <code class="language-plaintext highlighter-rouge">(C x H x W)</code>）。如</p>
+<div class="language-python highlighter-rouge">
+<div class="code-header"> <span data-label-text="Python"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button>
+</div>
+<div class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td>
+<td class="rouge-code"><pre><span class="n">transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="p">.</span><span class="n">Compose</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">transforms</span><span class="p">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+     <span class="n">transforms</span><span class="p">.</span><span class="n">Normalize</span><span class="p">((</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))])</span>
+</pre></td>
+</tr></tbody></table></code></div>
+</div>
+<p><strong>Q：上面说BN层在训练和测试时使用方法不同，那么模型如何区分自己是在训练还是在测试呢？</strong></p>
+<p><strong>A：</strong>使用<code class="language-plaintext highlighter-rouge">model.train()</code>或者<code class="language-plaintext highlighter-rouge">model.train(True)</code>将<code class="language-plaintext highlighter-rouge">model</code>设为训练状态；使用<code class="language-plaintext highlighter-rouge">model.eval()</code>或者<code class="language-plaintext highlighter-rouge">model.train(False)</code>将<code class="language-plaintext highlighter-rouge">model</code>设为测试状态。当状态变化时，目前只有<code class="language-plaintext highlighter-rouge">dropout</code>和<code class="language-plaintext highlighter-rouge">batchnorm</code>两种层会受到影响(<a href="https://stackoverflow.com/questions/51433378/what-does-model-train-do-in-pytorch">参考</a>)。<code class="language-plaintext highlighter-rouge">batchnorm</code>层在不同状态下的表现如前所述；对于<a href="https://pytorch.org/docs/stable/_modules/torch/nn/modules/dropout.html"><code class="language-plaintext highlighter-rouge">dropout</code></a>层，当处在测试状态时，该层输出值等于输入值(<code class="language-plaintext highlighter-rouge">identity map</code>)，相当于<code class="language-plaintext highlighter-rouge">disabled</code>。</p>
+<blockquote><p>Tips: <code class="language-plaintext highlighter-rouge">dropout(p)</code>在训练时有一个<code class="language-plaintext highlighter-rouge">scaled by factor</code>\(\frac{1}{1-p}\)操作，目的是使得某一神经元输出在测试时的期望=训练时的期望，更进一步解释可参考<a href="https://stats.stackexchange.com/questions/205932/dropout-scaling-the-activation-versus-inverting-the-dropout">这里</a></p></blockquote>
+<p><strong>Q：Batch Normalization的一些局限？</strong></p>
+<p><strong>A：</strong>因为测试时BN层使用的均值和方差是训练过程中计算得到的值，因此当测试集和训练集数据分布差别较大时，会得到不好的测试效果。</p>
+<p><strong>Q：BN层应放在非线性激活函数前面还是后面？</strong></p>
+<p><strong>A：</strong>BN作者本意是为了通过BN层，使得任何的参数值，都可以用所期望的分布(应该就是指正态分布)来生成激活值，因此将BN层放在了非线性激活函数前面一层。后来很多网络结构，比如ResNet，mobilenet-v2也都沿用了这一准则。不过也有<a href="https://github.com/ducha-aiki/caffenet-benchmark/blob/master/batchnorm.md#bn----before-or-after-relu">工作</a>表示将BN层放在了非线性激活函数后面一层会取得更好的效果，但是没有给出有力的解释。reddit上对于这一问题有个激烈的<a href="https://www.reddit.com/r/MachineLearning/comments/67gonq/d_batch_normalization_before_or_after_relu/dgqaksn/">讨论</a>。</p>
+<p><strong>Q：Group Normlization?</strong></p>
+<p><strong>A：</strong></p>
+<h1 id="参考">参考</h1>
+<p><a href="https://towardsdatascience.com/batch-normalization-in-3-levels-of-understanding-14c2da90a338#b93c">Batch normalization in 3 levels of understanding</a></p>
+<p><a href="https://my.oschina.net/u/4286839/blog/3407778">pytorch 计算图像数据集的均值和标准差</a></p>
+</div>
+<div class="post-tail-wrapper text-muted">
+<div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href="/categories/%E4%B8%93%E4%B8%9A%E7%A7%AF%E7%B4%AF/">专业积累</a>, <a href="/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">基础知识</a>
+</div>
+<div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2">
+<div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div>
+<div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=%E5%85%B3%E4%BA%8EBatch%20Normalization%20-%20ZhangGe's%20Blog&amp;url=https://zhangge6.github.io/posts/%E5%85%B3%E4%BA%8EBatch-Normalization/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=%E5%85%B3%E4%BA%8EBatch%20Normalization%20-%20ZhangGe's%20Blog&amp;u=https://zhangge6.github.io/posts/%E5%85%B3%E4%BA%8EBatch-Normalization/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https://zhangge6.github.io/posts/%E5%85%B3%E4%BA%8EBatch-Normalization/&amp;text=%E5%85%B3%E4%BA%8EBatch%20Normalization%20-%20ZhangGe's%20Blog" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" data-title-succeed="Link copied successfully!"> </i> </span>
+</div>
+</div>
+</div>
+</div></div>
+<div id="panel-wrapper" class="col-xl-3 pl-2 text-muted">
+<div class="access">
+<div id="access-lastmod" class="post">
+<div class="panel-heading">Recently Updated</div>
+<ul class="post-content pl-0 pb-1 ml-1 mt-2">
+<li><a href="/posts/Git%E5%AD%A6%E4%B9%A0/">Git学习</a></li>
+<li><a href="/posts/VS-code%E4%BD%BF%E7%94%A8/">VS code使用</a></li>
+<li><a href="/posts/Docker%E5%AD%A6%E4%B9%A0/">Docker学习</a></li>
+<li><a href="/posts/GPU%E9%80%9A%E4%BF%A1%E5%85%83%E8%AF%AD/">GPU通信元语</a></li>
+<li><a href="/posts/%E5%AF%B9Roofline%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%90%86%E8%A7%A3/">对Roofline模型的理解</a></li>
+</ul>
+</div>
+<div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+<div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
+<nav id="toc" data-toggle="toc"></nav>
+</div>
+</div>
+</div>
+<div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+<div id="related-posts" class="mt-5 mb-2 mb-sm-4">
+<h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3>
+<div class="card-deck mb-4">
+<div class="card"> <a href="/posts/%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/"><div class="card-body"> <em class="timeago small" data-ts="1610589240"> 2021-01-14 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>一些基本概念</h3>
+<div class="text-muted small"><p> 动机 一些以往不清楚的基本概念。学习后做下记录。 名词 网络的depth、width、cardinality depth：整个网络的层数 width：每一层的通道(channel)数 cardinality:首次出现在ResNeXt中， 原文解释为‘the size of the set of transformations’...</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/%E9%A2%91%E5%9F%9F%E8%A7%92%E5%BA%A6%E7%90%86%E8%A7%A3%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-F-principle/"><div class="card-body"> <em class="timeago small" data-ts="1613224800"> 2021-02-13 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>频域角度理解深度学习 F-principle</h3>
+<div class="text-muted small"><p> \(F-Principle\)定理： DNN倾向于按从低频到高频的顺序来拟合训练数据。 实验 Spatial Domain Red: the target function; Blue: DNN output. Abscissa: input; Ordinate: output. Fourier Domain Red: FFT of the target func...</p></div>
+</div></a>
+</div>
+<div class="card"> <a href="/posts/Python%E7%A7%AF%E7%B4%AF/"><div class="card-body"> <em class="timeago small" data-ts="1607667300"> 2020-12-11 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Python积累</h3>
+<div class="text-muted small"><p> 关于本页 一些Python的基本知识、操作积累，记录下方便日后查找使用。 python文件读写模式 参考：Stack Overflow | r r+ w w+ a a+ ------------------|-------------------------- read | + + + ...</p></div>
+</div></a>
+</div>
+</div>
+</div>
+<div class="post-navigation d-flex justify-content-between"> <a href="/posts/Pytorch%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/" class="btn btn-outline-primary" prompt="Older"><p>Pytorch系统学习</p></a> <a href="/posts/%E9%A2%91%E5%9F%9F%E8%A7%92%E5%BA%A6%E7%90%86%E8%A7%A3%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-F-principle/" class="btn btn-outline-primary" prompt="Newer"><p>频域角度理解深度学习 F-principle</p></a>
+</div>
+<script type="text/javascript"> $(function () { const origin = "https://giscus.app"; const iframe = "iframe.giscus-frame"; const lightTheme = "light"; const darkTheme = "dark_dimmed"; let initTheme = lightTheme; if ($("html[data-mode=dark]").length > 0 || ($("html[data-mode]").length == 0 && window.matchMedia("(prefers-color-scheme: dark)").matches)) { initTheme = darkTheme; } let giscusAttributes = { "src": "https://giscus.app/client.js", "data-repo": "ZhangGe6/ZhangGe6.github.io", "data-repo-id": "R_kgDOHRk9Cg", "data-category": "Announcements", "data-category-id": "DIC_kwDOHRk9Cs4CPOm5", "data-mapping": "pathname", "data-reactions-enabled": "1", "data-emit-metadata": "0", "data-theme": initTheme, "data-input-position": "bottom", "data-lang": "en", "crossorigin": "anonymous", "async": "" }; let giscusScript = document.createElement("script"); Object.entries(giscusAttributes).forEach(([key, value]) => giscusScript.setAttribute(key, value)); document.getElementById("tail-wrapper").appendChild(giscusScript); addEventListener("message", (event) => { if (event.source === window && event.data && event.data.direction === ModeToggle.ID) { /* global theme mode changed */ const mode = event.data.message; const theme = (mode === ModeToggle.DARK_MODE ? darkTheme : lightTheme); const message = { setConfig: { theme: theme } }; const giscus = document.querySelector(iframe).contentWindow; giscus.postMessage({ giscus: message }, origin); } }); }); </script>
+</div></div></div>
+<footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted">
+<div class="footer-left"><p class="mb-0"> © 2025 <a href="https://twitter.com/username">ZhangGe</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div>
+<div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div>
+</div></footer>
+</div>
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content">
+<div id="search-hints"><div id="access-tags">
+<div class="panel-heading">Trending Tags</div>
+<div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/github/">github</a> <a class="post-tag" href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a> <a class="post-tag" href="/tags/cheat-sheets/">cheat sheets</a> <a class="post-tag" href="/tags/getting-started/">getting started</a> <a class="post-tag" href="/tags/llm/">LLM</a> <a class="post-tag" href="/tags/pytorch/">pytorch</a> <a class="post-tag" href="/tags/%E5%AE%9E%E8%B7%B5/">实践</a> <a class="post-tag" href="/tags/anaconda/">anaconda</a>
+</div>
+</div></div>
+<div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+</div></div>
+</div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/zh.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script> /* see: <https://docs.mathjax.org/en/latest/options/input/tex.html#tex-options> */ MathJax = { tex: { inlineMath: [ /* start/end delimiter pairs for in-line math */ ['$','$'], ['\\(','\\)'] ], displayMath: [ /* start/end delimiter pairs for display math */ ['$$', '$$'], ['\\[', '\\]'] ] } }; </script> <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"> </script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script>
